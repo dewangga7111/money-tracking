@@ -9,17 +9,17 @@
     "start": "waku start"
   },
   "dependencies": {
-    "@heroui/react": "^2.8.9",
     "@prisma/client": "^6.19.2",
-    "framer-motion": "^12.34.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.564.0",
     "next-auth": "^4.24.13",
     "react": "~19.2.4",
+    "react-device-detect": "^2.2.3",
     "react-dom": "~19.2.4",
     "react-server-dom-webpack": "~19.2.4",
     "waku": "1.0.0-alpha.3"
   },
   "devDependencies": {
-    "@heroui/theme": "^2.4.26",
     "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
