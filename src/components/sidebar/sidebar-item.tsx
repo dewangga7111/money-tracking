@@ -34,8 +34,8 @@ export function SidebarItem({
           onClick={() => onToggleMenu(item.key)}
           className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
             isChildActive
-              ? 'bg-purple-50 font-semibold text-purple-600 dark:bg-purple-950/30'
-              : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+              ? 'bg-purple-50 font-semibold text-purple-600'
+              : 'text-gray-700 hover:bg-gray-100'
           }`}
         >
           {isChildActive && (
@@ -67,7 +67,7 @@ export function SidebarItem({
                   className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-300 ${
                     isChildItemActive
                       ? 'font-semibold text-purple-600'
-                      : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                      : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   {ChildIcon && <ChildIcon className="h-[18px] w-[18px]" />}
@@ -86,8 +86,8 @@ export function SidebarItem({
       onClick={() => item.path && router.push(item.path)}
       className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
         isActive
-          ? 'bg-purple-50 font-semibold text-purple-600 dark:bg-purple-950/30'
-          : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+          ? 'bg-purple-50 font-semibold text-purple-600'
+          : 'text-gray-700 hover:bg-gray-100'
       }`}
     >
       {isActive && <div className="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-purple-600" />}

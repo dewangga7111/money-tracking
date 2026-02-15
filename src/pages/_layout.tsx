@@ -1,8 +1,7 @@
 import '../styles.css';
 
 import type { ReactNode } from 'react';
-import { SidebarWrapper } from '../components/sidebar-wrapper';
-import { Navbar } from '../components/navbar';
+import { LayoutWrapper } from '../components/layout-wrapper';
 
 type RootLayoutProps = { children: ReactNode };
 
@@ -13,13 +12,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     <div className="font-sans antialiased">
       <meta name="description" content={data.description} />
       <link rel="icon" type="image/png" href={data.icon} />
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
-        <SidebarWrapper />
-        <div className="flex flex-1 flex-col">
-          <Navbar />
-          <main className="flex-1 p-6">{children}</main>
-        </div>
-      </div>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.classList.remove('dark');`,
+        }}
+      />
+      <LayoutWrapper>{children}</LayoutWrapper>
     </div>
   );
 }

@@ -6,11 +6,11 @@ import { BrowserView } from 'react-device-detect';
 
 type SidebarProps = {
   pathname: string;
+  isOpen: boolean;
 };
 
-export function Sidebar({ pathname }: SidebarProps) {
+export function Sidebar({ pathname, isOpen }: SidebarProps) {
   const [mounted, setMounted] = useState(false);
-  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     setMounted(true);
@@ -23,11 +23,11 @@ export function Sidebar({ pathname }: SidebarProps) {
   return (
     <BrowserView>
       <aside
-        className={`sticky top-0 h-screen border-r border-gray-200 bg-white shadow-sm transition-all duration-300 dark:border-gray-800 dark:bg-gray-950 ${
-          open ? 'w-64' : 'w-16'
+        className={`sticky top-0 h-screen border-r border-gray-200 bg-white shadow-sm transition-all duration-300 ${
+          isOpen ? 'w-64' : 'w-16'
         }`}
       >
-        <SidebarContent isOpen={open} setIsOpen={setOpen} pathname={pathname} />
+        <SidebarContent isOpen={isOpen} pathname={pathname} />
       </aside>
     </BrowserView>
   );
