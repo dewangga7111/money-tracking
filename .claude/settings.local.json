@@ -4,7 +4,9 @@
       "WebFetch(domain:claude.ai)",
       "WebFetch(domain:waku.gg)",
       "Bash(cat:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(npx shadcn@latest init:*)",
+      "Bash(npx shadcn@latest add:*)"
     ]
   }
 }
