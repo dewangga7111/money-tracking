@@ -19,31 +19,13 @@ const columns: TableColumnType[] = [
 
 const fields: FilterField[] = [
   { type: "input", key: "name", label: "Nama Resep" },
-  { type: "input", key: "bahan", label: "Bahan" },
-  {
-    type: "autocomplete",
-    key: "status",
-    label: "Status",
-    placeholder: "Select status",
-    options: [
-      {
-        label: 'Active',
-        value: 'active',
-      },
-      {
-        label: 'Inactive',
-        value: 'inactive',
-      },
-    ],
-  },
-  { type: "daterange", key: "createdRange", label: "Tanggal Dibuat" },
 ];
 
 type ResepContentProps = {
   initialData?: ResepData[];
   initialPagination: PaginationInfo;
   deleteAction: (id: string) => Promise<ActionResponse>;
-  getAllAction: (page: number, pageSize: number) => Promise<GetAllResepResponse>;
+  getAllAction: (page: number, pageSize: number, params: any) => Promise<GetAllResepResponse>;
 };
 
 export function ResepContent({
@@ -57,6 +39,7 @@ export function ResepContent({
   const [loading, setLoading] = useState(false);
   const [resepData, setResepData] = useState<TableRowType[]>([]);
   const [pagination, setPagination] = useState<PaginationInfo>(initialPagination);
+  const [filters, setFilters] = useState<any>();
 
   // Transform database data to table format
   useEffect(() => {
@@ -69,6 +52,11 @@ export function ResepContent({
     setResepData(transformedData);
   }, [initialData]);
 
+  // listener to filter change
+  useEffect(() => {
+    handlePageChange(1);
+  }, [filters]);
+
   const handleAdd = () => {
     router.push('/resep/add');
   };
@@ -80,7 +68,7 @@ export function ResepContent({
 
       if (result.success) {
         // Refresh current page data
-        const pageResult = await getAllAction(page, pagination.pageSize);
+        const pageResult = await getAllAction(page, pagination.pageSize, filters);
         if (pageResult.success) {
           const transformedData = pageResult.data.map((resep) => ({
             key: resep.resepId,
@@ -102,7 +90,7 @@ export function ResepContent({
   const handlePageChange = async (newPage: number) => {
     setLoading(true);
     try {
-      const result = await getAllAction(newPage, pagination.pageSize);
+      const result = await getAllAction(newPage, pagination.pageSize, filters);
       if (result.success) {
         const transformedData = result.data.map((resep) => ({
           key: resep.resepId,
@@ -130,8 +118,10 @@ export function ResepContent({
       <DynamicFilter
         fields={fields}
         onFilter={(data: any) => {
+          setFilters(data);
         }}
         onClear={() => {
+          setFilters(undefined);
         }}
       />
 

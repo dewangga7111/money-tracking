@@ -14,7 +14,8 @@ function getPrismaClient() {
 
 export async function getAllResep(
   page: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
+  params?: any
 ): Promise<GetAllResepResponse> {
   const prisma = getPrismaClient();
   try {
@@ -24,6 +25,7 @@ export async function getAllResep(
     const totalCount = await prisma.tbResep.count({
       where: {
         status: true,
+        ...params
       },
     });
 
@@ -31,6 +33,7 @@ export async function getAllResep(
     const resep = await prisma.tbResep.findMany({
       where: {
         status: true,
+        ...params
       },
       orderBy: {
         createdAt: 'desc',
