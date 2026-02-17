@@ -1,7 +1,7 @@
 import '../styles.css';
 
 import type { ReactNode } from 'react';
-import { LayoutWrapper } from '../components/layout-wrapper';
+import { LayoutWrapper } from '../components/layout/layout-cms';
 import { Providers } from '../components/providers';
 
 type RootLayoutProps = { children: ReactNode };

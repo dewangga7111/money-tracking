@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'waku';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sidebar } from './sidebar/sidebar';
-import { Navbar } from './navbar';
+import { Sidebar } from '../sidebar/sidebar';
+import { Navbar } from '../navbar/navbar';
 
 type LayoutWrapperProps = {
   children: React.ReactNode;
@@ -29,7 +29,7 @@ export function LayoutWrapper({ children }: LayoutWrapperProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{
-                duration: 0.3,
+                duration: 0.4,
                 ease: 'easeInOut',
               }}
             >

@@ -1,5 +1,5 @@
 import ResepForm from '@/components/pages/resep/resep-form';
-import { getResepByIdAction, updateResepAction } from '@/models/resep';
+import { getResepByIdAction, updateResepAction } from '@/actions/resep';
 
 export default async function EditResepPage({ id }: { id: string }) {
   const data = await getData(id);

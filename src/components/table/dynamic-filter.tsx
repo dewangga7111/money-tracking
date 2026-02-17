@@ -24,7 +24,7 @@ export default function DynamicFilter({
   onClear,
 }: DynamicFilterProps) {
   const [formValues, setFormValues] = useState<Record<string, any>>({});
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleChange = (key: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));

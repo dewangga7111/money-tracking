@@ -1,5 +1,7 @@
 {
-  "name": "admin-template",
+  "name": "waku-admin-template",
+  "description": "Waku + heroui Admin Template",
+  "author": "Aldi Dewangga",
   "version": "0.0.0",
   "type": "module",
   "private": true,
