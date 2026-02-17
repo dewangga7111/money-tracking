@@ -5,11 +5,55 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model TbSystem {
+  sysCat      String   @map("sys_cat") @db.VarChar(100)
+  sysSubCat   String   @map("sys_sub_cat") @db.VarChar(100)
+  sysCode     String   @map("sys_code") @db.VarChar(100)
+  sysValue    String   @map("sys_value") @db.Text
+  description String?  @db.VarChar(255)
+  status      Boolean  @default(true)
+  createdBy   String?  @map("created_by") @db.VarChar(50)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedBy   String?  @map("updated_by") @db.VarChar(50)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@id([sysCat, sysSubCat, sysCode])
+  @@map("tb_system")
+}
+
+model TbBahan {
+  bahanId   String   @id @default(uuid()) @map("bahan_id") @db.Uuid
+  name      String   @db.VarChar(255)
+  jumlah    Int
+  satuan    String   @db.VarChar(50)
+  status    Boolean  @default(true)
+  createdBy String?  @map("created_by") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedBy String?  @map("updated_by") @db.VarChar(50)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@map("tb_bahan")
+}
+
+model TbResep {
+  resepId   String   @id @default(uuid()) @map("resep_id") @db.Uuid
+  name      String   @db.VarChar(255)
+  resep     String   @db.Text
+  bahan     String   @db.Text
+  status    Boolean  @default(true)
+  createdBy String?  @map("created_by") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedBy String?  @map("updated_by") @db.VarChar(50)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@map("tb_resep")
 }

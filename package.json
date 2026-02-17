@@ -6,7 +6,14 @@
   "scripts": {
     "dev": "waku dev",
     "build": "waku build",
-    "start": "waku start"
+    "start": "waku start",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:seed:system": "tsx prisma/seeders/system.seed.ts",
+    "db:seed:bahan": "tsx prisma/seeders/bahan.seed.ts",
+    "db:seed:resep": "tsx prisma/seeders/resep.seed.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@heroui/react": "^2.8.9",
@@ -32,6 +39,7 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "prisma": "^6.19.2",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
