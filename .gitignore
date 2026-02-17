@@ -5,5 +5,3 @@ dist
 .cache
 .DS_Store
 *.pem
-
-/src/generated/prisma

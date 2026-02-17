@@ -27,4 +27,12 @@ export type DynamicTableProps = {
 export type RenderCellProps = {
   item: TableRowType;
   columnKey: string | number;
+  onDelete?: (id: string) => Promise<void>;
+};
+
+export type PaginationInfo = {
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 };

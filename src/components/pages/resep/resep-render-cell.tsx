@@ -14,7 +14,7 @@ import { formatEllipsis, showSuccessToast } from '@/utils/common';
 import { useConfirmation } from '@/contexts/confirmation-context';
 import { ManagedPopover } from '@/components/popover/managed-popover';
 
-export default function ResepRenderCell({ item, columnKey }: RenderCellProps) {
+export default function ResepRenderCell({ item, columnKey, onDelete }: RenderCellProps) {
   const key = String(columnKey);
   const cellValue = getKeyValue(item, key);
   const router = useRouter();
@@ -65,8 +65,11 @@ export default function ResepRenderCell({ item, columnKey }: RenderCellProps) {
               onPress={() => {
                 confirm({
                   message: 'Are you sure you want to delete this data?',
-                  onConfirm: () => {
-                    showSuccessToast('Data Deleted Successfully');
+                  onConfirm: async () => {
+                    if (onDelete) {
+                      await onDelete(item.key);
+                      showSuccessToast('Data Deleted Successfully');
+                    }
                   },
                 });
               }}

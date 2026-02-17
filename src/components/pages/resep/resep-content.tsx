@@ -1,51 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'waku';
 import Datatable from '@/components/table/datatable';
-import { TableColumnType, TableRowType } from '@/types/table';
+import { TableColumnType, TableRowType, PaginationInfo } from '@/types/table';
 import ResepRenderCell from './resep-render-cell';
 import DynamicFilter from '@/components/table/dynamic-filter';
 import { FilterField } from '@/types/filter';
+import type { ResepData, GetAllResepResponse, DeleteResepResponse } from '@/types/resep';
 
 const columns: TableColumnType[] = [
   { key: 'action', label: 'Action', width: 50, align: 'center' },
   { key: 'name', label: 'Nama Resep', align: 'start' },
   { key: 'bahan', label: 'Bahan-bahan', align: 'start' },
   { key: 'status', label: 'Status', align: 'center' },
-];
-
-const sampleData: TableRowType[] = [
-  {
-    key: '1',
-    name: 'Nasi Goreng',
-    bahan: 'Nasi putih, telur, bawang merah, bawang putih, kecap manis',
-    status: 'Active',
-  },
-  {
-    key: '2',
-    name: 'Rendang Daging',
-    bahan: 'Daging sapi, santan, cabai merah, bawang merah, serai',
-    status: 'Active',
-  },
-  {
-    key: '3',
-    name: 'Soto Ayam',
-    bahan: 'Ayam, kunyit, jahe, bawang putih, seledri',
-    status: 'Active',
-  },
-  {
-    key: '4',
-    name: 'Gado-Gado',
-    bahan: 'Sayuran rebus, tahu, tempe, telur, bumbu kacang',
-    status: 'Active',
-  },
-  {
-    key: '5',
-    name: 'Ayam Bakar',
-    bahan: 'Ayam, kecap manis, bawang putih, jahe, lengkuas',
-    status: 'Active',
-  },
 ];
 
 const fields: FilterField[] = [
@@ -70,17 +38,90 @@ const fields: FilterField[] = [
   { type: "daterange", key: "createdRange", label: "Tanggal Dibuat" },
 ];
 
-export function ResepContent() {
+type ResepContentProps = {
+  initialData?: ResepData[];
+  initialPagination: PaginationInfo;
+  deleteAction: (id: string) => Promise<DeleteResepResponse>;
+  getAllAction: (page: number, pageSize: number) => Promise<GetAllResepResponse>;
+};
+
+export function ResepContent({
+  initialData = [],
+  initialPagination,
+  deleteAction,
+  getAllAction,
+}: ResepContentProps) {
   const router = useRouter();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(initialPagination.page);
   const [loading, setLoading] = useState(false);
+  const [resepData, setResepData] = useState<TableRowType[]>([]);
+  const [pagination, setPagination] = useState<PaginationInfo>(initialPagination);
+
+  // Transform database data to table format
+  useEffect(() => {
+    const transformedData = initialData.map((resep) => ({
+      key: resep.resepId,
+      name: resep.name,
+      bahan: resep.bahan,
+      status: resep.status ? 'Active' : 'Inactive',
+    }));
+    setResepData(transformedData);
+  }, [initialData]);
 
   const handleAdd = () => {
     router.push('/resep/add');
   };
 
+  const handleDelete = async (id: string) => {
+    setLoading(true);
+    try {
+      const result = await deleteAction(id);
+
+      if (result.success) {
+        // Refresh current page data
+        const pageResult = await getAllAction(page, pagination.pageSize);
+        if (pageResult.success) {
+          const transformedData = pageResult.data.map((resep) => ({
+            key: resep.resepId,
+            name: resep.name,
+            bahan: resep.bahan,
+            status: resep.status ? 'Active' : 'Inactive',
+          }));
+          setResepData(transformedData);
+          setPagination(pageResult.pagination);
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting resep:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePageChange = async (newPage: number) => {
+    setLoading(true);
+    try {
+      const result = await getAllAction(newPage, pagination.pageSize);
+      if (result.success) {
+        const transformedData = result.data.map((resep) => ({
+          key: resep.resepId,
+          name: resep.name,
+          bahan: resep.bahan,
+          status: resep.status ? 'Active' : 'Inactive',
+        }));
+        setResepData(transformedData);
+        setPagination(result.pagination);
+        setPage(newPage);
+      }
+    } catch (error) {
+      console.error('Error fetching page:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const renderCell = (row: TableRowType, columnKey: string | number) => {
-    return <ResepRenderCell item={row} columnKey={columnKey} />;
+    return <ResepRenderCell item={row} columnKey={columnKey} onDelete={handleDelete} />;
   };
 
   return (
@@ -95,12 +136,12 @@ export function ResepContent() {
 
       <Datatable
         columns={columns}
-        rows={sampleData}
+        rows={resepData}
         loading={loading}
         page={page}
-        totalPage={Math.ceil(sampleData.length / 10)}
-        totalRows={sampleData.length}
-        onPageChange={setPage}
+        totalPage={pagination.totalPages}
+        totalRows={pagination.totalCount}
+        onPageChange={handlePageChange}
         doAdd={handleAdd}
         renderCell={renderCell}
       />

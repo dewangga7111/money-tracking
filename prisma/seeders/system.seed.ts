@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../src/generated/prisma';
+import { PrismaClient } from '@prisma/client';
 
 export async function seedSystem(prisma: PrismaClient) {
   console.log('Seeding tb_system...');

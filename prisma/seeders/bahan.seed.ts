@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../src/generated/prisma';
+import { PrismaClient } from '@prisma/client';
 
 export async function seedBahan(prisma: PrismaClient) {
   console.log('Seeding tb_bahan...');
@@ -57,14 +57,39 @@ export async function seedBahan(prisma: PrismaClient) {
   ];
 
   for (const row of data) {
-    await prisma.tbBahan.create({
-      data: {
-        ...row,
-        createdBy: 'SYSTEM',
-        updatedBy: 'SYSTEM',
+    // Check if record exists
+    const existing = await prisma.tbBahan.findFirst({
+      where: {
+        name: row.name,
+        satuan: row.satuan,
+        status: true,
       },
     });
-    console.log(`  Created: ${row.name} - ${row.jumlah} ${row.satuan}`);
+
+    if (existing) {
+      // Update existing record
+      await prisma.tbBahan.update({
+        where: {
+          bahanId: existing.bahanId,
+        },
+        data: {
+          jumlah: row.jumlah,
+          updatedBy: 'SYSTEM',
+          updatedAt: new Date(),
+        },
+      });
+      console.log(`  Updated: ${row.name} - ${row.jumlah} ${row.satuan}`);
+    } else {
+      // Insert new record
+      await prisma.tbBahan.create({
+        data: {
+          ...row,
+          createdBy: 'SYSTEM',
+          updatedBy: 'SYSTEM',
+        },
+      });
+      console.log(`  Created: ${row.name} - ${row.jumlah} ${row.satuan}`);
+    }
   }
 
   console.log('tb_bahan seeding completed!');
