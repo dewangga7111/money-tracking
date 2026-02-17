@@ -25,7 +25,10 @@ export async function getAllResep(
     const totalCount = await prisma.tbResep.count({
       where: {
         status: true,
-        ...params
+        name: {
+          contains: params?.name,
+          mode: 'insensitive',
+        },
       },
     });
 
@@ -33,7 +36,10 @@ export async function getAllResep(
     const resep = await prisma.tbResep.findMany({
       where: {
         status: true,
-        ...params
+        name: {
+          contains: params?.name,
+          mode: 'insensitive',
+        },
       },
       orderBy: {
         createdAt: 'desc',

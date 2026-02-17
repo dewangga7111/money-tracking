@@ -11,7 +11,7 @@ import type { BahanData, GetAllBahanResponse } from '@/types/bahan';
 import type { ActionResponse } from '@/types/response';
 
 const columns: TableColumnType[] = [
-  { key: 'name', label: 'Nama Resep', align: 'start' },
+  { key: 'name', label: 'Nama Bahan', align: 'start' },
   { key: 'jumlah', label: 'Jumlah', align: 'start' },
   { key: 'satuan', label: 'Satuan', align: 'center' },
 ];
