@@ -45,9 +45,11 @@ export default function Datatable({
   const topContent = React.useMemo(() => (
     <div className="flex flex-col gap-4">
       <div className="flex justify-end gap-3 items-end">
-        <Button onPress={doAdd} color="primary" className={button()} startContent={<PlusIcon />}>
-          Add
-        </Button>
+        {doAdd && (
+          <Button onPress={doAdd} color="primary" className={button()} startContent={<PlusIcon />}>
+            Add
+          </Button>
+        )}
       </div>
     </div>
   ), [doAdd]);

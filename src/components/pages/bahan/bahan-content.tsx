@@ -4,36 +4,35 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'waku';
 import Datatable from '@/components/table/datatable';
 import { TableColumnType, TableRowType, PaginationInfo } from '@/types/table';
-import ResepRenderCell from './resep-render-cell';
+import BahanRenderCell from './bahan-render-cell';
 import DynamicFilter from '@/components/table/dynamic-filter';
 import { FilterField } from '@/types/filter';
-import type { ResepData, GetAllResepResponse } from '@/types/resep';
+import type { BahanData, GetAllBahanResponse } from '@/types/bahan';
 import type { ActionResponse } from '@/types/response';
 
 const columns: TableColumnType[] = [
-  { key: 'action', label: 'Action', width: 50, align: 'center' },
   { key: 'name', label: 'Nama Resep', align: 'start' },
-  { key: 'bahan', label: 'Bahan-bahan', align: 'start' },
-  { key: 'status', label: 'Status', align: 'center' },
+  { key: 'jumlah', label: 'Jumlah', align: 'start' },
+  { key: 'satuan', label: 'Satuan', align: 'center' },
 ];
 
 const fields: FilterField[] = [
   { type: "input", key: "name", label: "Nama Resep" },
 ];
 
-type ResepContentProps = {
-  initialData?: ResepData[];
+type BahanContentProps = {
+  initialData?: BahanData[];
   initialPagination: PaginationInfo;
   deleteAction: (id: string) => Promise<ActionResponse>;
-  getAllAction: (page: number, pageSize: number, params: any) => Promise<GetAllResepResponse>;
+  getAllAction: (page: number, pageSize: number, params: any) => Promise<GetAllBahanResponse>;
 };
 
-export function ResepContent({
+export function BahanContent({
   initialData = [],
   initialPagination,
   deleteAction,
   getAllAction,
-}: ResepContentProps) {
+}: BahanContentProps) {
   const router = useRouter();
   const [page, setPage] = useState(initialPagination.page);
   const [loading, setLoading] = useState(false);
@@ -44,10 +43,10 @@ export function ResepContent({
   // Transform database data to table format
   useEffect(() => {
     const transformedData = initialData.map((v) => ({
-      key: v.resepId,
+      key: v.bahanId,
       name: v.name,
-      bahan: v.bahan,
-      status: v.status ? 'Active' : 'Inactive',
+      jumlah: v.jumlah,
+      satuan: v.satuan,
     }));
     setData(transformedData);
   }, [initialData]);
@@ -58,33 +57,6 @@ export function ResepContent({
   }, [filters]);
 
   const handleAdd = () => {
-    router.push('/resep/add');
-  };
-
-  const handleDelete = async (id: string) => {
-    setLoading(true);
-    try {
-      const result = await deleteAction(id);
-
-      if (result.success) {
-        // Refresh current page data
-        const pageResult = await getAllAction(page, pagination.pageSize, filters);
-        if (pageResult.success) {
-          const transformedData = pageResult.data.map((v) => ({
-            key: v.resepId,
-            name: v.name,
-            bahan: v.bahan,
-            status: v.status ? 'Active' : 'Inactive',
-          }));
-          setData(transformedData);
-          setPagination(pageResult.pagination);
-        }
-      }
-    } catch (error) {
-      console.error('Error deleting resep:', error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handlePageChange = async (newPage: number) => {
@@ -93,10 +65,10 @@ export function ResepContent({
       const result = await getAllAction(newPage, pagination.pageSize, filters);
       if (result.success) {
         const transformedData = result.data.map((v) => ({
-          key: v.resepId,
+          key: v.bahanId,
           name: v.name,
-          bahan: v.bahan,
-          status: v.status ? 'Active' : 'Inactive',
+          jumlah: v.jumlah,
+          satuan: v.satuan,
         }));
         setData(transformedData);
         setPagination(result.pagination);
@@ -110,7 +82,7 @@ export function ResepContent({
   };
 
   const renderCell = (row: TableRowType, columnKey: string | number) => {
-    return <ResepRenderCell item={row} columnKey={columnKey} onDelete={handleDelete} />;
+    return <BahanRenderCell item={row} columnKey={columnKey} />;
   };
 
   return (
@@ -133,7 +105,6 @@ export function ResepContent({
         totalPage={pagination.totalPages}
         totalRows={pagination.totalCount}
         onPageChange={handlePageChange}
-        doAdd={handleAdd}
         renderCell={renderCell}
       />
     </div>

@@ -1,27 +1,27 @@
-import { ResepContent } from '@/components/pages/resep/resep-content';
-import { getAllResep, deleteResepAction } from '@/models/resep';
+import { BahanContent } from '@/components/pages/bahan/bahan-content';
+import { getAllBahan, deleteBahanAction } from '@/models/bahan';
 
-export default async function ResepPage() {
+export default async function BahanPage() {
   const data = await getData();
 
   return (
     <>
       <title>{data.title}</title>
-      <ResepContent
+      <BahanContent
         initialData={data.data}
         initialPagination={data.pagination}
-        deleteAction={deleteResepAction}
-        getAllAction={getAllResep}
+        deleteAction={deleteBahanAction}
+        getAllAction={getAllBahan}
       />
     </>
   );
 }
 
 const getData = async () => {
-  const result = await getAllResep(1, 10);
+  const result = await getAllBahan(1, 10);
 
   const data = {
-    title: 'Resep',
+    title: 'Bahan',
     data: result.success ? result.data : [],
     pagination: result.pagination,
   };
