@@ -10,12 +10,6 @@ export type MenuItem = {
 
 export const menuItems: MenuItem[] = [
   {
-    key: 'HOME_PAGE',
-    label: 'Home',
-    path: '/about',
-    icon: Home,
-  },
-  {
     key: 'settings',
     label: 'Settings',
     icon: Settings,
@@ -26,18 +20,12 @@ export const menuItems: MenuItem[] = [
         path: '/users',
         icon: Users,
       },
-      {
-        key: 'ROLES_PAGE',
-        label: 'Roles',
-        path: '/roles',
-        icon: ShieldCheck,
-      },
+      // {
+      //   key: 'ROLES_PAGE',
+      //   label: 'Roles',
+      //   path: '/about',
+      //   icon: ShieldCheck,
+      // },
     ],
-  },
-  {
-    key: 'logout',
-    label: 'Logout',
-    path: '/logout',
-    icon: LogOut,
   },
 ];

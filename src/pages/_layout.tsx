@@ -2,6 +2,7 @@ import '../styles.css';
 
 import type { ReactNode } from 'react';
 import { LayoutWrapper } from '../components/layout-wrapper';
+import { Providers } from '../components/providers';
 
 type RootLayoutProps = { children: ReactNode };
 
@@ -17,7 +18,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           __html: `document.documentElement.classList.remove('dark');`,
         }}
       />
-      <LayoutWrapper>{children}</LayoutWrapper>
+      <Providers>
+        <LayoutWrapper>{children}</LayoutWrapper>
+      </Providers>
     </div>
   );
 }

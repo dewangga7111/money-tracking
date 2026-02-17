@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SidebarItem } from './sidebar-item';
 import { menuItems } from '../../config/menu';
 
@@ -12,6 +12,17 @@ type SidebarContentProps = {
 export function SidebarContent({ isOpen, pathname }: SidebarContentProps) {
   const [openMenus, setOpenMenus] = useState<string[]>([]);
 
+  // Auto-open parent menu if child is active
+  useEffect(() => {
+    const activeParent = menuItems.find((item) =>
+      item.children?.some((child) => child.path === pathname)
+    );
+
+    if (activeParent && !openMenus.includes(activeParent.key)) {
+      setOpenMenus((prev) => [...prev, activeParent.key]);
+    }
+  }, [pathname]);
+
   const toggleMenu = (key: string) => {
     setOpenMenus((prev) =>
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
@@ -21,7 +32,7 @@ export function SidebarContent({ isOpen, pathname }: SidebarContentProps) {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center border-b border-gray-200 p-4">
+      <div className="flex h-[50px] items-center border-b border-gray-200 px-4">
         {isOpen && <h2 className="text-xl font-bold text-purple-600">Admin</h2>}
       </div>
 

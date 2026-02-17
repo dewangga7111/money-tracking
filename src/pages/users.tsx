@@ -1,19 +1,19 @@
-import { HomeContent } from '../components/pages/home/home-content';
+import { UsersContent } from "@/components/pages/users/users-content";
 
-export default async function HomePage() {
+export default async function UsersPage() {
   const data = await getData();
 
   return (
-    <>
+    <div>
       <title>{data.title}</title>
-      <HomeContent />
-    </>
+      <UsersContent />
+    </div>
   );
 }
 
 const getData = async () => {
   const data = {
-    title: 'Admin Dashboard',
+    title: 'Users',
   };
 
   return data;

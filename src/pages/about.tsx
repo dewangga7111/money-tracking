@@ -1,4 +1,4 @@
-import { AboutContent } from '../components/about/about-content';
+import { AboutContent } from '../components/pages/about/about-content';
 
 export default async function AboutPage() {
   const data = await getData();

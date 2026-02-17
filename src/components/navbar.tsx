@@ -6,9 +6,10 @@ import { User, LogOut, Menu } from 'lucide-react';
 type NavbarProps = {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  title: string;
 };
 
-export function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
+export function Navbar({ sidebarOpen, setSidebarOpen, title }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -21,7 +22,7 @@ export function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
           >
             <Menu className="h-5 w-5" />
           </button>
-          <h1 className="font-bold text-gray-900">ADMIN DASHBOARD</h1>
+          <h1 className="font-bold text-gray-900">{title}</h1>
         </div>
 
         <div className="flex items-center gap-3">
