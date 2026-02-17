@@ -7,10 +7,7 @@
     "dev": "waku dev",
     "build": "waku build",
     "start": "waku start",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:seed:system": "tsx prisma/seeders/system.seed.ts",
-    "db:seed:bahan": "tsx prisma/seeders/bahan.seed.ts",
-    "db:seed:resep": "tsx prisma/seeders/resep.seed.ts"
+    "db:seed": "tsx prisma/seed.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

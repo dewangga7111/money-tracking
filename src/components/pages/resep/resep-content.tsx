@@ -10,70 +10,64 @@ import { FilterField } from '@/types/filter';
 
 const columns: TableColumnType[] = [
   { key: 'action', label: 'Action', width: 50, align: 'center' },
-  { key: 'name', label: 'Name', align: 'start' },
-  { key: 'email', label: 'Email', align: 'start' },
-  { key: 'role', label: 'Role', align: 'center' },
+  { key: 'name', label: 'Nama Resep', align: 'start' },
+  { key: 'bahan', label: 'Bahan-bahan', align: 'start' },
   { key: 'status', label: 'Status', align: 'center' },
 ];
 
 const sampleData: TableRowType[] = [
   {
     key: '1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'Admin',
+    name: 'Nasi Goreng',
+    bahan: 'Nasi putih, telur, bawang merah, bawang putih, kecap manis',
     status: 'Active',
   },
   {
     key: '2',
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    role: 'User',
+    name: 'Rendang Daging',
+    bahan: 'Daging sapi, santan, cabai merah, bawang merah, serai',
     status: 'Active',
   },
   {
     key: '3',
-    name: 'Bob Johnson',
-    email: 'bob@example.com',
-    role: 'Editor',
-    status: 'Inactive',
+    name: 'Soto Ayam',
+    bahan: 'Ayam, kunyit, jahe, bawang putih, seledri',
+    status: 'Active',
   },
   {
     key: '4',
-    name: 'Alice Williams',
-    email: 'alice@example.com',
-    role: 'User',
+    name: 'Gado-Gado',
+    bahan: 'Sayuran rebus, tahu, tempe, telur, bumbu kacang',
     status: 'Active',
   },
   {
     key: '5',
-    name: 'Charlie Brown',
-    email: 'charlie@example.com',
-    role: 'Admin',
+    name: 'Ayam Bakar',
+    bahan: 'Ayam, kecap manis, bawang putih, jahe, lengkuas',
     status: 'Active',
   },
 ];
 
 const fields: FilterField[] = [
-  { type: "input", key: "name", label: "Name" },
+  { type: "input", key: "name", label: "Nama Resep" },
+  { type: "input", key: "bahan", label: "Bahan" },
   {
     type: "autocomplete",
-    key: "role",
-    label: "Role",
-    placeholder: "Select role",
+    key: "status",
+    label: "Status",
+    placeholder: "Select status",
     options: [
       {
-        label: 'Admin',
-        value: 'admin',
+        label: 'Active',
+        value: 'active',
       },
       {
-        label: 'User',
-        value: 'user',
+        label: 'Inactive',
+        value: 'inactive',
       },
     ],
   },
-  { type: "datepicker", key: "joinedAt", label: "Joined Date" },
-  { type: "daterange", key: "activeRange", label: "Active Range" },
+  { type: "daterange", key: "createdRange", label: "Tanggal Dibuat" },
 ];
 
 export function ResepContent() {

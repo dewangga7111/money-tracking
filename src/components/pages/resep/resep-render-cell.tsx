@@ -21,8 +21,8 @@ export default function ResepRenderCell({ item, columnKey }: RenderCellProps) {
   const { confirm } = useConfirmation();
 
   switch (key) {
-    case 'email':
-      return <div>{formatEllipsis(cellValue, 20)}</div>;
+    case 'bahan':
+      return <div>{formatEllipsis(cellValue, 50)}</div>;
 
     case 'status':
       return (

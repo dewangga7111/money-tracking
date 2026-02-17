@@ -24,7 +24,11 @@ export function SidebarItem({
   const Icon = item.icon;
   const hasChildren = item.children && item.children.length > 0;
   const isMenuOpen = openMenus.includes(item.key);
-  const isActive = item.path === pathname;
+
+  // Check if menu item is active - exact match or pathname starts with item.path
+  const isActive = item.path === pathname ||
+    (item.path !== '/' && pathname.startsWith(item.path + '/'));
+
   const isChildActive = hasChildren && item.children?.some((child) => child.path === pathname);
 
   if (hasChildren) {
