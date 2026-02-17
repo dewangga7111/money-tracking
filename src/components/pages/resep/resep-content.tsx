@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'waku';
 import Datatable from '@/components/table/datatable';
 import { TableColumnType, TableRowType } from '@/types/table';
-import UsersRenderCell from './users-render-cell';
+import ResepRenderCell from './resep-render-cell';
 import DynamicFilter from '@/components/table/dynamic-filter';
 import { FilterField } from '@/types/filter';
 
@@ -75,16 +76,17 @@ const fields: FilterField[] = [
   { type: "daterange", key: "activeRange", label: "Active Range" },
 ];
 
-export function UsersContent() {
+export function ResepContent() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const handleAdd = () => {
-    console.log('Add new user');
+    router.push('/resep/add');
   };
 
   const renderCell = (row: TableRowType, columnKey: string | number) => {
-    return <UsersRenderCell item={row} columnKey={columnKey} />;
+    return <ResepRenderCell item={row} columnKey={columnKey} />;
   };
 
   return (

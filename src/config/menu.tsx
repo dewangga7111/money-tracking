@@ -1,4 +1,4 @@
-import { Home, Settings, Users, ShieldCheck, LogOut, type LucideIcon } from 'lucide-react';
+import { Home, Settings, CookingPot, Users, LogOut, type LucideIcon } from 'lucide-react';
 
 export type MenuItem = {
   key: string;
@@ -9,6 +9,12 @@ export type MenuItem = {
 };
 
 export const menuItems: MenuItem[] = [
+  {
+    key: 'RESEP_PAGE',
+    label: 'Resep',
+    path: '/resep',
+    icon: CookingPot,
+  },
   {
     key: 'settings',
     label: 'Settings',

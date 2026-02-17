@@ -1,4 +1,4 @@
-import { AboutContent } from '../components/pages/about/about-content';
+import { ResepContent } from '@/components/pages/resep/resep-content';
 
 export default async function AboutPage() {
   const data = await getData();
@@ -6,14 +6,14 @@ export default async function AboutPage() {
   return (
     <>
       <title>{data.title}</title>
-      <AboutContent />
+      <ResepContent />
     </>
   );
 }
 
 const getData = async () => {
   const data = {
-    title: 'About',
+    title: 'Resep',
   };
 
   return data;

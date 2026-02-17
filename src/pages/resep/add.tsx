@@ -1,19 +1,19 @@
-import { AboutContent } from '../components/pages/about/about-content';
+import ResepForm from '@/components/pages/resep/resep-form';
 
-export default async function AboutPage() {
+export default async function AddResepPage() {
   const data = await getData();
 
   return (
-    <>
+    <div>
       <title>{data.title}</title>
-      <AboutContent />
-    </>
+      <ResepForm />
+    </div>
   );
 }
 
 const getData = async () => {
   const data = {
-    title: 'About',
+    title: 'Add Resep',
   };
 
   return data;
