@@ -1,5 +1,5 @@
 import ResepForm from '@/components/pages/resep/resep-form';
-import { createResepAction } from '@/actions/resep';
+import { createResepAction } from '@/actions/resep-action';
 
 export default async function AddResepPage() {
   const data = await getData();

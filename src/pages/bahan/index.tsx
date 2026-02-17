@@ -1,5 +1,5 @@
 import { BahanContent } from '@/components/pages/bahan/bahan-content';
-import { getAllBahan, deleteBahanAction } from '@/actions/bahan';
+import { getAllBahan, deleteBahanAction } from '@/actions/bahan-action';
 
 export default async function BahanPage() {
   const data = await getData();

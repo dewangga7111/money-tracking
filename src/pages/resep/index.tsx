@@ -1,5 +1,5 @@
 import { ResepContent } from '@/components/pages/resep/resep-content';
-import { getAllResep, deleteResepAction } from '@/actions/resep';
+import { getAllResep, deleteResepAction } from '@/actions/resep-action';
 
 export default async function ResepPage() {
   const data = await getData();
