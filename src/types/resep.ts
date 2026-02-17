@@ -9,6 +9,14 @@ export type ResepFormData = {
   bahan: string;
 };
 
+export type SelectedBahanItem = {
+  bahanId: string;
+  name: string;
+  jumlah: number; // Available quantity
+  usedJumlah: number; // Quantity used in recipe
+  satuan: string;
+};
+
 export type GetAllResepResponse = PaginatedResponse<ResepData>;
 
 export type GetResepByIdResponse = DataResponse<ResepData>;

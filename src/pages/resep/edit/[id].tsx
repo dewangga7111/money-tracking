@@ -1,5 +1,6 @@
 import ResepForm from '@/components/pages/resep/resep-form';
 import { getResepByIdAction, updateResepAction } from '@/actions/resep-action';
+import { getAllBahan } from '@/actions/bahan-action';
 
 export default async function EditResepPage({ id }: { id: string }) {
   const data = await getData(id);
@@ -20,6 +21,7 @@ export default async function EditResepPage({ id }: { id: string }) {
         initialData={data.resep}
         isEdit={true}
         updateAction={updateResepAction}
+        availableBahan={data.bahan}
       />
     </div>
   );
@@ -27,10 +29,12 @@ export default async function EditResepPage({ id }: { id: string }) {
 
 const getData = async (id: string) => {
   const result = await getResepByIdAction(id);
+  const bahanResult = await getAllBahan(1, 1000);
 
   const data = {
     title: 'Edit Resep',
     resep: result.success ? result.data : null,
+    bahan: bahanResult.success ? bahanResult.data : [],
   };
 
   return data;
