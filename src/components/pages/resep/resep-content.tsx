@@ -7,7 +7,8 @@ import { TableColumnType, TableRowType, PaginationInfo } from '@/types/table';
 import ResepRenderCell from './resep-render-cell';
 import DynamicFilter from '@/components/table/dynamic-filter';
 import { FilterField } from '@/types/filter';
-import type { ResepData, GetAllResepResponse, DeleteResepResponse } from '@/types/resep';
+import type { ResepData, GetAllResepResponse } from '@/types/resep';
+import type { ActionResponse } from '@/types/response';
 
 const columns: TableColumnType[] = [
   { key: 'action', label: 'Action', width: 50, align: 'center' },
@@ -41,7 +42,7 @@ const fields: FilterField[] = [
 type ResepContentProps = {
   initialData?: ResepData[];
   initialPagination: PaginationInfo;
-  deleteAction: (id: string) => Promise<DeleteResepResponse>;
+  deleteAction: (id: string) => Promise<ActionResponse>;
   getAllAction: (page: number, pageSize: number) => Promise<GetAllResepResponse>;
 };
 

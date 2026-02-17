@@ -1,8 +1,14 @@
 import type { TbResep } from '@prisma/client';
-import type { PaginatedResponse, ActionResponse } from './response';
+import type { PaginatedResponse, DataResponse } from './response';
 
 export type ResepData = TbResep;
 
+export type ResepFormData = {
+  name: string;
+  resep: string;
+  bahan: string;
+};
+
 export type GetAllResepResponse = PaginatedResponse<ResepData>;
 
-export type DeleteResepResponse = ActionResponse;
+export type GetResepByIdResponse = DataResponse<ResepData>;

@@ -1,7 +1,12 @@
 'use server';
 
 import { PrismaClient } from '@prisma/client';
-import type { GetAllResepResponse, DeleteResepResponse } from '@/types/resep';
+import type {
+  GetAllResepResponse,
+  GetResepByIdResponse,
+  ResepFormData,
+} from '@/types/resep';
+import type { ActionResponse } from '@/types/response';
 
 function getPrismaClient() {
   return new PrismaClient();
@@ -62,7 +67,103 @@ export async function getAllResep(
   }
 }
 
-export async function deleteResepAction(id: string): Promise<DeleteResepResponse> {
+export async function getResepByIdAction(id: string): Promise<GetResepByIdResponse> {
+  const prisma = getPrismaClient();
+  try {
+    const resep = await prisma.tbResep.findUnique({
+      where: {
+        resepId: id,
+        status: true,
+      },
+    });
+
+    if (!resep) {
+      return {
+        success: false,
+        error: 'Resep not found',
+        data: null as any,
+      };
+    }
+
+    return {
+      success: true,
+      data: resep,
+    };
+  } catch (error) {
+    console.error('Error fetching resep:', error);
+    return {
+      success: false,
+      error: 'Failed to fetch resep',
+      data: null as any,
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function createResepAction(formData: ResepFormData): Promise<ActionResponse> {
+  const prisma = getPrismaClient();
+  try {
+    await prisma.tbResep.create({
+      data: {
+        name: formData.name,
+        resep: formData.resep,
+        bahan: formData.bahan,
+        createdBy: 'SYSTEM',
+        updatedBy: 'SYSTEM',
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Resep created successfully',
+    };
+  } catch (error) {
+    console.error('Error creating resep:', error);
+    return {
+      success: false,
+      error: 'Failed to create resep',
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function updateResepAction(
+  id: string,
+  formData: ResepFormData
+): Promise<ActionResponse> {
+  const prisma = getPrismaClient();
+  try {
+    await prisma.tbResep.update({
+      where: {
+        resepId: id,
+      },
+      data: {
+        name: formData.name,
+        resep: formData.resep,
+        bahan: formData.bahan,
+        updatedBy: 'SYSTEM',
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Resep updated successfully',
+    };
+  } catch (error) {
+    console.error('Error updating resep:', error);
+    return {
+      success: false,
+      error: 'Failed to update resep',
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function deleteResepAction(id: string): Promise<ActionResponse> {
   const prisma = getPrismaClient();
   try {
     // Soft delete by setting status to false
