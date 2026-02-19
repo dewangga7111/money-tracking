@@ -6,13 +6,14 @@ import {
   Listbox,
   ListboxItem,
 } from '@heroui/react';
-import { EllipsisVertical, Trash2, Pencil } from 'lucide-react';
+import { EllipsisVertical, Trash2, Pencil, Play } from 'lucide-react';
 import { useRouter } from 'waku';
 
 import { RenderCellProps } from '@/types/table';
-import { formatEllipsis, showSuccessToast } from '@/utils/common';
+import { formatEllipsis, showSuccessToast, showErrorToast } from '@/utils/common';
 import { useConfirmation } from '@/contexts/confirmation-context';
 import { ManagedPopover } from '@/components/popover/managed-popover';
+import { runResepAction } from '@/actions/resep-action';
 
 export default function ResepRenderCell({ item, columnKey, onDelete }: RenderCellProps) {
   const key = String(columnKey);
@@ -48,6 +49,29 @@ export default function ResepRenderCell({ item, columnKey, onDelete }: RenderCel
           }
         >
           <Listbox aria-label="User actions" variant="flat">
+            <ListboxItem
+              key="run"
+              className="text-success"
+              color="success"
+              startContent={<Play size={13} />}
+              onPress={() => {
+                confirm({
+                  message: 'Are you sure you want to run this recipe? This will reduce ingredient quantities in inventory.',
+                  onConfirm: async () => {
+                    const result = await runResepAction(item.key);
+                    if (result.success) {
+                      showSuccessToast(result.message || 'Recipe executed successfully');
+                      // Refresh the page to show updated data
+                      router.push('/resep');
+                    } else {
+                      showErrorToast(result.error || 'Failed to run recipe');
+                    }
+                  },
+                });
+              }}
+            >
+              Run Recipe
+            </ListboxItem>
             <ListboxItem
               key="edit"
               startContent={<Pencil size={13} />}

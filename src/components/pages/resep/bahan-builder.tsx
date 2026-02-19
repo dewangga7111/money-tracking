@@ -191,9 +191,6 @@ export default function BahanBuilder({
   return (
     <DragDropProvider onDragEnd={handleDragEnd}>
       <div className="space-y-4 flex gap-4 border border-gray-200 p-4 rounded-xl">
-        {/* Hidden input for form submission */}
-        <input type="hidden" name={name} value={JSON.stringify(selectedBahan)} />
-
         {/* Available Bahan */}
         <div className="flex-1">
           <label className="block text-sm font-medium mb-2">

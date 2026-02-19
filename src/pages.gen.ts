@@ -16,6 +16,8 @@ import type { getConfig as File_ResepEditId_getConfig } from './pages/resep/edit
 // prettier-ignore
 import type { getConfig as File_ResepIndex_getConfig } from './pages/resep/index';
 // prettier-ignore
+import type { getConfig as File_ResepHistoryIndex_getConfig } from './pages/resep-history/index';
+// prettier-ignore
 import type { getConfig as File_Users_getConfig } from './pages/users';
 
 // prettier-ignore
@@ -26,6 +28,7 @@ type Page =
 | ({ path: '/resep/add' } & GetConfigResponse<typeof File_ResepAdd_getConfig>)
 | ({ path: '/resep/edit/[id]' } & GetConfigResponse<typeof File_ResepEditId_getConfig>)
 | ({ path: '/resep' } & GetConfigResponse<typeof File_ResepIndex_getConfig>)
+| ({ path: '/resep-history' } & GetConfigResponse<typeof File_ResepHistoryIndex_getConfig>)
 | ({ path: '/users' } & GetConfigResponse<typeof File_Users_getConfig>);
 
 // prettier-ignore

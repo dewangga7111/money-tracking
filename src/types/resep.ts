@@ -17,6 +17,12 @@ export type SelectedBahanItem = {
   satuan: string;
 };
 
+// Minimal data stored in tb_resep.bahan JSON
+export type ResepBahanData = {
+  bahanId: string;
+  usedJumlah: number;
+};
+
 export type GetAllResepResponse = PaginatedResponse<ResepData>;
 
 export type GetResepByIdResponse = DataResponse<ResepData>;

@@ -54,5 +54,22 @@ model TbResep {
   updatedBy String?  @map("updated_by") @db.VarChar(50)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
 
+  history TbResepHistory[]
+
   @@map("tb_resep")
+}
+
+model TbResepHistory {
+  historyId        String   @id @default(uuid()) @map("history_id") @db.Uuid
+  resepId          String   @map("resep_id") @db.Uuid
+  resepName        String   @map("resep_name") @db.VarChar(255)
+  bahanDeductions  String   @map("bahan_deductions") @db.Text
+  executedAt       DateTime @default(now()) @map("executed_at") @db.Timestamp(6)
+  executedBy       String   @map("executed_by") @db.VarChar(50)
+  status           String   @db.VarChar(20)
+  errorMessage     String?  @map("error_message") @db.Text
+
+  resep TbResep @relation(fields: [resepId], references: [resepId])
+
+  @@map("tb_resep_history")
 }
