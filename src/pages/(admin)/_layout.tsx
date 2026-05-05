@@ -1,10 +1,36 @@
 import type { ReactNode } from 'react';
+import { unstable_getContext } from 'waku/server';
+import { PrismaClient } from '@prisma/client';
 import { LayoutWrapper } from '@/components/layout/layout-cms';
+import { getSessionFromRequest } from '@/lib/session';
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
-  return <LayoutWrapper>{children}</LayoutWrapper>;
+async function getCurrentUser() {
+  const ctx = unstable_getContext();
+  const session = getSessionFromRequest(ctx.req);
+  if (!session) return null;
+
+  const prisma = new PrismaClient();
+  try {
+    const user = await prisma.tbUser.findUnique({
+      where: { userId: session.userId, status: true },
+      include: { role: true },
+    });
+    return user;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  const user = await getCurrentUser();
+
+  return (
+    <LayoutWrapper user={user}>
+      {children}
+    </LayoutWrapper>
+  );
 }
 
 export const getConfig = async () => {
-  return { render: 'static' } as const;
+  return { render: 'dynamic' } as const;
 };

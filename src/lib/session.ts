@@ -38,3 +38,10 @@ export function sessionCookieHeader(token: string): string {
 export function clearSessionCookieHeader(): string {
   return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0`;
 }
+
+export function getSessionFromRequest(req: Request): ReturnType<typeof verifySessionToken> {
+  const cookieHeader = req.headers.get('cookie') || '';
+  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${SESSION_COOKIE}=([^;]+)`));
+  const token = match?.[1];
+  return token ? verifySessionToken(token) : null;
+}

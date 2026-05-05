@@ -5,13 +5,16 @@ import { Button, Listbox, ListboxItem } from '@heroui/react';
 import { ManagedPopover } from '@/components/managed-popover';
 import { apiClient } from '@/lib/api-client';
 import { useConfirmation } from '@/contexts/confirmation-context';
+import avatar from '@/assets/images/User-avatar.png';
+import type { UserData } from '@/types/user';
 
 type NavbarProps = {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  user: UserData | null;
 };
 
-export function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
+export function Navbar({ sidebarOpen, setSidebarOpen, user }: NavbarProps) {
   const { confirm } = useConfirmation();
 
   const handleLogout = () => {
@@ -38,8 +41,8 @@ export function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
 
         <div className="flex items-center gap-3">
           <div className="flex flex-col items-end">
-            <span className="text-sm font-semibold text-gray-900">John Doe</span>
-            <span className="text-xs text-gray-500">Admin</span>
+            <span className="text-sm font-semibold text-gray-900">{user?.name}</span>
+            <span className="text-xs text-gray-500">{user?.role?.name}</span>
           </div>
 
           <ManagedPopover
@@ -47,9 +50,9 @@ export function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
             trigger={
               <Button variant="light" isIconOnly className="rounded-full p-0">
                 <img
-                  src="https://i.pravatar.cc/150?u=admin"
+                  src={avatar}
                   alt="User avatar"
-                  className="h-7 w-7 rounded-full border-2 border-purple-600"
+                  className="h-8 w-8 rounded-full bg-blue"
                 />
               </Button>
             }

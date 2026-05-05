@@ -6,12 +6,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from '../sidebar/sidebar';
 import { Navbar } from '../navbar/navbar';
 import { Footer } from './footer';
+import type { UserData } from '@/types/user';
 
 type LayoutWrapperProps = {
   children: React.ReactNode;
+  user: UserData | null;
 };
 
-export function LayoutWrapper({ children }: LayoutWrapperProps) {
+export function LayoutWrapper({ children, user }: LayoutWrapperProps) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -19,7 +21,7 @@ export function LayoutWrapper({ children }: LayoutWrapperProps) {
     <div className="flex min-h-screen bg-white">
       <Sidebar pathname={router.path} isOpen={sidebarOpen} />
       <div className="flex flex-1 flex-col">
-        <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} user={user} />
         <main className="flex-1 bg-gray-50 p-6">
           <AnimatePresence mode="wait">
             <motion.div
