@@ -1,7 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { User, LogOut, Menu } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
+import { Button, Listbox, ListboxItem } from '@heroui/react';
+import { ManagedPopover } from '@/components/popover/managed-popover';
+import { apiClient } from '@/lib/api-client';
+import { useConfirmation } from '@/contexts/confirmation-context';
 
 type NavbarProps = {
   sidebarOpen: boolean;
@@ -9,7 +12,17 @@ type NavbarProps = {
 };
 
 export function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { confirm } = useConfirmation();
+
+  const handleLogout = () => {
+    confirm({
+      message: 'Are you sure you want to logout?',
+      onConfirm: async () => {
+        await apiClient.post('/auth/logout');
+        window.location.href = '/login';
+      },
+    });
+  };
 
   return (
     <header className="sticky top-0 z-10 h-[50px] border-b border-gray-200 bg-white/80 backdrop-blur-md">
@@ -29,39 +42,30 @@ export function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
             <span className="text-xs text-gray-500">Admin</span>
           </div>
 
-          <div className="relative">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center gap-2"
-            >
-              <img
-                src="https://i.pravatar.cc/150?u=admin"
-                alt="User avatar"
-                className="h-7 w-7 rounded-full border-2 border-purple-600"
-              />
-            </button>
-
-            {isMenuOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-10"
-                  onClick={() => setIsMenuOpen(false)}
+          <ManagedPopover
+            placement="bottom-end"
+            trigger={
+              <Button variant="light" isIconOnly className="rounded-full p-0">
+                <img
+                  src="https://i.pravatar.cc/150?u=admin"
+                  alt="User avatar"
+                  className="h-7 w-7 rounded-full border-2 border-purple-600"
                 />
-                <div className="absolute right-0 top-full z-20 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
-                  <div className="py-1">
-                    <button className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <User className="h-4 w-4" />
-                      Profile
-                    </button>
-                    <button className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                      <LogOut className="h-4 w-4" />
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+              </Button>
+            }
+          >
+            <Listbox aria-label="User menu" variant="flat">
+              <ListboxItem
+                key="logout"
+                className="text-danger"
+                color="danger"
+                startContent={<LogOut className="h-4 w-4" />}
+                onPress={handleLogout}
+              >
+                Logout
+              </ListboxItem>
+            </Listbox>
+          </ManagedPopover>
         </div>
       </div>
     </header>

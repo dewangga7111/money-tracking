@@ -1,41 +1,23 @@
 import '../styles.css';
 
 import type { ReactNode } from 'react';
-import { LayoutWrapper } from '../components/layout/layout-cms';
-import { Providers } from '../components/providers';
+import { Providers } from '@/components/providers';
 
-type RootLayoutProps = { children: ReactNode };
-
-export default async function RootLayout({ children }: RootLayoutProps) {
-  const data = await getData();
-
+export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
     <div className="font-sans antialiased">
-      <meta name="description" content={data.description} />
-      <link rel="icon" type="image/png" href={data.icon} />
+      <meta name="description" content="Admin Template - Waku + Tailwind CSS" />
+      <link rel="icon" type="image/png" href="/images/favicon.png" />
       <script
         dangerouslySetInnerHTML={{
           __html: `document.documentElement.classList.remove('dark');`,
         }}
       />
-      <Providers>
-        <LayoutWrapper>{children}</LayoutWrapper>
-      </Providers>
+      <Providers>{children}</Providers>
     </div>
   );
 }
 
-const getData = async () => {
-  const data = {
-    description: 'Admin Template - Waku + Tailwind CSS',
-    icon: '/images/favicon.png',
-  };
-
-  return data;
-};
-
 export const getConfig = async () => {
-  return {
-    render: 'static',
-  } as const;
+  return { render: 'static' } as const;
 };

@@ -5,20 +5,17 @@ import { EllipsisVertical, Trash2, Pencil } from 'lucide-react';
 import { useRouter } from 'waku';
 
 import { RenderCellProps } from '@/types/table';
-import { formatEllipsis, showSuccessToast } from '@/utils/common';
+import { showSuccessToast } from '@/utils/common';
 import { useConfirmation } from '@/contexts/confirmation-context';
 import { ManagedPopover } from '@/components/popover/managed-popover';
 
-export default function UsersRenderCell({ item, columnKey, onDelete }: RenderCellProps) {
+export default function RoleRenderCell({ item, columnKey, onDelete }: RenderCellProps) {
   const key = String(columnKey);
   const cellValue = getKeyValue(item, key);
   const router = useRouter();
   const { confirm } = useConfirmation();
 
   switch (key) {
-    case 'email':
-      return <div>{formatEllipsis(cellValue, 30)}</div>;
-
     case 'status':
       return (
         <span
@@ -40,11 +37,11 @@ export default function UsersRenderCell({ item, columnKey, onDelete }: RenderCel
             </Button>
           }
         >
-          <Listbox aria-label="User actions" variant="flat">
+          <Listbox aria-label="Role actions" variant="flat">
             <ListboxItem
               key="edit"
               startContent={<Pencil size={13} />}
-              onPress={() => router.push(`/users/edit/${item.key}`)}
+              onPress={() => router.push(`/role/edit/${item.key}`)}
             >
               Edit
             </ListboxItem>
@@ -55,11 +52,11 @@ export default function UsersRenderCell({ item, columnKey, onDelete }: RenderCel
               startContent={<Trash2 size={13} />}
               onPress={() => {
                 confirm({
-                  message: 'Are you sure you want to delete this user?',
+                  message: 'Are you sure you want to delete this role?',
                   onConfirm: async () => {
                     if (onDelete) {
                       await onDelete(item.key);
-                      showSuccessToast('User deleted successfully');
+                      showSuccessToast('Role deleted successfully');
                     }
                   },
                 });

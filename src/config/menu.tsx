@@ -1,4 +1,4 @@
-import { Home, Settings, CookingPot, Users, History, ReceiptText, type LucideIcon } from 'lucide-react';
+import { Settings, type LucideIcon } from 'lucide-react';
 
 export type MenuItem = {
   key: string;
@@ -10,24 +10,6 @@ export type MenuItem = {
 
 export const menuItems: MenuItem[] = [
   {
-    key: 'RESEP_PAGE',
-    label: 'Resep',
-    path: '/resep',
-    icon: ReceiptText,
-  },
-  {
-    key: 'RESEP_HISTORY_PAGE',
-    label: 'Resep History',
-    path: '/resep-history',
-    icon: History,
-  },
-  {
-    key: 'BAHAN_PAGE',
-    label: 'Bahan',
-    path: '/bahan',
-    icon: CookingPot,
-  },
-  {
     key: 'settings',
     label: 'Settings',
     icon: Settings,
@@ -36,14 +18,12 @@ export const menuItems: MenuItem[] = [
         key: 'USERS_PAGE',
         label: 'Users',
         path: '/users',
-        icon: Users,
       },
-      // {
-      //   key: 'ROLES_PAGE',
-      //   label: 'Roles',
-      //   path: '/about',
-      //   icon: ShieldCheck,
-      // },
+      {
+        key: 'ROLES_PAGE',
+        label: 'Roles',
+        path: '/role',
+      },
     ],
   },
 ];

@@ -11,15 +11,12 @@ import {
   getKeyValue,
   Spinner,
   Pagination,
-  Button,
   Card,
   CardHeader,
   CardBody,
 } from "@heroui/react";
 import { DynamicTableProps, TableColumnType } from "@/types/table";
-import { PlusIcon } from "lucide-react";
 import { isMobile } from "react-device-detect";
-import { button } from "@/utils/primitives";
 
 export default function Datatable({
   columns,
@@ -32,7 +29,7 @@ export default function Datatable({
   totalPage = 0,
   totalRows = 0,
   onPageChange,
-  doAdd,
+  topContent,
 }: DynamicTableProps) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -41,18 +38,6 @@ export default function Datatable({
     { key: "no", label: "No", align: "center", width: 50 },
     ...columns,
   ];
-
-  const topContent = React.useMemo(() => (
-    <div className="flex flex-col gap-4">
-      <div className="flex justify-end gap-3 items-end">
-        {doAdd && (
-          <Button onPress={doAdd} color="primary" className={button()} startContent={<PlusIcon />}>
-            Add
-          </Button>
-        )}
-      </div>
-    </div>
-  ), [doAdd]);
 
   const startRow = totalRows === 0 ? 0 : (page - 1) * 10 + 1;
   const endRow = Math.min(page * 10, totalRows);

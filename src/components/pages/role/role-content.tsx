@@ -7,38 +7,36 @@ import { PlusIcon } from 'lucide-react';
 import Datatable from '@/components/table/datatable';
 import { button } from '@/utils/primitives';
 import { TableColumnType, TableRowType, PaginationInfo } from '@/types/table';
-import UsersRenderCell from './users-render-cell';
+import RoleRenderCell from './role-render-cell';
 import DynamicFilter from '@/components/table/dynamic-filter';
 import { FilterField } from '@/types/filter';
-import type { UserData, GetAllUserResponse } from '@/types/user';
+import type { RoleData, GetAllRoleResponse } from '@/types/role';
 import type { ActionResponse } from '@/types/response';
 
 const columns: TableColumnType[] = [
   { key: 'action', label: 'Action', width: 50, align: 'center' },
   { key: 'name', label: 'Name', align: 'start' },
-  { key: 'email', label: 'Email', align: 'start' },
-  { key: 'role', label: 'Role', align: 'center' },
+  { key: 'description', label: 'Description', align: 'start' },
   { key: 'status', label: 'Status', align: 'center' },
 ];
 
 const fields: FilterField[] = [
-  { type: 'input', key: 'name', label: 'Name' },
-  { type: 'input', key: 'email', label: 'Email' },
+  { type: 'input', key: 'name', label: 'Role Name' },
 ];
 
-type UsersContentProps = {
-  initialData?: UserData[];
+type RoleContentProps = {
+  initialData?: RoleData[];
   initialPagination: PaginationInfo;
   deleteAction: (id: string) => Promise<ActionResponse>;
-  getAllAction: (page: number, pageSize: number, params: any) => Promise<GetAllUserResponse>;
+  getAllAction: (page: number, pageSize: number, params: any) => Promise<GetAllRoleResponse>;
 };
 
-export function UsersContent({
+export function RoleContent({
   initialData = [],
   initialPagination,
   deleteAction,
   getAllAction,
-}: UsersContentProps) {
+}: RoleContentProps) {
   const router = useRouter();
   const [page, setPage] = useState(initialPagination.page);
   const [loading, setLoading] = useState(false);
@@ -49,10 +47,9 @@ export function UsersContent({
   useEffect(() => {
     setData(
       initialData.map((v) => ({
-        key: v.userId,
+        key: v.roleId,
         name: v.name,
-        email: v.email,
-        role: v.role.name,
+        description: v.description || '-',
         status: v.status ? 'Active' : 'Inactive',
       }))
     );
@@ -71,10 +68,9 @@ export function UsersContent({
         if (pageResult.success) {
           setData(
             pageResult.data.map((v) => ({
-              key: v.userId,
+              key: v.roleId,
               name: v.name,
-              email: v.email,
-              role: v.role.name,
+              description: v.description || '-',
               status: v.status ? 'Active' : 'Inactive',
             }))
           );
@@ -82,7 +78,7 @@ export function UsersContent({
         }
       }
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error('Error deleting role:', error);
     } finally {
       setLoading(false);
     }
@@ -95,10 +91,9 @@ export function UsersContent({
       if (result.success) {
         setData(
           result.data.map((v) => ({
-            key: v.userId,
+            key: v.roleId,
             name: v.name,
-            email: v.email,
-            role: v.role.name,
+            description: v.description || '-',
             status: v.status ? 'Active' : 'Inactive',
           }))
         );
@@ -106,14 +101,14 @@ export function UsersContent({
         setPage(newPage);
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching roles:', error);
     } finally {
       setLoading(false);
     }
   };
 
   const renderCell = (row: TableRowType, columnKey: string | number) => (
-    <UsersRenderCell item={row} columnKey={columnKey} onDelete={handleDelete} />
+    <RoleRenderCell item={row} columnKey={columnKey} onDelete={handleDelete} />
   );
 
   return (
@@ -135,7 +130,7 @@ export function UsersContent({
         topContent={
           <div className="flex flex-col gap-4">
             <div className="flex justify-end gap-3 items-end">
-              <Button onPress={() => router.push('/users/add')} color="primary" className={button()} startContent={<PlusIcon />}>
+              <Button onPress={() => router.push('/role/add')} color="primary" className={button()} startContent={<PlusIcon />}>
                 Add
               </Button>
             </div>

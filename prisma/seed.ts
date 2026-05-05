@@ -1,16 +1,14 @@
 import { PrismaClient } from '@prisma/client';
-import { seedSystem } from './seeders/system.seed';
-import { seedBahan } from './seeders/bahan.seed';
-import { seedResep } from './seeders/resep.seed';
+import { seedRole } from './seeders/role.seed';
+import { seedUser } from './seeders/user.seed';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('Start seeding...\n');
 
-  await seedSystem(prisma);
-  await seedBahan(prisma);
-  await seedResep(prisma);
+  await seedRole(prisma);
+  await seedUser(prisma);
 
   console.log('\nAll seeding completed!');
 }

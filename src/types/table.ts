@@ -21,7 +21,7 @@ export type DynamicTableProps = {
   totalPage?: number;
   totalRows?: number;
   onPageChange?: (page: number) => void;
-  doAdd?: () => void;
+  topContent?: React.ReactNode;
 };
 
 export type RenderCellProps = {
