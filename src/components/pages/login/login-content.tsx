@@ -13,9 +13,7 @@ import { BlurText } from '@/components/animations/blur-text';
 import { ShinyText } from '@/components/animations/shiny-text';
 import { SplitText } from '@/components/animations/split-text';
 import { apiClient } from '@/lib/api-client';
-
-const APP_NAME = import.meta.env.WAKU_PUBLIC_WEB_TITLE || 'Waku Admin';
-const APP_TAGLINE = 'A minimal, modern admin template powered by Waku and HeroUI.';
+import { APP_NAME, APP_TAGLINE } from '@/lib/app-config';
 
 export function LoginContent() {
   const router = useRouter();
