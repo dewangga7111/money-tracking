@@ -2,7 +2,7 @@
 
 import { LogOut, Menu } from 'lucide-react';
 import { Button, Listbox, ListboxItem } from '@heroui/react';
-import { ManagedPopover } from '@/components/popover/managed-popover';
+import { ManagedPopover } from '@/components/managed-popover';
 import { apiClient } from '@/lib/api-client';
 import { useConfirmation } from '@/contexts/confirmation-context';
 

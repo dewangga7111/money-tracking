@@ -7,7 +7,7 @@ import { useRouter } from 'waku';
 import { RenderCellProps } from '@/types/table';
 import { showSuccessToast } from '@/utils/common';
 import { useConfirmation } from '@/contexts/confirmation-context';
-import { ManagedPopover } from '@/components/popover/managed-popover';
+import { ManagedPopover } from '@/components/managed-popover';
 
 export default function RoleRenderCell({ item, columnKey, onDelete }: RenderCellProps) {
   const key = String(columnKey);
@@ -19,9 +19,8 @@ export default function RoleRenderCell({ item, columnKey, onDelete }: RenderCell
     case 'status':
       return (
         <span
-          className={`rounded-full px-2 py-1 text-xs font-semibold ${
-            cellValue === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-          }`}
+          className={`rounded-full px-2 py-1 text-xs font-semibold ${cellValue === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }`}
         >
           {cellValue}
         </span>
