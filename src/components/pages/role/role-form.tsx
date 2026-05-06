@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Card, CardBody, Form } from '@heroui/react';
+import { Button, Card, Form, Spinner } from '@heroui/react';
 import { Save } from 'lucide-react';
 import { useRouter } from 'waku';
 
@@ -70,7 +70,7 @@ export default function RoleForm({
 
   return (
     <Card className="px-1">
-      <CardBody>
+      <Card.Content>
         <Form onSubmit={handleSubmit}>
           <div className={form()}>
             <div className="grid lg:grid-cols-2 gap-4">
@@ -78,7 +78,7 @@ export default function RoleForm({
                 isRequired
                 name="name"
                 label="Role Name"
-                defaultValue={initialData?.name}
+                defaultValue={initialData?.name ?? ''}
               />
               <AppTextarea
                 name="description"
@@ -91,8 +91,7 @@ export default function RoleForm({
             <div className={actionButtons()}>
               <Button
                 type="button"
-                color="primary"
-                variant="flat"
+                variant="ghost"
                 className={button()}
                 onPress={() => router.push('/role')}
                 isDisabled={loading}
@@ -101,17 +100,18 @@ export default function RoleForm({
               </Button>
               <Button
                 type="submit"
-                color="primary"
+                variant="primary"
                 className={button()}
-                startContent={<Save size={15} />}
-                isLoading={loading}
+                isDisabled={loading}
               >
-                Save
+                <span className="flex items-center gap-2">
+                  {loading ? <Spinner size="sm" /> : <Save size={15} />}Save
+                </span>
               </Button>
             </div>
           </div>
         </Form>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

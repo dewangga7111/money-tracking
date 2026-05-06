@@ -1,14 +1,7 @@
 'use client';
 
 import { createContext, useState, ReactNode, useContext } from 'react';
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from '@heroui/react';
+import { Modal, Button } from '@heroui/react';
 
 type ConfirmParams = {
   message: string;
@@ -58,39 +51,31 @@ export const ConfirmationProvider = ({ children }: { children: ReactNode }) => {
     setIsOpen(false);
   };
 
-  const handleCancel = () => {
-    setIsOpen(false);
-  };
-
   return (
     <ConfirmationContext.Provider value={{ confirm }}>
       {children}
 
-      {/* ✅ Global Modal Rendered Once */}
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={setIsOpen}
-        isDismissable={false}
-        backdrop="blur"
-        placement="center"
-        hideCloseButton={true}
-      >
-        <ModalContent>
-          <ModalHeader className="justify-center text-center text-lg font-semibold">
-            {header}
-          </ModalHeader>
-          <ModalBody className="text-center">
-            <p className="text-default-600">{message}</p>
-          </ModalBody>
-          <ModalFooter className="flex justify-center gap-4">
-            <Button variant="flat" color="primary" onPress={handleCancel}>
-              {cancelText}
-            </Button>
-            <Button color="primary" onPress={handleConfirm}>
-              {confirmText}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+      <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
+        <Modal.Backdrop isDismissable={false} variant="blur">
+          <Modal.Container placement="center">
+            <Modal.Dialog>
+              <Modal.Header className="justify-center text-center text-lg font-semibold">
+                {header}
+              </Modal.Header>
+              <Modal.Body className="text-center">
+                <p className="text-default-600">{message}</p>
+              </Modal.Body>
+              <Modal.Footer className="flex justify-center gap-4">
+                <Button variant="ghost" onPress={() => setIsOpen(false)} fullWidth>
+                  {cancelText}
+                </Button>
+                <Button variant="primary" onPress={handleConfirm} fullWidth>
+                  {confirmText}
+                </Button>
+              </Modal.Footer>
+            </Modal.Dialog>
+          </Modal.Container>
+        </Modal.Backdrop>
       </Modal>
     </ConfirmationContext.Provider>
   );

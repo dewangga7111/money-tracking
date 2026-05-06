@@ -1,13 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
+@import "@heroui/styles";
 @config '../tailwind.config.ts';
+
+:root {
+  /* HeroUI v3 semantic tokens — controls component colors (buttons, inputs, etc.) */
+  --accent: oklch(57.69% 0.246 293.94);        /* violet-600 = #7c3aed */
+  --accent-foreground: oklch(100% 0 0);         /* white */
+
+  /* Tailwind primary palette — for bg-primary, text-primary, from-primary, etc. */
+  --heroui-primary-50: 245 243 255;
+  --heroui-primary-100: 237 233 254;
+  --heroui-primary-200: 221 214 254;
+  --heroui-primary-300: 196 181 253;
+  --heroui-primary-400: 167 139 250;
+  --heroui-primary-500: 139 92 246;
+  --heroui-primary-600: 124 58 237;
+  --heroui-primary: 124 58 237;
+  --heroui-primary-700: 109 40 217;
+  --heroui-primary-800: 91 33 182;
+  --heroui-primary-900: 76 29 149;
+  --heroui-primary-foreground: 255 255 255;
+}
 
 body {
   font-family: 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

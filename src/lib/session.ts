@@ -19,7 +19,10 @@ export function createSessionToken(userId: string, email: string): string {
 
 export function verifySessionToken(token: string): SessionPayload | null {
   try {
-    const [encoded, sig] = token.split('.');
+    const parts = token.split('.');
+    const encoded = parts[0];
+    const sig = parts[1];
+    if (!encoded || !sig) return null;
     const expected = createHmac('sha256', SECRET).update(encoded).digest('base64url');
     if (sig !== expected) return null;
     const payload: SessionPayload = JSON.parse(Buffer.from(encoded, 'base64url').toString());

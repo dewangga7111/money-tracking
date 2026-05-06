@@ -135,8 +135,8 @@ export function UsersContent({
         topContent={
           <div className="flex flex-col gap-4">
             <div className="flex justify-end gap-3 items-end">
-              <Button onPress={() => router.push('/users/add')} color="primary" className={button()} startContent={<PlusIcon />}>
-                Add
+              <Button onPress={() => router.push('/users/add')} variant="primary" className={button()}>
+                <span className="flex items-center gap-2"><PlusIcon size={15} />Add</span>
               </Button>
             </div>
           </div>

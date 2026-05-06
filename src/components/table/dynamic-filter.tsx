@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardHeader, CardBody, Button, Form } from '@heroui/react';
+import { Card, Button, Form } from '@heroui/react';
 import { Search, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -54,7 +54,7 @@ export default function DynamicFilter({
   return (
     <Card className="px-1 mb-3 overflow-hidden">
       {/* Header with toggle */}
-      <CardHeader
+      <Card.Header
         className="flex justify-between items-center cursor-pointer select-none h-[45px]"
         onClick={() => setIsOpen((prev) => !prev)}
       >
@@ -65,7 +65,7 @@ export default function DynamicFilter({
         >
           <ChevronDown size={18} />
         </motion.div>
-      </CardHeader>
+      </Card.Header>
 
       {/* Animated Body */}
       <AnimatePresence initial={false}>
@@ -77,7 +77,7 @@ export default function DynamicFilter({
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: 'easeInOut' }}
           >
-            <CardBody>
+            <Card.Content>
               <Form id="filterForm" onSubmit={handleSubmit}>
                 <div className="w-full flex flex-col gap-4">
                   <div className={`grid sm:grid-cols-3 gap-4`}>
@@ -90,10 +90,10 @@ export default function DynamicFilter({
                             <AppTextInput
                               key={field.key}
                               label={field.label}
-                              placeholder={field.placeholder}
+                              {...(field.placeholder !== undefined ? { placeholder: field.placeholder } : {})}
                               value={value || ''}
-                              onChange={(e) =>
-                                handleChange(field.key, e.target.value)
+                              onChange={(val) =>
+                                handleChange(field.key, val)
                               }
                             />
                           );
@@ -103,10 +103,9 @@ export default function DynamicFilter({
                             <AppAutocomplete
                               key={field.key}
                               label={field.label}
-                              placeholder={field.placeholder}
                               selectedKey={value || ''}
                               items={field.options ?? []}
-                              onSelectionChange={(v) =>
+                              onSelectionChange={(v: any) =>
                                 handleChange(field.key, v)
                               }
                             />
@@ -141,8 +140,7 @@ export default function DynamicFilter({
                   <div className={actionButtons()}>
                     <Button
                       type="button"
-                      color="primary"
-                      variant="flat"
+                      variant="ghost"
                       className={button()}
                       onPress={handleClear}
                     >
@@ -150,16 +148,17 @@ export default function DynamicFilter({
                     </Button>
                     <Button
                       type="submit"
-                      color="primary"
+                      variant="primary"
                       className={button()}
-                      startContent={<Search size={15} />}
                     >
-                      Search
+                      <span className="flex items-center gap-2">
+                        <Search size={15} />Search
+                      </span>
                     </Button>
                   </div>
                 </div>
               </Form>
-            </CardBody>
+            </Card.Content>
           </motion.div>
         )}
       </AnimatePresence>

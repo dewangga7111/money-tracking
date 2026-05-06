@@ -1,44 +1,37 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverProps,
-} from '@heroui/react';
+import { Popover, type PopoverContentProps } from '@heroui/react';
 
-interface ManagedPopoverProps
-  extends Omit<PopoverProps, 'isOpen' | 'onOpenChange' | 'children'> {
+interface ManagedPopoverProps {
   trigger: React.ReactNode;
   children: React.ReactNode;
+  placement?: PopoverContentProps['placement'];
 }
 
 export const ManagedPopover = ({
   trigger,
   children,
-  ...props
+  placement = 'bottom',
 }: ManagedPopoverProps) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => {
     const handleCloseAll = () => setIsPopoverOpen(false);
     window.addEventListener('close-all-popovers', handleCloseAll);
-    return () =>
-      window.removeEventListener('close-all-popovers', handleCloseAll);
+    return () => window.removeEventListener('close-all-popovers', handleCloseAll);
   }, []);
 
   return (
-    <Popover
-      placement="bottom"
-      {...props}
-      isOpen={isPopoverOpen}
-      onOpenChange={setIsPopoverOpen}
-    >
-      <PopoverTrigger onPress={() => setIsPopoverOpen((v) => !v)}>
+    <Popover isOpen={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+      <Popover.Trigger>
         {trigger}
-      </PopoverTrigger>
-      <PopoverContent>{children}</PopoverContent>
+      </Popover.Trigger>
+      <Popover.Content placement={placement}>
+        <Popover.Dialog>
+          {children}
+        </Popover.Dialog>
+      </Popover.Content>
     </Popover>
   );
 };

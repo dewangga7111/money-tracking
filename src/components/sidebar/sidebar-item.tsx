@@ -67,7 +67,7 @@ export function SidebarItem({
               return (
                 <button
                   key={child.key}
-                  onClick={() => child.path && router.push(child.path)}
+                  onClick={() => child.path && router.push(child.path as any)}
                   className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-300 ${
                     isChildItemActive
                       ? 'font-semibold text-purple-600'
@@ -87,7 +87,7 @@ export function SidebarItem({
 
   return (
     <button
-      onClick={() => item.path && router.push(item.path)}
+      onClick={() => item.path && router.push(item.path as any)}
       className={`group relative flex w-full items-center gap-3 rounded-r-lg px-3 py-2 transition-all duration-300 ${
         isActive
           ? 'bg-purple-50 font-semibold text-purple-600'

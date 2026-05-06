@@ -80,7 +80,7 @@ export async function createRoleAction(formData: RoleFormData): Promise<ActionRe
     await prisma.tbRole.create({
       data: {
         name: formData.name,
-        description: formData.description,
+        description: formData.description ?? null,
         createdBy: 'SYSTEM',
         updatedBy: 'SYSTEM',
       },
@@ -102,7 +102,7 @@ export async function updateRoleAction(id: string, formData: RoleFormData): Prom
       where: { roleId: id },
       data: {
         name: formData.name,
-        description: formData.description,
+        description: formData.description ?? null,
         updatedBy: 'SYSTEM',
         updatedAt: new Date(),
       },
