@@ -51,7 +51,7 @@ export function Navbar() {
                 />
               </Button>
             </Dropdown.Trigger>
-            <Dropdown.Popover placement="bottom end">
+            <Dropdown.Popover placement="bottom end" className="min-w-32">
               <Dropdown.Menu aria-label="User menu">
                 <Dropdown.Item key="logout" className="text-danger" onAction={handleLogout}>
                   <span className="flex items-center gap-2">

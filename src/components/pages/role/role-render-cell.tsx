@@ -32,7 +32,7 @@ export default function RoleRenderCell({ item, columnKey, onDelete }: RenderCell
               <EllipsisVertical size={18} />
             </Button>
           </Dropdown.Trigger>
-          <Dropdown.Popover placement="right">
+          <Dropdown.Popover placement="right" className="min-w-32">
             <Dropdown.Menu aria-label="Role actions">
               <Dropdown.Item
                 key="edit"

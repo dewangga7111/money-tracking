@@ -22,7 +22,6 @@ export const useConfirmation = () => {
     cancelText = 'No',
     confirmText = 'Yes',
   }: ConfirmParams) => {
-    window.dispatchEvent(new Event('close-all-popovers'));
     setState({ isOpen: true, message, header, cancelText, confirmText, onConfirm });
   };
 

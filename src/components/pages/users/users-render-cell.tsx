@@ -35,7 +35,7 @@ export default function UsersRenderCell({ item, columnKey, onDelete }: RenderCel
               <EllipsisVertical size={18} />
             </Button>
           </Dropdown.Trigger>
-          <Dropdown.Popover placement="right">
+          <Dropdown.Popover placement="right" className="min-w-32">
             <Dropdown.Menu aria-label="User actions">
               <Dropdown.Item
                 key="edit"
