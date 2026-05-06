@@ -58,7 +58,7 @@ export default function DynamicFilter({
         className="cursor-pointer select-none"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <div className="flex flex-row justify-between items-center w-full">
+        <div className="flex justify-between items-center w-full">
           <span className="font-semibold text-md">Filter</span>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}

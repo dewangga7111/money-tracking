@@ -41,9 +41,14 @@ export default function Datatable({
   const startRow = totalRows === 0 ? 0 : (page - 1) * 10 + 1;
   const endRow = Math.min(page * 10, totalRows);
 
-  const paginationContent = (
-    <Pagination className="justify-end">
-      <Pagination.Content>
+  const bottomContent = (
+    <Pagination>
+      <Pagination.Summary className="max-sm:self-center">
+        {totalRows > 0
+          ? `Showing ${startRow}–${endRow} of ${totalRows} entries`
+          : "No data to display"}
+      </Pagination.Summary>
+      <Pagination.Content className="max-sm:self-center">
         <Pagination.Item>
           <Pagination.Previous
             onPress={() => onPageChange?.(page - 1)}
@@ -82,17 +87,6 @@ export default function Datatable({
     </Pagination>
   );
 
-  const bottomContent = (
-    <>
-      <p className="text-sm text-default-500 w-full">
-        {totalRows > 0
-          ? `Showing ${startRow}–${endRow} of ${totalRows} entries`
-          : "No data to display"}
-      </p>
-      {paginationContent}
-    </>
-  );
-
   // Mobile card view
   const renderMobileCards = () => {
     if (loading) {
@@ -115,13 +109,15 @@ export default function Datatable({
             const actionColumn = columns.find((col) => col.key === "action");
             return (
               <Card key={item.key || index} className="p-3 shadow-sm">
-                <Card.Header className="flex justify-between items-center">
-                  <p className="font-semibold text-sm">
-                    #{(page - 1) * 10 + (index + 1)}
-                  </p>
-                  {actionColumn && renderCell && (
-                    <div>{renderCell(item, actionColumn.key)}</div>
-                  )}
+                <Card.Header>
+                  <div className="flex justify-between items-center w-full">
+                    <p className="font-semibold text-sm">
+                      #{(page - 1) * 10 + (index + 1)}
+                    </p>
+                    {actionColumn && renderCell && (
+                      <div>{renderCell(item, actionColumn.key)}</div>
+                    )}
+                  </div>
                 </Card.Header>
                 <Card.Content className="grid grid-cols-1 gap-2 text-sm">
                   {columns
@@ -198,7 +194,7 @@ export default function Datatable({
                 }}
               </Table.Body>
             </Table.Content>
-            <Table.Footer>
+            <Table.Footer className="pb-0">
               {bottomContent}
             </Table.Footer>
           </Table>
