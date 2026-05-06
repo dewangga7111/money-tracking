@@ -50,7 +50,7 @@ export function ConfirmationModal() {
               <p className="text-default-600">{state.message}</p>
             </Modal.Body>
             <Modal.Footer className="flex justify-center gap-4">
-              <Button variant="ghost" onPress={close} fullWidth>
+              <Button variant="secondary" onPress={close} fullWidth>
                 {state.cancelText}
               </Button>
               <Button variant="primary" onPress={handleConfirm} fullWidth>

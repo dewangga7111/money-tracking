@@ -148,61 +148,63 @@ export default function Datatable({
 
   // Desktop table view
   const renderDesktopTable = () => (
-    <div>
-      {topContent && <div className="mb-4">{topContent}</div>}
-      <div className="relative">
-        {loading && (
-          <div className="absolute inset-0 flex justify-center items-center bg-white/60 z-10 rounded">
-            <Spinner size="lg" />
-          </div>
-        )}
-        <Table>
-          <Table.Content>
-            <Table.Header>
-              {finalColumns.map((col, i) => (
-                <Table.Column
-                  key={col.key}
-                  id={col.key}
-                  isRowHeader={i === 0}
-                  style={{ width: col.width, textAlign: col.align }}
-                >
-                  {col.label}
-                </Table.Column>
-              ))}
-            </Table.Header>
+    <Card>
+      <Card.Content>
+        {topContent && <div className="mb-4">{topContent}</div>}
+        <div className="relative">
+          {loading && (
+            <div className="absolute inset-0 flex justify-center items-center bg-white/60 z-10 rounded">
+              <Spinner size="lg" />
+            </div>
+          )}
+          <Table variant="secondary">
+            <Table.Content>
+              <Table.Header>
+                {finalColumns.map((col, i) => (
+                  <Table.Column
+                    key={col.key}
+                    id={col.key}
+                    isRowHeader={i === 0}
+                    style={{ width: col.width, textAlign: col.align }}
+                  >
+                    {col.label}
+                  </Table.Column>
+                ))}
+              </Table.Header>
 
-            <Table.Body
-              items={rows}
-              renderEmptyState={() =>
-                !loading ? (
-                  <p className="text-center py-6 text-default-500">{emptyContent}</p>
-                ) : null
-              }
-            >
-              {(item) => {
-                const index = rows.indexOf(item);
-                return (
-                  <Table.Row id={String(item.key || index)}>
-                    {finalColumns.map((col) => (
-                      <Table.Cell key={col.key} style={{ textAlign: col.align }}>
-                        {col.key === "no"
-                          ? (page - 1) * 10 + (index + 1)
-                          : renderCell
-                            ? renderCell(item, col.key)
-                            : (item as Record<string, any>)[col.key]}
-                      </Table.Cell>
-                    ))}
-                  </Table.Row>
-                );
-              }}
-            </Table.Body>
-          </Table.Content>
-          <Table.Footer>
-            {bottomContent}
-          </Table.Footer>
-        </Table>
-      </div>
-    </div>
+              <Table.Body
+                items={rows}
+                renderEmptyState={() =>
+                  !loading ? (
+                    <p className="text-center py-6 text-default-500">{emptyContent}</p>
+                  ) : null
+                }
+              >
+                {(item) => {
+                  const index = rows.indexOf(item);
+                  return (
+                    <Table.Row id={String(item.key || index)}>
+                      {finalColumns.map((col) => (
+                        <Table.Cell key={col.key} style={{ textAlign: col.align }}>
+                          {col.key === "no"
+                            ? (page - 1) * 10 + (index + 1)
+                            : renderCell
+                              ? renderCell(item, col.key)
+                              : (item as Record<string, any>)[col.key]}
+                        </Table.Cell>
+                      ))}
+                    </Table.Row>
+                  );
+                }}
+              </Table.Body>
+            </Table.Content>
+            <Table.Footer>
+              {bottomContent}
+            </Table.Footer>
+          </Table>
+        </div>
+      </Card.Content>
+    </Card>
   );
 
   if (!mounted) return null;

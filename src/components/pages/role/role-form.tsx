@@ -91,7 +91,7 @@ export default function RoleForm({
             <div className={actionButtons()}>
               <Button
                 type="button"
-                variant="ghost"
+                variant="secondary"
                 className={button()}
                 onPress={() => router.push('/role')}
                 isDisabled={loading}

@@ -134,7 +134,7 @@ export default function UserForm({
             <div className={actionButtons()}>
               <Button
                 type="button"
-                variant="ghost"
+                variant="secondary"
                 className={button()}
                 onPress={() => router.push('/users')}
                 isDisabled={loading}
