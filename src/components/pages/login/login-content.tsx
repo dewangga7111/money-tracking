@@ -101,7 +101,7 @@ export function LoginContent() {
   return (
     <div className="flex justify-center items-center h-screen w-screen bg-default-50">
       <Card className="max-w-6xl w-[90%] h-[70%] shadow-2xl p-0">
-        <Card.Content className="grid grid-cols-2 p-0 h-full overflow-hidden">
+        <Card.Content className="grid grid-cols-2 gap-0 p-0 h-full overflow-hidden">
           {/* Left panel */}
           <div className="w-full h-full bg-gradient-to-br from-primary-600 via-primary-500 to-primary-300 rounded-l-xl relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
