@@ -1,7 +1,8 @@
 'use client';
 
-import { createContext, useState, ReactNode, useContext } from 'react';
+import { useAtom } from 'jotai';
 import { Modal, Button } from '@heroui/react';
+import { confirmationAtom } from '@/store/confirmation';
 
 type ConfirmParams = {
   message: string;
@@ -11,23 +12,8 @@ type ConfirmParams = {
   confirmText?: string;
 };
 
-type ConfirmationContextType = {
-  confirm: (params: ConfirmParams) => void;
-};
-
-const ConfirmationContext = createContext<ConfirmationContextType | undefined>(
-  undefined
-);
-
-export const ConfirmationProvider = ({ children }: { children: ReactNode }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [onConfirmAction, setOnConfirmAction] = useState<(() => void) | null>(
-    null
-  );
-  const [header, setHeader] = useState('Confirmation');
-  const [cancelText, setCancelText] = useState('No');
-  const [confirmText, setConfirmText] = useState('Yes');
+export const useConfirmation = () => {
+  const [, setState] = useAtom(confirmationAtom);
 
   const confirm = ({
     message,
@@ -36,57 +22,45 @@ export const ConfirmationProvider = ({ children }: { children: ReactNode }) => {
     cancelText = 'No',
     confirmText = 'Yes',
   }: ConfirmParams) => {
-    //close all active popovers
     window.dispatchEvent(new Event('close-all-popovers'));
-    setMessage(message);
-    setOnConfirmAction(() => onConfirm);
-    setHeader(header);
-    setCancelText(cancelText);
-    setConfirmText(confirmText);
-    setIsOpen(true);
+    setState({ isOpen: true, message, header, cancelText, confirmText, onConfirm });
   };
 
+  return { confirm };
+};
+
+export function ConfirmationModal() {
+  const [state, setState] = useAtom(confirmationAtom);
+
+  const close = () => setState((s) => ({ ...s, isOpen: false }));
+
   const handleConfirm = () => {
-    onConfirmAction?.();
-    setIsOpen(false);
+    state.onConfirm?.();
+    close();
   };
 
   return (
-    <ConfirmationContext.Provider value={{ confirm }}>
-      {children}
-
-      <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
-        <Modal.Backdrop isDismissable={false} variant="blur">
-          <Modal.Container placement="center">
-            <Modal.Dialog>
-              <Modal.Header className="justify-center text-center text-lg font-semibold">
-                {header}
-              </Modal.Header>
-              <Modal.Body className="text-center">
-                <p className="text-default-600">{message}</p>
-              </Modal.Body>
-              <Modal.Footer className="flex justify-center gap-4">
-                <Button variant="ghost" onPress={() => setIsOpen(false)} fullWidth>
-                  {cancelText}
-                </Button>
-                <Button variant="primary" onPress={handleConfirm} fullWidth>
-                  {confirmText}
-                </Button>
-              </Modal.Footer>
-            </Modal.Dialog>
-          </Modal.Container>
-        </Modal.Backdrop>
-      </Modal>
-    </ConfirmationContext.Provider>
+    <Modal isOpen={state.isOpen} onOpenChange={(open) => !open && close()}>
+      <Modal.Backdrop isDismissable={false} variant="blur">
+        <Modal.Container placement="center">
+          <Modal.Dialog>
+            <Modal.Header className="justify-center text-center text-lg font-semibold">
+              {state.header}
+            </Modal.Header>
+            <Modal.Body className="text-center">
+              <p className="text-default-600">{state.message}</p>
+            </Modal.Body>
+            <Modal.Footer className="flex justify-center gap-4">
+              <Button variant="ghost" onPress={close} fullWidth>
+                {state.cancelText}
+              </Button>
+              <Button variant="primary" onPress={handleConfirm} fullWidth>
+                {state.confirmText}
+              </Button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
+    </Modal>
   );
-};
-
-export const useConfirmation = (): ConfirmationContextType => {
-  const context = useContext(ConfirmationContext);
-  if (!context) {
-    throw new Error(
-      'useConfirmation must be used within a ConfirmationProvider'
-    );
-  }
-  return context;
-};
+}

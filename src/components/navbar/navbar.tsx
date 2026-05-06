@@ -1,20 +1,17 @@
 'use client';
 
+import { useAtom, useAtomValue } from 'jotai';
 import { LogOut, Menu } from 'lucide-react';
 import { Button, Dropdown } from '@heroui/react';
 import { apiClient } from '@/lib/api-client';
 import { useConfirmation } from '@/contexts/confirmation-context';
+import { sidebarOpenAtom, currentUserAtom } from '@/store/ui';
 import avatar from '@/assets/images/User-avatar.png';
-import type { UserData } from '@/types/user';
 
-type NavbarProps = {
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
-  user: UserData | null;
-};
-
-export function Navbar({ sidebarOpen, setSidebarOpen, user }: NavbarProps) {
+export function Navbar() {
   const { confirm } = useConfirmation();
+  const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
+  const user = useAtomValue(currentUserAtom);
 
   const handleLogout = () => {
     confirm({
