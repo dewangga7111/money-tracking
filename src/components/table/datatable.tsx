@@ -41,8 +41,8 @@ export default function Datatable({
   const startRow = totalRows === 0 ? 0 : (page - 1) * 10 + 1;
   const endRow = Math.min(page * 10, totalRows);
 
-  const paginationContent = totalPage > 1 ? (
-    <Pagination>
+  const paginationContent = (
+    <Pagination className="justify-end">
       <Pagination.Content>
         <Pagination.Item>
           <Pagination.Previous
@@ -80,17 +80,17 @@ export default function Datatable({
         </Pagination.Item>
       </Pagination.Content>
     </Pagination>
-  ) : null;
+  );
 
   const bottomContent = (
-    <div className="flex w-full justify-between items-center px-2 max-sm:flex-col max-sm:justify-center gap-4">
-      <p className="text-sm text-default-500">
+    <>
+      <p className="text-sm text-default-500 w-full">
         {totalRows > 0
           ? `Showing ${startRow}–${endRow} of ${totalRows} entries`
           : "No data to display"}
       </p>
       {paginationContent}
-    </div>
+    </>
   );
 
   // Mobile card view
@@ -188,8 +188,8 @@ export default function Datatable({
                         {col.key === "no"
                           ? (page - 1) * 10 + (index + 1)
                           : renderCell
-                          ? renderCell(item, col.key)
-                          : (item as Record<string, any>)[col.key]}
+                            ? renderCell(item, col.key)
+                            : (item as Record<string, any>)[col.key]}
                       </Table.Cell>
                     ))}
                   </Table.Row>
@@ -197,9 +197,11 @@ export default function Datatable({
               }}
             </Table.Body>
           </Table.Content>
+          <Table.Footer>
+            {bottomContent}
+          </Table.Footer>
         </Table>
       </div>
-      <div className="mt-4">{bottomContent}</div>
     </div>
   );
 

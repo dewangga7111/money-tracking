@@ -88,7 +88,7 @@ export default function UserForm({
   };
 
   return (
-    <Card className="px-1">
+    <Card>
       <Card.Content>
         <Form onSubmit={handleSubmit}>
           <div className={form()}>

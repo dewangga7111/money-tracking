@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { TextField, Label, Input, FieldError } from '@heroui/react';
+import { Button, InputGroup, Label, TextField, FieldError } from '@heroui/react';
 import type { TextFieldRootProps } from '@heroui/react';
 import type { ReactNode } from 'react';
 
@@ -24,21 +24,23 @@ export default function AppTextInputPassword({
   return (
     <TextField variant='secondary' className={`flex flex-col gap-1 w-full ${className ?? ''}`} {...props}>
       {label && <Label>{label}</Label>}
-      <div className="relative">
-        <Input
+      <InputGroup>
+        <InputGroup.Input
           type={isVisible ? 'text' : 'password'}
           {...(placeholder !== undefined ? { placeholder } : {})}
-          className="pr-10"
         />
-        <button
-          type="button"
-          aria-label="toggle password visibility"
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 focus:outline-none"
-          onClick={() => setIsVisible((v) => !v)}
-        >
-          {isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
-      </div>
+        <InputGroup.Suffix className="pr-0">
+          <Button
+            isIconOnly
+            aria-label={isVisible ? 'Hide password' : 'Show password'}
+            size="sm"
+            variant="ghost"
+            onPress={() => setIsVisible((v) => !v)}
+          >
+            {isVisible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </Button>
+        </InputGroup.Suffix>
+      </InputGroup>
       <FieldError>{errorMessage}</FieldError>
     </TextField>
   );

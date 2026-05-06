@@ -52,19 +52,21 @@ export default function DynamicFilter({
   };
 
   return (
-    <Card className="px-1 mb-3 overflow-hidden">
+    <Card className="mb-3 overflow-hidden">
       {/* Header with toggle */}
       <Card.Header
-        className="flex justify-between items-center cursor-pointer select-none h-[45px]"
+        className="cursor-pointer select-none"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="font-semibold text-md">Filter</span>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.25, ease: 'easeInOut' }}
-        >
-          <ChevronDown size={18} />
-        </motion.div>
+        <div className="flex flex-row justify-between items-center w-full">
+          <span className="font-semibold text-md">Filter</span>
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+          >
+            <ChevronDown size={18} />
+          </motion.div>
+        </div>
       </Card.Header>
 
       {/* Animated Body */}

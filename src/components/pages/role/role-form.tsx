@@ -69,7 +69,7 @@ export default function RoleForm({
   };
 
   return (
-    <Card className="px-1">
+    <Card>
       <Card.Content>
         <Form onSubmit={handleSubmit}>
           <div className={form()}>
