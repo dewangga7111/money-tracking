@@ -14,7 +14,7 @@ export default async function HomePage() {
 
 const getData = async () => {
   const data = {
-    title: 'Admin Dashboard',
+    title: 'Driven by the Wind of Change',
   };
 
   return data;
