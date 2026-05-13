@@ -5,17 +5,13 @@ import { Button, Card, Form, Spinner } from '@heroui/react';
 import { Save } from 'lucide-react';
 import AppTextInput from '@/components/forms/app-text-input';
 import AppTextarea from '@/components/forms/app-textarea';
+import AppImageUpload from '@/components/forms/app-image-upload';
 import { showSuccessToast, showErrorToast } from '@/utils/common';
 import { useConfirmation } from '@/contexts/confirmation-context';
+import { uploadImageAction } from '@/actions/upload-action';
 import { actionButtons, button, form } from '@/utils/primitives';
 import type { HeroData } from '@/types/sections/home-section';
 import type { ActionResponse } from '@/types/response';
-
-const FIELDS: { key: keyof HeroData; label: string; type: 'text' | 'textarea' | 'url' }[] = [
-  { key: 'headline', label: 'Headline',             type: 'textarea' },
-  { key: 'subtitle', label: 'Subtitle',             type: 'text' },
-  { key: 'bgImage',  label: 'Background Image URL', type: 'url' },
-];
 
 type HeroContentProps = {
   initialData: HeroData | null;
@@ -38,10 +34,22 @@ export function HeroContent({ initialData, saveAction }: HeroContentProps) {
   const doSave = async (raw: Record<string, FormDataEntryValue>) => {
     setLoading(true);
     try {
+      let bgImage = raw.bgImage as string;
+      if (raw.bgImage instanceof File && raw.bgImage.size > 0) {
+        const fd = new FormData();
+        fd.append('file', raw.bgImage);
+        const uploadResult = await uploadImageAction(fd);
+        if (!uploadResult.success) {
+          showErrorToast(uploadResult.error || 'Upload failed');
+          setLoading(false);
+          return;
+        }
+        bgImage = uploadResult.path!;
+      }
       const data: HeroData = {
         headline: raw.headline as string,
         subtitle: raw.subtitle as string,
-        bgImage:  raw.bgImage as string,
+        bgImage,
       };
       const result = await saveAction(data);
       if (result.success) {
@@ -62,25 +70,23 @@ export function HeroContent({ initialData, saveAction }: HeroContentProps) {
         <Form onSubmit={handleSubmit}>
           <div className={form()}>
             <div className="grid lg:grid-cols-2 gap-4">
-              {FIELDS.map((f) =>
-                f.type === 'textarea' ? (
-                  <AppTextarea
-                    key={f.key}
-                    name={f.key}
-                    label={f.label}
-                    defaultValue={initialData?.[f.key] ?? ''}
-                    minRows={3}
-                    className="lg:col-span-2"
-                  />
-                ) : (
-                  <AppTextInput
-                    key={f.key}
-                    name={f.key}
-                    label={f.label}
-                    defaultValue={initialData?.[f.key] ?? ''}
-                  />
-                )
-              )}
+              <AppTextarea
+                name="headline"
+                label="Headline"
+                defaultValue={initialData?.headline ?? ''}
+                minRows={3}
+                className="lg:col-span-2"
+              />
+              <AppTextInput
+                name="subtitle"
+                label="Subtitle"
+                defaultValue={initialData?.subtitle ?? ''}
+              />
+              <AppImageUpload
+                name="bgImage"
+                label="Background Image"
+                defaultValue={initialData?.bgImage ?? ''}
+              />
             </div>
 
             <div className={actionButtons()}>
