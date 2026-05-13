@@ -15,12 +15,15 @@ export async function seedHomeSection(prisma: PrismaClient) {
   ];
 
   for (const section of sections) {
-    await prisma.tbHomeSection.upsert({
-      where: { section: section.section },
-      create: { ...section, updatedBy: 'SYSTEM' },
-      update: { data: section.data, updatedBy: 'SYSTEM' },
+    const existing = await prisma.tbHomeSection.findUnique({ where: { section: section.section } });
+    if (existing) {
+      console.log(`  Skipped section (already exists): ${section.section}`);
+      continue;
+    }
+    await prisma.tbHomeSection.create({
+      data: { ...section, updatedBy: 'SYSTEM' },
     });
-    console.log(`  Upserted section: ${section.section}`);
+    console.log(`  Created section: ${section.section}`);
   }
 
   console.log('tb_home_section seeding completed!');
