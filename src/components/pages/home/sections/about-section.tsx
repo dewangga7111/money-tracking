@@ -1,5 +1,6 @@
 'use client';
 
+import { IMG } from '../home-constants';
 import { FadeIn, Stagger, StaggerItem, fadeLeft, fadeRight } from '../home-animations';
 
 export function AboutSection() {
@@ -8,7 +9,7 @@ export function AboutSection() {
       {/* Introduction */}
       <div className="py-20">
         <div className="max-w-[1100px] mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-12 items-stretch">
             <FadeIn variants={fadeLeft}>
               <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">Introduction</span>
               <h2 className="font-black leading-tight mb-6" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
@@ -20,15 +21,18 @@ export function AboutSection() {
                 <p className="font-bold text-sm text-primary-700">Namun, limbah kulit memiliki kandungan biologis organik tinggi dan kaya nutrisi sebagai kategori produk asam amino — mengandung potensi 1 juta liter/hari jika dikonversi menjadi pupuk organik cair.</p>
               </div>
             </FadeIn>
-            <Stagger className="grid grid-cols-2 gap-3">
+            <Stagger className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
               {[
-                { label: 'Lime Waste', cls: 'bg-primary' },
-                { label: 'Leather Insertion Waste', cls: 'bg-primary-700' },
-                { label: 'Solid Waste', cls: 'bg-primary' },
-                { label: 'Leather Dye Waste', cls: 'bg-primary-700' },
+                { label: 'Lime Waste', img: IMG.waste1 },
+                { label: 'Leather Insertion Waste', img: IMG.waste2 },
+                { label: 'Solid Waste', img: IMG.waste3 },
+                { label: 'Leather Dye Waste', img: IMG.waste4 },
               ].map((item) => (
-                <StaggerItem key={item.label}>
-                  <div className={`rounded-lg p-5 flex flex-col justify-end text-white font-bold text-sm ${item.cls}`} style={{ minHeight: '120px' }}>
+                <StaggerItem key={item.label} className="h-full">
+                  <div
+                    className="h-full rounded-lg p-5 flex flex-col justify-end text-white font-bold text-sm overflow-hidden"
+                    style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.6)), url(${item.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                  >
                     {item.label}
                   </div>
                 </StaggerItem>
