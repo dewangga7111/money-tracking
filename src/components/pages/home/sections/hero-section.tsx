@@ -1,21 +1,38 @@
 'use client';
 
-import { motion, type MotionValue } from 'framer-motion';
-import { IMG } from '../home-constants';
+import { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import type { HeroData } from '@/types/sections/home-section';
 
 type HeroSectionProps = {
-  heroRef: React.RefObject<HTMLElement | null>;
-  bgY: MotionValue<string>;
+  data: HeroData | null;
 };
 
-export function HeroSection({ heroRef, bgY }: HeroSectionProps) {
+export function HeroSection({ data }: HeroSectionProps) {
+  const heroRef = useRef<HTMLElement>(null);
+  const scrollY = useMotionValue(0);
+  const bgY = useTransform(scrollY, [0, 1], ['0%', '40%']);
+
+  useEffect(() => {
+    const update = () => {
+      if (!heroRef.current) return;
+      const { top, height } = heroRef.current.getBoundingClientRect();
+      scrollY.set(Math.max(0, Math.min(1, -top / height)));
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, [scrollY]);
+
+  if (!data) return null;
+  const d = data;
+
   return (
     <section ref={heroRef} className="relative overflow-hidden" style={{ height: '100vh', minHeight: '650px' }}>
       <motion.div
         className="absolute inset-0"
         style={{
           y: bgY,
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url(${IMG.hero})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url(${d.bgImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           scale: 1.2,
@@ -33,18 +50,14 @@ export function HeroSection({ heroRef, bgY }: HeroSectionProps) {
               className="text-sm font-bold uppercase tracking-[0.2em] mb-5 text-primary"
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } } }}
             >
-              PT. Mandraguna Pusaka Indonesia
+              {d.subtitle}
             </motion.p>
             <motion.h1
-              className="text-white font-black leading-[0.95] mb-8"
+              className="text-white font-black leading-[0.95] mb-8 whitespace-pre-line"
               style={{ fontSize: 'clamp(2rem, 6vw, 5rem)', letterSpacing: '-0.02em' }}
               variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
             >
-              <span style={{ color: '#F5C561' }}>"PETANI </span>
-              ADALAH TUAN<br />
-              SEBUAH NEGERI DAN<br />
-              SEJATINYA DIALAH{' '}
-              <span style={{ color: '#F5C561' }}>RAJA YANG HAKIKI"</span>
+              {d.headline}
             </motion.h1>
             <motion.div
               className="flex flex-wrap gap-3"

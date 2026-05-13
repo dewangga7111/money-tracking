@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useScroll, useTransform } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { NAV_ITEMS } from './home-constants';
+import type { HeroData } from '@/types/sections/home-section';
 import { HeroSection } from './sections/hero-section';
 import { StickyNav } from './sections/sticky-nav';
 import { AboutSection } from './sections/about-section';
@@ -15,15 +15,11 @@ import { DocumentationSection } from './sections/documentation-section';
 import { ContactSection } from './sections/contact-section';
 import { FooterSection } from './sections/footer-section';
 
-export function HomeContent() {
+export function HomeContent({ heroData }: { heroData?: HeroData | null }) {
   const [activeSection, setActiveSection] = useState<string>('company');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(0);
   const [winW, setWinW] = useState(1200);
-
-  const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
 
   useEffect(() => {
     setWinW(window.innerWidth);
@@ -54,7 +50,7 @@ export function HomeContent() {
       className="min-h-screen bg-white text-gray-900"
       style={{ fontFamily: '"Helvetica Neue", Arial, sans-serif', isolation: 'isolate' }}
     >
-      <HeroSection heroRef={heroRef} bgY={bgY} />
+      <HeroSection data={heroData ?? null} />
       <StickyNav activeSection={activeSection} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <AboutSection />
       <ProductsSection />

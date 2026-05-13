@@ -1,15 +1,26 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion } from 'framer-motion';
-import { useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { IMG } from '../home-constants';
 import { FadeIn, Stagger, StaggerItem } from '../home-animations';
 
 export function BenefitSection() {
   const bannerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: bannerRef, offset: ['start end', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-20%', '20%']);
+  const scrollY = useMotionValue(0);
+  const bgY = useTransform(scrollY, [0, 1], ['-20%', '20%']);
+
+  useEffect(() => {
+    const update = () => {
+      if (!bannerRef.current) return;
+      const { top, height } = bannerRef.current.getBoundingClientRect();
+      const progress = (window.innerHeight - top) / (window.innerHeight + height);
+      scrollY.set(Math.max(0, Math.min(1, progress)));
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+    return () => window.removeEventListener('scroll', update);
+  }, [scrollY]);
 
   return (
     <section id="benefit">
