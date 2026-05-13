@@ -15,7 +15,7 @@ export function AboutSection({ data }: { data: AboutData | null }) {
         <div className="max-w-[1100px] mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-stretch">
             <FadeIn variants={fadeLeft}>
-              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">Introduction</span>
+              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">{introduction.badge}</span>
               <h2 className="font-black leading-tight mb-6" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
                 {introduction.headline}<br /><span className="text-primary">{introduction.headlineHighlight}</span>
               </h2>
@@ -46,7 +46,7 @@ export function AboutSection({ data }: { data: AboutData | null }) {
         <div className="max-w-[1100px] mx-auto px-6">
           <FadeIn>
             <h2 className="font-black text-white mb-10" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>
-              <span className="text-primary">PROBLEMS</span> BRING BLESSINGS
+              <span className="text-primary">{problems.titleHighlight}</span> {problems.titleNormal}
             </h2>
           </FadeIn>
           <Stagger className="grid gap-3">
@@ -64,7 +64,7 @@ export function AboutSection({ data }: { data: AboutData | null }) {
         <div className="max-w-[1100px] mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <FadeIn variants={fadeLeft}>
-              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">About Us</span>
+              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">{company.badge}</span>
               <h2 className="font-black leading-tight mb-6" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
                 {company.name}<br /><span className="text-primary">{company.nameHighlight}</span>
               </h2>

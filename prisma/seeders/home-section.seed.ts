@@ -13,9 +13,53 @@ export async function seedHomeSection(prisma: PrismaClient) {
       },
     },
     {
+      section: 'products',
+      data: {
+        badge: 'Produk Kami',
+        title: 'PRODUK UNGGULAN',
+        description:
+          'PT Mandraguna Pusaka Indonesia menghadirkan produk unggulan di pasaran dengan berbagai macam varian produk sesuai segmentasi pasar yang dibutuhkan, dari mulai produk tanaman bahan pokok berupa padi, dan juga buah dan sayuran hingga untuk produk tanaman hias.',
+        products: [
+          {
+            image: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80&auto=format&fit=crop',
+            name: 'MANDRAGUNA GROW',
+            subtitle: 'Pupuk Organik Cair • Nutrisi Asam Amino',
+            badge: { label: '1 LITER', cls: 'bg-primary text-white' },
+            desc: 'Pupuk Asam Amino Yang Di Hasilkan Dari Lemak Hewani. Kaya Akan Protein Sehingga Dapat Menutrisi Tanaman Dengan Maksimal Dan Juga Meningkatkan Imunitas Tanaman Sehingga Rentan Terhadap Hama Dan Penyakit.',
+            kandungan: [
+              { key: 'C-Organik', value: '15,58%' },
+              { key: 'N+P₂O₅+K₂O', value: '2,90%' },
+              { key: 'N-Organik', value: '0,54%' },
+              { key: 'pH', value: '4,4' },
+              { key: 'Cu-total', value: '32,7 ppm' },
+              { key: 'Zn-total', value: '27,2 ppm' },
+            ],
+            valueCls: 'text-primary',
+            reg: 'No. Reg: 02.02.2022.897 — PT. MANDRAGUNA PUSAKA INDONESIA',
+          },
+          {
+            image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=80&auto=format&fit=crop',
+            name: 'BIO-FAT',
+            subtitle: 'Pupuk Hayati Cair • Majemuk',
+            badge: { label: 'HAYATI', cls: 'bg-[#2d5a1b] text-[#7ed952]' },
+            desc: 'Pupuk Hayati Cair dari CV. Bir Ali Jaya yang mengandung mikroba bermanfaat untuk meningkatkan kesuburan tanah dan mendukung pertumbuhan tanaman secara alami dan berkelanjutan.',
+            kandungan: [
+              { key: 'Bacillus sp.', value: '4,38 × 10⁸ CFU/ml' },
+              { key: 'Pseudomonas sp.', value: '3,88 × 10⁸ CFU/ml' },
+              { key: 'Actinomycetes sp.', value: '5,08 × 10⁶ CFU/ml' },
+              { key: 'Trichoderma sp.', value: '1,20 × 10⁸ CFU/ml' },
+            ],
+            valueCls: 'text-[#7ed952]',
+            reg: 'No. Reg: 03.02.2023.996 — CV. BIR ALI JAYA',
+          },
+        ],
+      },
+    },
+    {
       section: 'about',
       data: {
         introduction: {
+          badge: 'Introduction',
           headline: 'Masalah Limbah Kulit',
           headlineHighlight: 'Menjadi Berkah',
           paragraph1:
@@ -32,6 +76,8 @@ export async function seedHomeSection(prisma: PrismaClient) {
           ],
         },
         problems: {
+          titleHighlight: 'PROBLEMS',
+          titleNormal: 'BRING BLESSINGS',
           items: [
             'Leather waste has high organic biological content and is rich in nutrients as an amino acid product category',
             'Leather industry waste has 1 million liters / day if converted into liquid organic fertilizer',
@@ -41,6 +87,7 @@ export async function seedHomeSection(prisma: PrismaClient) {
           ],
         },
         company: {
+          badge: 'About Us',
           name: 'PT. Mandraguna',
           nameHighlight: 'Pusaka Indonesia',
           paragraph1:

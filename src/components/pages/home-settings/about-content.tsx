@@ -36,6 +36,7 @@ export function AboutContent({ initialData, saveAction }: Props) {
   const [loading, setLoading] = useState(false);
 
   const [intro, setIntro] = useState({
+    badge: initialData?.introduction.badge ?? '',
     headline: initialData?.introduction.headline ?? '',
     headlineHighlight: initialData?.introduction.headlineHighlight ?? '',
     paragraph1: initialData?.introduction.paragraph1 ?? '',
@@ -47,11 +48,16 @@ export function AboutContent({ initialData, saveAction }: Props) {
     initialData?.introduction.wasteCards.map((c) => ({ ...c, file: null })) ?? []
   );
 
+  const [problems, setProblems] = useState({
+    titleHighlight: initialData?.problems.titleHighlight ?? '',
+    titleNormal: initialData?.problems.titleNormal ?? '',
+  });
   const [problemItems, setProblemItems] = useState<string[]>(
     initialData?.problems.items ?? []
   );
 
   const [company, setCompany] = useState({
+    badge: initialData?.company.badge ?? '',
     name: initialData?.company.name ?? '',
     nameHighlight: initialData?.company.nameHighlight ?? '',
     paragraph1: initialData?.company.paragraph1 ?? '',
@@ -81,7 +87,7 @@ export function AboutContent({ initialData, saveAction }: Props) {
 
       const data: AboutData = {
         introduction: { ...intro, wasteCards: resolvedCards },
-        problems: { items: problemItems },
+        problems: { ...problems, items: problemItems },
         company: { ...company, missions, values },
       };
 
@@ -105,6 +111,13 @@ export function AboutContent({ initialData, saveAction }: Props) {
         <Card.Content>
           <h3 className="font-semibold text-sm text-gray-700 mb-4">Introduction</h3>
           <div className="grid lg:grid-cols-2 gap-4">
+            <AppTextInput
+              name="introBadge"
+              label="Badge"
+              value={intro.badge}
+              onChange={(val) => setIntro((p) => ({ ...p, badge: val }))}
+              className="lg:col-span-2"
+            />
             <AppTextInput
               name="headline"
               label="Headline"
@@ -181,6 +194,20 @@ export function AboutContent({ initialData, saveAction }: Props) {
       <Card>
         <Card.Content>
           <h3 className="font-semibold text-sm text-gray-700 mb-4">Problems Bring Blessings</h3>
+          <div className="grid lg:grid-cols-2 gap-4 mb-4">
+            <AppTextInput
+              name="problemsTitleHighlight"
+              label="Judul — bagian highlight (warna primary)"
+              value={problems.titleHighlight}
+              onChange={(val) => setProblems((p) => ({ ...p, titleHighlight: val }))}
+            />
+            <AppTextInput
+              name="problemsTitleNormal"
+              label="Judul — bagian normal (putih)"
+              value={problems.titleNormal}
+              onChange={(val) => setProblems((p) => ({ ...p, titleNormal: val }))}
+            />
+          </div>
           <div className="flex flex-col gap-2">
             {problemItems.map((item, i) => (
               <div key={i} className="flex gap-2 items-end">
@@ -218,6 +245,13 @@ export function AboutContent({ initialData, saveAction }: Props) {
         <Card.Content>
           <h3 className="font-semibold text-sm text-gray-700 mb-4">About Us — Perusahaan</h3>
           <div className="grid lg:grid-cols-2 gap-4">
+            <AppTextInput
+              name="companyBadge"
+              label="Badge"
+              value={company.badge}
+              onChange={(val) => setCompany((p) => ({ ...p, badge: val }))}
+              className="lg:col-span-2"
+            />
             <AppTextInput
               name="companyName"
               label="Nama Perusahaan"

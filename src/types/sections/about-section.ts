@@ -13,6 +13,7 @@ export type AdabValue = {
 
 export type AboutData = {
   introduction: {
+    badge: string;
     headline: string;
     headlineHighlight: string;
     paragraph1: string;
@@ -21,9 +22,12 @@ export type AboutData = {
     wasteCards: WasteCard[];
   };
   problems: {
+    titleHighlight: string;
+    titleNormal: string;
     items: string[];
   };
   company: {
+    badge: string;
     name: string;
     nameHighlight: string;
     paragraph1: string;
