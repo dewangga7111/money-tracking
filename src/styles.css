@@ -5,21 +5,21 @@
 
 :root {
   /* HeroUI v3 semantic tokens — controls component colors (buttons, inputs, etc.) */
-  --accent: oklch(57.69% 0.246 293.94);        /* violet-600 = #7c3aed */
+  --accent: oklch(63% 0.167 62);               /* amber = #D4890A */
   --accent-foreground: oklch(100% 0 0);         /* white */
 
   /* Tailwind primary palette — for bg-primary, text-primary, from-primary, etc. */
-  --heroui-primary-50: 245 243 255;
-  --heroui-primary-100: 237 233 254;
-  --heroui-primary-200: 221 214 254;
-  --heroui-primary-300: 196 181 253;
-  --heroui-primary-400: 167 139 250;
-  --heroui-primary-500: 139 92 246;
-  --heroui-primary-600: 124 58 237;
-  --heroui-primary: 124 58 237;
-  --heroui-primary-700: 109 40 217;
-  --heroui-primary-800: 91 33 182;
-  --heroui-primary-900: 76 29 149;
+  --heroui-primary-50:  255 251 240;
+  --heroui-primary-100: 254 243 220;
+  --heroui-primary-200: 253 232 176;
+  --heroui-primary-300: 251 208 122;
+  --heroui-primary-400: 247 183 60;
+  --heroui-primary-500: 212 137 10;
+  --heroui-primary:     212 137 10;
+  --heroui-primary-600: 184 116 9;
+  --heroui-primary-700: 163 99 8;
+  --heroui-primary-800: 122 74 6;
+  --heroui-primary-900: 77 46 4;
   --heroui-primary-foreground: 255 255 255;
 }
 

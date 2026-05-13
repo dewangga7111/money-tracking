@@ -1,724 +1,901 @@
 'use client';
 
-const GREEN = '#5fa744';
-const GREEN_DARK = '#4a8334';
-const GREEN_LIGHT = '#e8f1e0';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useScroll, useTransform, type Variants, type MotionStyle } from 'framer-motion';
+
+const AMBER = '#D4890A';
+const AMBER_DARK = '#A36308';
+const AMBER_LIGHT = '#FEF3DC';
+
+const NAV_ITEMS = [
+  { label: 'ABOUT US', href: '#company', id: 'company' },
+  { label: 'PRODUCTS', href: '#products', id: 'products' },
+  { label: 'BENEFIT', href: '#benefit', id: 'benefit' },
+  { label: 'HOW TO', href: '#howto', id: 'howto' },
+  { label: 'GALERI', href: '#gallery', id: 'gallery' },
+  { label: 'LEGAL', href: '#legal', id: 'legal' },
+  { label: 'DECOMMENTATION', href: '#decommentation', id: 'decommentation' },
+];
+
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const fadeUp = { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0, transition: { duration: 0.85, ease: EASE } } };
+const fadeLeft = { hidden: { opacity: 0, x: -40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.85, ease: EASE } } };
+const fadeRight = { hidden: { opacity: 0, x: 40 }, visible: { opacity: 1, x: 0, transition: { duration: 0.85, ease: EASE } } };
+
+const staggerContainer = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
+const staggerItem = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' as const } } };
+
+const viewOpts = { once: true, margin: '-80px' } as const;
+
+function FadeIn({ children, className, style, variants = fadeUp }: {
+  children: React.ReactNode; className?: string; style?: MotionStyle; variants?: Variants;
+}) {
+  return (
+    <motion.div className={className} {...(style ? { style } : {})} initial="hidden" whileInView="visible" viewport={viewOpts} variants={variants}>
+      {children}
+    </motion.div>
+  );
+}
+
+function Stagger({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <motion.div className={className} initial="hidden" whileInView="visible" viewport={viewOpts} variants={staggerContainer}>
+      {children}
+    </motion.div>
+  );
+}
+
+function StaggerItem({ children, className, variants = staggerItem }: { children: React.ReactNode; className?: string; variants?: Variants }) {
+  return (
+    <motion.div className={className} variants={variants}>
+      {children}
+    </motion.div>
+  );
+}
 
 const IMG = {
-  hero: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=1920&q=80&auto=format&fit=crop',
-  whatMakes: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1920&q=80&auto=format&fit=crop',
-  productRange: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1920&q=80&auto=format&fit=crop',
-  ltw42: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&q=80&auto=format&fit=crop',
-  ltw80: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=600&q=80&auto=format&fit=crop',
-  ltw90: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=600&q=80&auto=format&fit=crop',
-  ltw101: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&q=80&auto=format&fit=crop',
-  cacer: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900&q=80&auto=format&fit=crop',
-  ski: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?w=900&q=80&auto=format&fit=crop',
-  services: 'https://images.unsplash.com/photo-1473073897856-cc56a3e2c3a5?w=1920&q=80&auto=format&fit=crop',
-  news1: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=600&q=80&auto=format&fit=crop',
-  news2: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?w=600&q=80&auto=format&fit=crop',
-  news3: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=600&q=80&auto=format&fit=crop',
+  hero: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80&auto=format&fit=crop',
+  about: 'https://fwi.or.id/wp-content/uploads/2022/12/ID0617-MAHULU-DJI1106-NS-066.jpg',
+  grow1: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80&auto=format&fit=crop',
+  grow2: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=80&auto=format&fit=crop',
+  field1: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=80&auto=format&fit=crop',
+  field2: 'https://images.unsplash.com/photo-1562519819-016930ada31b?w=900&q=80&auto=format&fit=crop',
+  gallery1: 'https://images.unsplash.com/photo-1593504049359-74330189a345?w=600&q=80&auto=format&fit=crop',
+  gallery2: 'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=600&q=80&auto=format&fit=crop',
+  gallery3: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80&auto=format&fit=crop',
+  news1: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80&auto=format&fit=crop',
+  news2: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80&auto=format&fit=crop',
+  news3: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=80&auto=format&fit=crop',
+  plant: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&q=80&auto=format&fit=crop',
 };
 
 export function HomeContent() {
+  const [activeSection, setActiveSection] = useState<string>('company');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeArticle, setActiveArticle] = useState(0);
+  const [winW, setWinW] = useState(1200);
+  useEffect(() => {
+    setWinW(window.innerWidth);
+    const onResize = () => setWinW(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    NAV_ITEMS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry?.isIntersecting) setActiveSection(id); },
+        { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach((obs) => obs.disconnect());
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily: '"Helvetica Neue", Arial, sans-serif' }}>
-
-      {/* ── FLOATING LOGO CARD (top-left) ── */}
-      <div className="fixed top-5 left-5 z-50">
-        <div className="bg-white rounded-2xl px-5 py-2.5 shadow-md flex items-center gap-2">
-          <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-            <path d="M20 5 L13 18 L4 18 L14 25 L10 36 L20 28 L30 36 L26 25 L36 18 L27 18 Z" fill={GREEN} stroke={GREEN} strokeWidth="1.5" strokeLinejoin="round" />
-          </svg>
-          <span className="font-black text-xl tracking-tight" style={{ color: '#1a1a1a', letterSpacing: '0.02em' }}>LEITWIND<sup className="text-[8px]" style={{ color: GREEN }}>®</sup></span>
-        </div>
-      </div>
-
-      {/* ── FLOATING ICON BUTTONS (top-right) ── */}
-      <div className="fixed top-5 right-5 z-50 flex items-center gap-2">
-        {/* Phone */}
-        <a href="tel:+390472722111" className="w-11 h-11 rounded-full flex items-center justify-center text-white shadow-md hover:scale-105 transition-transform" style={{ background: GREEN }} aria-label="Call us">
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" /></svg>
-        </a>
-        {/* Email */}
-        <a href="mailto:info@leitwind.com" className="w-11 h-11 rounded-full flex items-center justify-center text-white shadow-md hover:scale-105 transition-transform" style={{ background: GREEN }} aria-label="Email us">
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg>
-        </a>
-        {/* Language */}
-        <button className="w-11 h-11 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold hover:scale-105 transition-transform" style={{ background: GREEN }}>
-          EN
-        </button>
-        {/* Menu */}
-        {/* <button className="h-11 px-5 rounded-full flex items-center gap-2.5 text-white shadow-md text-sm font-bold hover:scale-105 transition-transform" style={{ background: GREEN }}>
-          menu
-          <span className="flex flex-col gap-1">
-            <span className="block w-4 h-0.5 bg-white" />
-            <span className="block w-4 h-0.5 bg-white" />
-          </span>
-        </button> */}
-      </div>
+    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily: '"Helvetica Neue", Arial, sans-serif', isolation: 'isolate' }}>
 
       {/* ── HERO ── */}
-      <section className="relative" style={{ height: '100vh', minHeight: '650px' }}>
-        <div
+      <section ref={heroRef} className="relative overflow-hidden" style={{ height: '100vh', minHeight: '650px' }}>
+        <motion.div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url(${IMG.hero})`,
+            y: bgY,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url(${IMG.hero})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            scale: 1.2,
           }}
         />
-        <div className="relative z-10 h-full flex flex-col">
+        <motion.div
+          className="relative z-10 h-full flex flex-col"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.18, delayChildren: 0.2 } },
+          }}
+        >
           <div className="flex-1 flex items-center">
             <div className="max-w-[1400px] mx-auto px-6 w-full">
-              <h1
-                className="text-white font-black leading-[0.95] mb-8"
-                style={{ fontSize: 'clamp(2rem, 7vw, 6rem)', letterSpacing: '-0.03em' }}
+              <motion.p
+                className="text-sm font-bold uppercase tracking-[0.2em] mb-5"
+                style={{ color: AMBER }}
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } } }}
               >
-                <span style={{ color: '#a8e088' }}>PETANI </span>
-                ADALAH TUAN SEBUAH NEGERI DAN SEJATINYA DIALAH <br />
-                <span style={{ color: '#a8e088' }}>RAJA YANG HAKIKI</span>
-              </h1>
-              <div className="flex flex-wrap gap-3">
-                <a href="#products" className="inline-flex items-center gap-2 font-bold text-sm px-7 py-3.5 rounded text-white" style={{ background: GREEN }}>
-                  Products <span>→</span>
+                PT. Mandraguna Pusaka Indonesia
+              </motion.p>
+              <motion.h1
+                className="text-white font-black leading-[0.95] mb-8"
+                style={{ fontSize: 'clamp(2rem, 6vw, 5rem)', letterSpacing: '-0.02em' }}
+                variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+              >
+                <span style={{ color: '#F5C561' }}>"PETANI </span>
+                ADALAH TUAN<br />
+                SEBUAH NEGERI DAN<br />
+                SEJATINYA DIALAH{' '}
+                <span style={{ color: '#F5C561' }}>RAJA YANG HAKIKI"</span>
+              </motion.h1>
+              <motion.div
+                className="flex flex-wrap gap-3"
+                variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } } }}
+              >
+                <a
+                  href="#products"
+                  onClick={(e) => { e.preventDefault(); document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); }}
+                  className="inline-flex items-center gap-2 font-bold text-sm px-7 py-3.5 rounded text-white"
+                  style={{ background: AMBER }}
+                >
+                  Produk Kami <span>→</span>
                 </a>
-                <a href="#company" className="inline-flex items-center gap-2 font-bold text-sm px-7 py-3.5 rounded border-2 border-white text-white hover:bg-white hover:text-black transition-colors">
-                  Company <span>→</span>
+                <a
+                  href="#company"
+                  onClick={(e) => { e.preventDefault(); document.getElementById('company')?.scrollIntoView({ behavior: 'smooth' }); }}
+                  className="inline-flex items-center gap-2 font-bold text-sm px-7 py-3.5 rounded border-2 border-white text-white hover:bg-white hover:text-black transition-colors"
+                >
+                  Tentang Kami <span>→</span>
                 </a>
-                <a href="#technology" className="inline-flex items-center gap-2 font-bold text-sm px-7 py-3.5 rounded border-2 border-white text-white hover:bg-white hover:text-black transition-colors">
-                  Technology <span>→</span>
-                </a>
-              </div>
+              </motion.div>
             </div>
           </div>
 
-          {/* Bottom newsletter strip */}
-          {/* <div className="bg-black/40 backdrop-blur-sm py-5">
-            <div className="max-w-[1400px] mx-auto px-6 flex flex-col md:flex-row items-start md:items-center gap-4">
-              <p className="text-white text-sm">Stay informed about LEITWIND and the newest trends in the sector</p>
-              <div className="flex gap-2 ml-auto">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="bg-white/10 border border-white/30 rounded text-white placeholder-white/60 text-sm px-4 py-2.5 w-64 focus:outline-none focus:border-white"
-                />
-                <button className="font-bold text-sm px-6 py-2.5 rounded text-white" style={{ background: GREEN }}>
-                  Subscribe
-                </button>
-              </div>
-            </div>
-          </div> */}
-        </div>
+          {/* Scroll guide */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: [0, 0, 1, 1, 1, 1, 0, 0] }}
+            transition={{ delay: 1.2, duration: 4, repeat: Infinity, times: [0, 0.05, 0.15, 0.4, 0.6, 0.85, 0.95, 1], ease: 'easeInOut' }}
+            onClick={() => document.getElementById('company')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <span className="text-white/60 text-xs font-semibold uppercase tracking-[0.2em]">Scroll</span>
+            <motion.div
+              className="w-6 h-10 rounded-full border-2 border-white/40 flex items-start justify-center pt-1.5"
+            >
+              <motion.div
+                className="w-1.5 h-1.5 rounded-full bg-white"
+                animate={{ y: [0, 14, 0] }}
+                transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* ── STICKY PILL NAV ── */}
-      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-4 border-b border-gray-100">
-        <div className="max-w-[1400px] mx-auto px-6 flex justify-center">
-          <nav className="bg-[#f0f0f0] rounded-full px-3 py-2 flex items-center gap-1 overflow-x-auto max-w-full">
-            {[
-              { label: 'ABOUT US', active: true, href: '#company' },
-              { label: 'PRODUCTS', active: false, href: '#products' },
-              { label: 'BENEFIT', active: false, href: '#applications' },
-              { label: 'HOW TO', active: false, href: '#services' },
-              { label: 'GALERI', active: false, href: '#technology' },
-              { label: 'LEGAL', active: false, href: '#references' },
-              { label: 'DECOMMENTATION', active: false, href: '#magazine' },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-xs font-bold tracking-wider px-4 py-2 rounded-full whitespace-nowrap transition-colors"
-                style={{
-                  color: item.active ? GREEN : '#333',
-                }}
-                onMouseEnter={(e) => { if (!item.active) e.currentTarget.style.color = GREEN; }}
-                onMouseLeave={(e) => { if (!item.active) e.currentTarget.style.color = '#333'; }}
-              >
-                {item.label}
-              </a>
-            ))}
+      {/* ── STICKY NAV ── */}
+      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        {/* Desktop: pill nav */}
+        <div className="hidden md:flex max-w-[1400px] mx-auto px-6 py-4 justify-center">
+          <nav className="bg-[#f0f0f0] rounded-full px-3 py-2 flex items-center gap-1">
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => { e.preventDefault(); document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' }); }}
+                  className="relative text-xs font-bold tracking-wider px-4 py-2 rounded-full whitespace-nowrap cursor-pointer"
+                  style={{ color: isActive ? '#fff' : '#333', zIndex: 1 }}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: AMBER, zIndex: -1 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+                    />
+                  )}
+                  {item.label}
+                </a>
+              );
+            })}
           </nav>
+        </div>
+
+        {/* Mobile: burger nav */}
+        <div className="md:hidden">
+          <div className="px-5 py-3 flex items-center justify-between relative">
+            {/* Burger */}
+            <button onClick={() => setMenuOpen((o) => !o)} className="flex flex-col gap-1.5 p-1">
+              <motion.span animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }} className="block w-5 h-0.5 bg-gray-800" />
+              <motion.span animate={{ opacity: menuOpen ? 0 : 1 }} className="block w-5 h-0.5 bg-gray-800" />
+              <motion.span animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }} className="block w-5 h-0.5 bg-gray-800" />
+            </button>
+
+            {/* Center logo */}
+            <span className="absolute left-1/2 -translate-x-1/2 font-black text-sm tracking-wider" style={{ color: AMBER }}>
+              MANDRAGUNA
+            </span>
+
+            {/* Active section indicator */}
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: AMBER }}>
+              {NAV_ITEMS.find((n) => n.id === activeSection)?.label ?? ''}
+            </span>
+          </div>
+
+          {/* Dropdown menu */}
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.nav
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                className="overflow-hidden border-t border-gray-100"
+              >
+                {NAV_ITEMS.map((item, i) => {
+                  const isActive = activeSection === item.id;
+                  return (
+                    <motion.a
+                      key={item.label}
+                      initial={{ x: -16, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: i * 0.04 }}
+                      href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setMenuOpen(false);
+                        setTimeout(() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' }), 200);
+                      }}
+                      className="flex items-center justify-between px-6 py-3.5 text-sm font-bold border-b border-gray-50"
+                      style={{ color: isActive ? AMBER : '#333', background: isActive ? '#FEF9F0' : 'white' }}
+                    >
+                      {item.label}
+                      {isActive && <span style={{ color: AMBER }}>●</span>}
+                    </motion.a>
+                  );
+                })}
+              </motion.nav>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
-      {/* ── COMPANY INTRO ── */}
-      <section id="company" className="py-24 bg-white">
-        <div className="max-w-[1100px] mx-auto px-6 text-center">
-          <h2 className="font-black leading-tight mb-8" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
-            LEITWIND is the only Italian manufacturer of{' '}
-            <span style={{ color: GREEN }}>megawatt-class</span> wind turbine
-          </h2>
-          <p className="text-gray-500 text-lg leading-relaxed max-w-3xl mx-auto">
-            PT. Mandraguna Pusaka Indonesia melakukan operasi produksi dengan melalui proses perizinan sesuai perundangan di Indonesia, Seiring dengan berjalanya waktu kami terus berproses melengkapi dokumen legalitas kami dari mulai Akta Notariat, pengesahan Kemenkumham, Perizinan Perpajakan hingga terdaftar di OSS dan terbitnya NIB dan izin Usaha. Kami tumbuh melengkapi perizinan produksi hingga legalitas HAKI untuk pengamanan merk nama produk kami semua.
-          </p>
-        </div>
-      </section>
-
-      {/* ── WHAT MAKES US DIFFERENT — huge typography centered ── */}
-      <section className="relative overflow-hidden" style={{ minHeight: '700px' }}>
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${IMG.whatMakes})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 100%)' }} />
-        <div className="relative z-10 flex flex-col items-center justify-center w-full" style={{ minHeight: '700px' }}>
-          <h2
-            className="text-white font-black leading-[0.9] text-center select-none"
-            style={{
-              fontSize: 'clamp(5rem, 16vw, 16rem)',
-              letterSpacing: '-0.04em',
-              textShadow: '0 4px 24px rgba(0,0,0,0.2)',
-            }}
-          >
-            WHAT MAKES
-          </h2>
-          <h2
-            className="text-white font-black leading-[0.9] text-center select-none"
-            style={{
-              fontSize: 'clamp(3rem, 10vw, 10rem)',
-              letterSpacing: '-0.04em',
-              textShadow: '0 4px 24px rgba(0,0,0,0.2)',
-            }}
-          >
-            US DIFFERENT
-          </h2>
-        </div>
-      </section>
-
-      {/* ── 6 USPs ── */}
+      {/* ── INTRODUCTION ── */}
       <section className="py-20 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z',
-                title: 'Italian Design',
-                desc: 'The Hi-Tech district of Bolzano (Italy) is the place where LEITWIND wind turbines are designed and built. The high quality and technological excellence are part of our company DNA.',
-              },
-              {
-                icon: 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z',
-                title: 'A partner you can trust',
-                desc: 'As part of the HTI Group, LEITWIND is supported by a global leader in mountain transport technology and clean energy with decades of industrial experience.',
-              },
-              {
-                icon: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
-                title: 'LEITWIND in the world',
-                desc: 'We export our turbines all over the world and have over 400 wind turbines installed across Europe, Asia, and beyond — supported by our network of service centers.',
-              },
-              {
-                icon: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z',
-                title: 'From the idea to operational management',
-                desc: 'We accompany our partners and clients in every step of the project: from design and engineering to installation, commissioning, and ongoing maintenance services.',
-              },
-              {
-                icon: 'M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z',
-                title: 'Customisation',
-                desc: 'We custom build our wind turbines to satisfy any need. Through the modular design of our turbines, we can provide the perfect solution for every project.',
-              },
-              {
-                icon: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z',
-                title: 'Certifications',
-                desc: 'All the LEITWIND wind turbines have an excellent rate of reliability and uptime, attested by international Type Certificates and standards.',
-              },
-            ].map((usp) => (
-              <div key={usp.title} className="border-l-2 pl-6 py-2" style={{ borderColor: GREEN_LIGHT }}>
-                <svg viewBox="0 0 24 24" className="w-9 h-9 mb-4" fill={GREEN}>
-                  <path d={usp.icon} />
-                </svg>
-                <h3 className="font-bold text-base mb-3 text-gray-900">{usp.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{usp.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 flex justify-center">
-            <a href="#" className="inline-flex items-center gap-2 font-bold text-sm px-8 py-3.5 rounded text-white" style={{ background: GREEN }}>
-              Discover LEITWIND <span>→</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── THE LEITWIND RANGE — GREEN BACKGROUND ── */}
-      <section id="products" className="py-24 relative" style={{ background: GREEN }}>
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 mb-12">
-            <div>
-              <h2 className="font-black text-white leading-tight mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-                THE LEITWIND RANGE
+        <div className="max-w-[1100px] mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <FadeIn variants={fadeLeft}>
+              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: AMBER_LIGHT, color: AMBER }}>Introduction</span>
+              <h2 className="font-black leading-tight mb-6" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
+                Masalah Limbah Kulit<br /><span style={{ color: AMBER }}>Menjadi Berkah</span>
               </h2>
-            </div>
-            <div className="text-white text-opacity-90">
-              <p className="leading-relaxed mb-2 font-semibold text-white">A LEITWIND wind turbine for every need.</p>
-              <p className="leading-relaxed text-sm">
-                Thanks to the modular design of our turbines, we can provide the perfect solution for every project to satisfy even the most complex requests.
-              </p>
-              <a href="#" className="inline-flex items-center gap-1 text-white text-sm font-bold mt-4 underline-offset-4 hover:underline">
-                Download our presentation of LEITWIND wind turbines <span>↓</span>
-              </a>
-            </div>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            {[
-              { model: 'LTW42', tag: 'Ideal for self-consumption projects', img: IMG.ltw42, prod: '500–1,000 MWh/y', rotor: '42 m', height: '28 / 39 m' },
-              { model: 'LTW80', tag: 'Designed to withstand the strongest winds', img: IMG.ltw80, prod: '1,000–4,500 MWh/y', rotor: '80 m', height: '60 / 65 / 80 m' },
-              { model: 'LTW90', tag: 'Low wind, high performance', img: IMG.ltw90, prod: '1,500–5,500 MWh/y', rotor: '90 m', height: '60 / 65 / 80 / 97.5 m' },
-              { model: 'LTW101', tag: 'The largest LEITWIND turbine', img: IMG.ltw101, prod: '6,000–9,000 MWh/y', rotor: '101 m', height: '80 / 93.5 m' },
-            ].map((p) => (
-              <div key={p.model} className="bg-white rounded-md overflow-hidden flex">
-                <div
-                  className="w-2/5 flex-shrink-0"
-                  style={{
-                    backgroundImage: `url(${p.img})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                />
-                <div className="flex-1 p-6">
-                  <h3 className="font-black text-2xl mb-1" style={{ color: '#1a1a1a' }}>{p.model}</h3>
-                  <p className="text-gray-500 text-xs mb-4">{p.tag}</p>
-                  <div className="space-y-1.5 text-xs border-t pt-3" style={{ borderColor: '#f0f0f0' }}>
-                    {[
-                      ['Production', p.prod],
-                      ['Rotor diameter', p.rotor],
-                      ['Tower height', p.height],
-                    ].map(([k, v]) => (
-                      <div key={k} className="flex justify-between">
-                        <span className="text-gray-400">{k}</span>
-                        <span className="font-bold text-gray-800">{v}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <a
-                    href="#"
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-bold"
-                    style={{ color: GREEN }}
-                  >
-                    View product →
-                  </a>
-                </div>
+              <p className="text-gray-600 leading-relaxed mb-4">Industri kulit Sukaregang memiliki lima titik pengolahan limbah kulit, namun sayangnya hingga kini kelima titik pengolahan tersebut tidak berfungsi sehingga para pelaku industri kebingungan mengolah limbahnya.</p>
+              <p className="text-gray-600 leading-relaxed mb-6">Karena tidak ada tempat untuk mengolah limbah ini, sebagian orang langsung membuang limbah kulit ke sungai, menyebabkan sumber air bersih berkurang dan warga sekitar mulai kesulitan mendapatkan air bersih.</p>
+              <div className="p-5 rounded-lg" style={{ background: AMBER_LIGHT, borderLeft: `4px solid ${AMBER}` }}>
+                <p className="font-bold text-sm" style={{ color: AMBER_DARK }}>Namun, limbah kulit memiliki kandungan biologis organik tinggi dan kaya nutrisi sebagai kategori produk asam amino — mengandung potensi 1 juta liter/hari jika dikonversi menjadi pupuk organik cair.</p>
               </div>
-            ))}
-          </div>
-
-          <div className="mt-10 flex justify-end">
-            <a href="#" className="inline-flex items-center gap-2 font-bold text-sm px-8 py-3.5 rounded text-white border-2 border-white hover:bg-white" style={{ color: 'white' }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = GREEN; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'white'; }}>
-              Learn more about our turbines →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FIELDS OF APPLICATION ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <h2 className="font-black mb-10" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            FIELDS OF APPLICATION
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              { title: 'Cacer', img: IMG.cacer, badge: 'CACER • Communities • SMEs' },
-              { title: 'Ski resorts', img: IMG.ski, badge: 'Mountain • Resort • Lift energy' },
-            ].map((app) => (
-              <a key={app.title} href="#" className="group relative block overflow-hidden rounded-md" style={{ height: '320px' }}>
-                <div
-                  className="absolute inset-0 group-hover:scale-105 transition-transform duration-500"
-                  style={{
-                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%), url(${app.img})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                />
-                <div className="relative z-10 h-full flex flex-col justify-between p-7 text-white">
-                  <div className="flex items-center gap-2 text-xs font-medium opacity-90">
-                    {app.badge.split(' • ').map((b) => (
-                      <span key={b} className="border border-white/40 rounded-full px-2.5 py-0.5">{b}</span>
-                    ))}
-                  </div>
-                  <div>
-                    <h3 className="font-black text-3xl mb-1">{app.title}</h3>
-                    <span className="inline-flex items-center gap-1 text-sm font-bold">
-                      Learn more <span>→</span>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── OUR SERVICES — full-width image with overlay labels ── */}
-      <section className="relative overflow-hidden" style={{ minHeight: '500px' }}>
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(rgba(20,30,20,0.5), rgba(20,30,20,0.7)), url(${IMG.services})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <div className="relative z-10 max-w-[1400px] mx-auto px-6 py-20 text-white">
-          <h2 className="font-black leading-none mb-3" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
-            OUR SERVICES,
-          </h2>
-          <h2 className="font-black leading-none mb-12" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', color: '#a8e088' }}>
-            FROM IDEA TO MANAGEMENT
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 max-w-5xl">
-            {[
-              'Research & Development',
-              'Project Management',
-              'Production',
-              'Installation & Commissioning',
-              'Grid Connection',
-              'Management & Monitoring',
-              'Assistance & Maintenance',
-            ].map((s, i) => (
-              <div key={s} className="text-center">
-                <div
-                  className="w-12 h-12 mx-auto rounded-full mb-3 flex items-center justify-center font-bold text-sm border-2 border-white/30 backdrop-blur-sm"
-                  style={{ background: 'rgba(255,255,255,0.1)' }}
-                >
-                  {String(i + 1).padStart(2, '0')}
-                </div>
-                <p className="text-xs leading-tight font-medium">{s}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12">
-            <a href="#" className="inline-flex items-center gap-2 font-bold text-sm px-8 py-3.5 rounded text-white" style={{ background: GREEN }}>
-              Read more about our services <span>→</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── LEITWIND IN THE WORLD ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="mb-12">
-            <h2 className="font-black mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-              LEITWIND IN THE WORLD
-            </h2>
-            <p className="text-gray-500 max-w-2xl">
-              We manage an international supply chain and count over 400 wind turbines installed all over the world.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8 items-center">
-            {/* Stats box */}
-            <div className="rounded-md p-7" style={{ background: GREEN_LIGHT }}>
-              <div className="flex items-end gap-3 mb-3">
-                <span className="font-black leading-none" style={{ fontSize: '4.5rem', color: GREEN }}>6</span>
-                <div className="pb-2">
-                  <p className="font-bold text-gray-900">Production</p>
-                  <p className="font-bold text-gray-900">plants</p>
-                </div>
-              </div>
-              <ul className="text-sm text-gray-600 space-y-1 mb-5">
-                <li>South Tyrol, Italy</li>
-                <li>Telfs, Austria</li>
-                <li>Vienna, Austria</li>
-                <li>Gilly-sur-Isère, France</li>
-                <li>Lacedonia, Italy</li>
-                <li>Tamil Nadu, India</li>
-              </ul>
-              <a href="#" className="inline-flex items-center gap-1 text-sm font-bold" style={{ color: GREEN }}>
-                Find out more <span>→</span>
-              </a>
-            </div>
-
-            {/* World map */}
-            <div className="lg:col-span-2 rounded-md p-6" style={{ background: '#fafafa' }}>
-              <svg viewBox="0 0 800 380" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-                <rect width="800" height="380" fill="#fafafa" />
-                {/* Simplified continents — dotted style */}
-                {[
-                  // Europe
-                  { x: 380, y: 110, r: 1.5 }, { x: 385, y: 105, r: 1.5 }, { x: 392, y: 108, r: 1.5 }, { x: 400, y: 112, r: 1.5 }, { x: 410, y: 105, r: 1.5 }, { x: 415, y: 115, r: 1.5 }, { x: 405, y: 120, r: 1.5 }, { x: 395, y: 125, r: 1.5 }, { x: 385, y: 122, r: 1.5 }, { x: 378, y: 118, r: 1.5 },
-                  // North Africa
-                  { x: 380, y: 145, r: 1.5 }, { x: 395, y: 148, r: 1.5 }, { x: 410, y: 152, r: 1.5 }, { x: 425, y: 158, r: 1.5 }, { x: 415, y: 165, r: 1.5 }, { x: 400, y: 170, r: 1.5 }, { x: 388, y: 175, r: 1.5 }, { x: 405, y: 180, r: 1.5 }, { x: 420, y: 185, r: 1.5 }, { x: 415, y: 195, r: 1.5 }, { x: 405, y: 200, r: 1.5 }, { x: 395, y: 205, r: 1.5 }, { x: 408, y: 215, r: 1.5 }, { x: 418, y: 220, r: 1.5 }, { x: 412, y: 230, r: 1.5 }, { x: 422, y: 240, r: 1.5 },
-                  // Asia
-                  { x: 450, y: 100, r: 1.5 }, { x: 470, y: 95, r: 1.5 }, { x: 490, y: 90, r: 1.5 }, { x: 510, y: 95, r: 1.5 }, { x: 530, y: 100, r: 1.5 }, { x: 550, y: 105, r: 1.5 }, { x: 570, y: 110, r: 1.5 }, { x: 580, y: 120, r: 1.5 }, { x: 590, y: 130, r: 1.5 }, { x: 600, y: 140, r: 1.5 }, { x: 610, y: 150, r: 1.5 }, { x: 590, y: 155, r: 1.5 }, { x: 570, y: 145, r: 1.5 }, { x: 550, y: 130, r: 1.5 }, { x: 530, y: 125, r: 1.5 }, { x: 510, y: 130, r: 1.5 }, { x: 490, y: 125, r: 1.5 }, { x: 470, y: 120, r: 1.5 }, { x: 450, y: 115, r: 1.5 }, { x: 440, y: 120, r: 1.5 }, { x: 460, y: 140, r: 1.5 }, { x: 480, y: 150, r: 1.5 }, { x: 500, y: 160, r: 1.5 }, { x: 520, y: 170, r: 1.5 },
-                  // Americas
-                  { x: 180, y: 100, r: 1.5 }, { x: 200, y: 105, r: 1.5 }, { x: 215, y: 115, r: 1.5 }, { x: 220, y: 130, r: 1.5 }, { x: 215, y: 145, r: 1.5 }, { x: 205, y: 155, r: 1.5 }, { x: 195, y: 165, r: 1.5 }, { x: 200, y: 180, r: 1.5 }, { x: 215, y: 195, r: 1.5 }, { x: 225, y: 215, r: 1.5 }, { x: 230, y: 235, r: 1.5 }, { x: 225, y: 255, r: 1.5 }, { x: 220, y: 275, r: 1.5 }, { x: 215, y: 290, r: 1.5 }, { x: 210, y: 300, r: 1.5 }, { x: 220, y: 200, r: 1.5 }, { x: 235, y: 220, r: 1.5 },
-                  // Australia
-                  { x: 620, y: 250, r: 1.5 }, { x: 640, y: 255, r: 1.5 }, { x: 660, y: 260, r: 1.5 }, { x: 670, y: 270, r: 1.5 }, { x: 660, y: 280, r: 1.5 }, { x: 640, y: 285, r: 1.5 }, { x: 625, y: 275, r: 1.5 },
-                ].map((d, i) => (
-                  <circle key={i} cx={d.x} cy={d.y} r={d.r} fill="#cccccc" />
-                ))}
-
-                {/* Office markers */}
-                {[
-                  { x: 395, y: 115, label: 'Italy/Austria' },
-                  { x: 388, y: 105, label: 'Vienna' },
-                  { x: 478, y: 158, label: 'India' },
-                ].map((m, i) => (
-                  <g key={i}>
-                    <circle cx={m.x} cy={m.y} r="10" fill={GREEN} fillOpacity="0.2" />
-                    <circle cx={m.x} cy={m.y} r="5" fill={GREEN} />
-                  </g>
-                ))}
-              </svg>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── #MAGAZINE ── */}
-      <section className="py-20" style={{ background: '#fafafa' }}>
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-            <div>
-              <h2 className="font-black mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-                <span style={{ color: GREEN }}>#</span>MAGAZINE
-              </h2>
-              <p className="text-gray-500 text-sm">A dedicated space for our latest news</p>
-            </div>
-            <div className="flex flex-wrap gap-2">
+            </FadeIn>
+            <Stagger className="grid grid-cols-2 gap-3">
               {[
-                { label: 'NEWS', active: true },
-                { label: 'EVENTS', active: false },
-                { label: 'PRODUCT AND TECHNOLOGY', active: false },
-              ].map((tab) => (
-                <button
-                  key={tab.label}
-                  className="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded border transition-colors"
-                  style={{
-                    background: tab.active ? GREEN : 'transparent',
-                    color: tab.active ? 'white' : '#666',
-                    borderColor: tab.active ? GREEN : '#ddd',
-                  }}
-                >
-                  {tab.label}
-                </button>
+                { label: 'Lime Waste', color: AMBER },
+                { label: 'Leather Insertion Waste', color: AMBER_DARK },
+                { label: 'Solid Waste', color: AMBER },
+                { label: 'Leather Dye Waste', color: AMBER_DARK },
+              ].map((item) => (
+                <StaggerItem key={item.label}>
+                  <div className="rounded-lg p-5 flex flex-col justify-end text-white font-bold text-sm" style={{ background: item.color, minHeight: '120px' }}>
+                    {item.label}
+                  </div>
+                </StaggerItem>
               ))}
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                date: '8 Sep 2025',
-                cat: 'EVENTS',
-                title: 'LEITWIND at HUSUM Wind 2025: meet our team and discover the new grid certifications',
-                img: IMG.news1,
-              },
-              {
-                date: '17 Jul 2025',
-                cat: 'APPLICATIONS',
-                title: 'Wind power for the sustainable evolution of the ski resort',
-                img: IMG.news2,
-              },
-              {
-                date: '15 May 2025',
-                cat: 'COMPANY',
-                title: "HTI GROUP: REVENUE OF 1.4 BILLION EUROS, INVESTMENTS AND EMPLOYEES GROW",
-                img: IMG.news3,
-              },
-            ].map((a) => (
-              <article key={a.title} className="bg-white rounded-md overflow-hidden hover:shadow-lg transition-shadow group">
-                <div
-                  className="h-52"
-                  style={{
-                    backgroundImage: `url(${a.img})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                />
-                <div className="p-6">
-                  <p className="text-xs text-gray-400 mb-2">{a.date}</p>
-                  <h3 className="font-bold text-base leading-snug mb-4 text-gray-900 group-hover:text-green-700 transition-colors min-h-[64px]">{a.title}</h3>
-                  <div className="flex items-center justify-between border-t pt-3" style={{ borderColor: '#f0f0f0' }}>
-                    <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded" style={{ background: GREEN_LIGHT, color: GREEN_DARK }}>
-                      {a.cat}
-                    </span>
-                    <a href="#" className="text-xs font-bold" style={{ color: GREEN }}>Read →</a>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-10 flex justify-center">
-            <a href="#" className="inline-flex items-center gap-2 font-bold text-sm px-8 py-3.5 rounded border-2 hover:text-white transition-colors" style={{ borderColor: GREEN, color: GREEN }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = GREEN; e.currentTarget.style.color = 'white'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = GREEN; }}>
-              Browse magazine articles →
-            </a>
+            </Stagger>
           </div>
         </div>
       </section>
 
-      {/* ── #LINKEDIN WALL ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <h2 className="font-black mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            <span style={{ color: GREEN }}>#</span>LINKEDIN<br />WALL
-          </h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-10">
+      {/* ── PROBLEMS BRING BLESSINGS ── */}
+      <section className="py-16" style={{ background: '#1a1a1a' }}>
+        <div className="max-w-[1100px] mx-auto px-6">
+          <FadeIn>
+            <h2 className="font-black text-white mb-10" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>
+              <span style={{ color: AMBER }}>PROBLEMS</span> BRING BLESSINGS
+            </h2>
+          </FadeIn>
+          <Stagger className="grid gap-3">
             {[
-              { date: '2 days ago', title: 'LEITWIND - Italian Wind Turbines', text: 'New LTW101 installation milestone in Austria...', img: IMG.news1 },
-              { date: '5 days ago', title: 'LEITWIND - Italian Wind Turbines', text: 'HUSUM Wind 2025 — meet us at booth B12!', img: IMG.news2 },
-              { date: '1 week ago', title: 'LEITWIND - Italian Wind Turbines', text: 'Direct Drive technology explained: why we chose it.', img: IMG.news3 },
-              { date: '2 weeks ago', title: 'LEITWIND - Italian Wind Turbines', text: 'Sustainable mountain tourism with wind power.', img: IMG.cacer },
-              { date: '3 weeks ago', title: 'LEITWIND - Italian Wind Turbines', text: 'HTI Group: €1.4B revenue and growing investments.', img: IMG.ski },
-            ].map((post, i) => (
-              <a key={i} href="#" className="block rounded-md overflow-hidden border border-gray-200 hover:shadow-md transition-shadow bg-white">
-                <div
-                  className="h-32"
-                  style={{
-                    backgroundImage: `url(${post.img})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                />
-                <div className="p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-5 h-5 rounded bg-[#0a66c2] flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-[10px] font-black">in</span>
-                    </div>
-                    <span className="text-[10px] font-semibold text-gray-700 truncate">{post.title}</span>
-                  </div>
-                  <p className="text-[11px] text-gray-600 leading-snug line-clamp-3 mb-2">{post.text}</p>
-                  <p className="text-[10px] text-gray-400">{post.date}</p>
-                </div>
-              </a>
+              'Leather waste has high organic biological content and is rich in nutrients as an amino acid product category',
+              'Leather industry waste has 1 million liters / day if converted into liquid organic fertilizer',
+              'It has more economic value for farmers in Indonesia',
+              'Creating superior products in the form of animal fat amino acids and the only one in Indonesia',
+              'Provides maximum results and creates healthier food and lower chemical residues',
+            ].map((item, i) => (
+              <StaggerItem key={item} variants={i % 2 === 0 ? fadeLeft : fadeRight}>
+                <div className="px-6 py-4 rounded-full font-bold text-gray-900" style={{ background: AMBER }}>{item}</div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
-      {/* ── STAY UPDATED — Green section ── */}
-      <section className="py-16" style={{ background: GREEN }}>
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8">
-            <div className="lg:flex-1">
-              <h2 className="font-black text-white mb-2" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}>
-                STAY UPDATED
+      {/* ── ABOUT US ── */}
+      <section id="company" className="py-24 bg-white">
+        <div className="max-w-[1100px] mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <FadeIn variants={fadeLeft}>
+              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: AMBER_LIGHT, color: AMBER }}>About Us</span>
+              <h2 className="font-black leading-tight mb-6" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
+                PT. Mandraguna<br /><span style={{ color: AMBER }}>Pusaka Indonesia</span>
               </h2>
-              <p className="text-white text-opacity-90 text-sm">
-                Stay informed about LEITWIND and the newest trends in the sector.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="bg-white rounded px-4 py-3 text-sm w-full sm:w-72 focus:outline-none border border-white text-gray-900 placeholder-gray-400"
-              />
-              <button className="font-bold text-sm px-7 py-3 rounded text-white whitespace-nowrap" style={{ background: GREEN_DARK }}>
-                Join the newsletter →
-              </button>
-            </div>
+              <p className="text-gray-600 leading-relaxed mb-6">PT. Mandraguna Pusaka Indonesia adalah perusahaan yang bergerak dalam bidang produksi berbagai macam pupuk kebutuhan tanaman, yang mengedepankan kepuasan pelanggan. Sejalan dengan perkembangan teknologi, Mandraguna Pusaka Indonesia memiliki sumber daya manusia yang profesional dan ahli dalam bidangnya.</p>
+              <p className="text-gray-600 leading-relaxed mb-8">Kami terbentuk atas inisiasi Induk Perusahaan kami yaitu CV. Bir Ali Jaya yang bergerak di bidang pengolahan kulit sapi. Kami melihat visi yang lebih besar dari sumberdaya terkecil yang kami miliki berupa pemanfaatan limbah kulit yang memiliki kandungan hayati organik tinggi dan kaya nutrisi — untuk kemudian dengan cermat kami mengolah sumberdaya itu menjadi produk terbaik berupa Pupuk unggulan.</p>
+              <div className="mb-6 p-5 rounded-lg" style={{ background: AMBER_LIGHT }}>
+                <h3 className="font-black text-sm uppercase tracking-wider mb-3" style={{ color: AMBER_DARK }}>Visi</h3>
+                <p className="text-gray-700 text-sm leading-relaxed">"Menjadi Perusahaan Terkemuka Dalam Menghasilkan Pupuk Organik Cair Lemak Hewani Yang Ramah Lingkungan Dan Berperan Pada Ketahanan Tanaman Pertanian Dan Pangan Sehingga Membuat Bumi Menjadi Tempat Hidup Lebih Baik Bagi Generasi Masa Depan"</p>
+              </div>
+            </FadeIn>
+            <FadeIn variants={fadeRight}>
+              <div className="mb-6">
+                <h3 className="font-black text-sm uppercase tracking-wider mb-4" style={{ color: AMBER_DARK }}>Misi</h3>
+                <ul className="space-y-2.5">
+                  {[
+                    'Sebagai solusi untuk masalah pembenah tanah dan penyubur tanaman.',
+                    'Menginspirasi & menumbuhkan kesadaran manusia pada lingkungan hidup untuk masa depan yang berkelanjutan.',
+                    'Memberikan pelayanan prima dan loyalitas sehingga tercipta kepuasan pelanggan.',
+                    'Membentuk perusahaan yang dikenal luas dan menghasilkan keuntungan untuk kesejahteraan semua pihak terkait.',
+                    'Melakukan usaha dan memanfaatkan asset yang terintegrasi dalam produk hewani.',
+                    'Senantiasa melakukan perbaikan berkelanjutan.',
+                  ].map((m) => (
+                    <li key={m} className="flex gap-3 text-sm text-gray-600">
+                      <span className="mt-1 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-white text-[10px] font-bold" style={{ background: AMBER }}>✓</span>
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-black text-sm uppercase tracking-wider mb-4" style={{ color: AMBER_DARK }}>Nilai-Nilai ADAB</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { letter: 'A', name: 'Amanah', desc: 'Memegang teguh kepercayaan yang diberikan.' },
+                    { letter: 'D', name: 'Dedikasi', desc: 'Pengorbanan tenaga, pikiran dan waktu demi keberhasilan usaha yang mempunyai tujuan mulia.' },
+                    { letter: 'A', name: 'Arif', desc: 'Bijaksana, berakal sehat, cerda, tajam, berilmu, sadar.' },
+                    { letter: 'B', name: 'Berani', desc: 'Memiliki hati yang mantap dan rasa percaya diri yang besar serta mampu menaklukkan rasa takut.' },
+                  ].map((v) => (
+                    <div key={v.name} className="p-4 rounded-lg border" style={{ borderColor: AMBER_LIGHT }}>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center font-black text-white text-sm mb-2" style={{ background: AMBER }}>{v.letter}</div>
+                      <p className="font-bold text-sm text-gray-900 mb-1">{v.name}</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">{v.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* ── FOOTER — Green ── */}
-      <footer style={{ background: GREEN }}>
-        <div className="border-t border-white border-opacity-20">
-          <div className="max-w-[1400px] mx-auto px-6 py-14">
-            {/* Logo */}
-            <div className="flex items-center gap-2 mb-10">
-              <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
-                <circle cx="20" cy="20" r="20" fill="white" />
-                <path d="M20 8 L17 17 L8 17 L15.5 22.5 L12.5 31 L20 26 L27.5 31 L24.5 22.5 L32 17 L23 17 Z" fill={GREEN} />
-              </svg>
-              <span className="font-black text-2xl text-white tracking-tight">leitwind</span>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
-              {/* Headquarters block */}
-              <div className="lg:col-span-2">
-                <h4 className="text-white font-black text-sm uppercase tracking-wider mb-5">Headquarters</h4>
-                <div className="grid sm:grid-cols-2 gap-5 text-white text-xs leading-relaxed">
-                  <div>
-                    <p className="font-bold mb-1">SOUTH TYROL — ITALY</p>
-                    <p className="opacity-85">LEITWIND S.p.A.</p>
-                    <p className="opacity-85">Via Brennero 34</p>
-                    <p className="opacity-85">39049 Vipiteno (BZ), Italy</p>
-                    <p className="opacity-85">+39 0472 722111</p>
-                  </div>
-                  <div>
-                    <p className="font-bold mb-1">CAMPANIA — ITALY</p>
-                    <p className="opacity-85">LEITWIND S.p.A.</p>
-                    <p className="opacity-85">Via Industriale</p>
-                    <p className="opacity-85">83046 Lacedonia (AV), Italy</p>
-                  </div>
-                  <div>
-                    <p className="font-bold mb-1">AUSTRIA</p>
-                    <p className="opacity-85">LEITWIND AG</p>
-                    <p className="opacity-85">Untermarkt 9</p>
-                    <p className="opacity-85">6410 Telfs, Austria</p>
-                  </div>
-                  <div>
-                    <p className="font-bold mb-1">INDIA</p>
-                    <p className="opacity-85">LEITWIND Shriram</p>
-                    <p className="opacity-85">Manufacturing Ltd.</p>
-                    <p className="opacity-85">Tamil Nadu, India</p>
+      {/* ── PRODUCTS ── */}
+      <section id="products" className="py-24 relative" style={{ background: '#1a1a1a' }}>
+        <div className="max-w-[1400px] mx-auto px-6">
+          <FadeIn className="mb-12">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: 'rgba(212,137,10,0.2)', color: AMBER }}>Produk Kami</span>
+            <h2 className="font-black text-white leading-tight mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>PRODUK UNGGULAN</h2>
+            <p className="text-gray-400 max-w-2xl text-sm leading-relaxed">PT Mandraguna Pusaka Indonesia menghadirkan produk unggulan di pasaran dengan berbagai macam varian produk sesuai segmentasi pasar yang dibutuhkan, dari mulai produk tanaman bahan pokok berupa padi, dan juga buah dan sayuran hingga untuk produk tanaman hias.</p>
+          </FadeIn>
+          <div className="grid md:grid-cols-2 gap-8">
+            {[
+              {
+                image: IMG.grow1,
+                name: 'MANDRAGUNA GROW',
+                subtitle: 'Pupuk Organik Cair • Nutrisi Asam Amino',
+                badge: { label: '1 LITER', bg: AMBER, color: 'white' },
+                desc: 'Pupuk Asam Amino Yang Di Hasilkan Dari Lemak Hewani. Kaya Akan Protein Sehingga Dapat Menutrisi Tanaman Dengan Maksimal Dan Juga Meningkatkan Imunitas Tanaman Sehingga Rentan Terhadap Hama Dan Penyakit.',
+                kandungan: [
+                  ['C-Organik', '15,58%'],
+                  ['N+P₂O₅+K₂O', '2,90%'],
+                  ['N-Organik', '0,54%'],
+                  ['pH', '4,4'],
+                  ['Cu-total', '32,7 ppm'],
+                  ['Zn-total', '27,2 ppm'],
+                ] as [string, string][],
+                valueColor: AMBER,
+                reg: 'No. Reg: 02.02.2022.897 — PT. MANDRAGUNA PUSAKA INDONESIA',
+              },
+              {
+                image: IMG.grow2,
+                name: 'BIO-FAT',
+                subtitle: 'Pupuk Hayati Cair • Majemuk',
+                badge: { label: 'HAYATI', bg: '#2d5a1b', color: '#7ed952' },
+                desc: 'Pupuk Hayati Cair dari CV. Bir Ali Jaya yang mengandung mikroba bermanfaat untuk meningkatkan kesuburan tanah dan mendukung pertumbuhan tanaman secara alami dan berkelanjutan.',
+                kandungan: [
+                  ['Bacillus sp.', '4,38 × 10⁸ CFU/ml'],
+                  ['Pseudomonas sp.', '3,88 × 10⁸ CFU/ml'],
+                  ['Actinomycetes sp.', '5,08 × 10⁶ CFU/ml'],
+                  ['Trichoderma sp.', '1,20 × 10⁸ CFU/ml'],
+                ] as [string, string][],
+                valueColor: '#7ed952',
+                reg: 'No. Reg: 03.02.2023.996 — CV. BIR ALI JAYA',
+              },
+            ].map((product, i) => (
+              <FadeIn key={product.name} variants={i === 0 ? fadeLeft : fadeRight}>
+                <div className="rounded-xl overflow-hidden h-full flex flex-col" style={{ background: '#111' }}>
+                  <div className="h-56 shrink-0" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%), url(${product.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                  <div className="p-8 flex flex-col flex-1">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="font-black text-2xl text-white mb-1">{product.name}</h3>
+                        <p className="text-sm" style={{ color: AMBER }}>{product.subtitle}</p>
+                      </div>
+                      <span className="text-xs font-bold px-2 py-1 rounded" style={{ background: product.badge.bg, color: product.badge.color }}>{product.badge.label}</span>
+                    </div>
+                    <p className="text-gray-400 text-sm leading-relaxed mb-5">{product.desc}</p>
+                    <div className="space-y-3 mb-6">
+                      <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Kandungan</p>
+                      {product.kandungan.map(([k, v]) => (
+                        <div key={k} className="flex justify-between text-xs">
+                          <span className="text-gray-400">{k}</span>
+                          <span className="font-bold" style={{ color: product.valueColor }}>{v}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-auto pt-4 border-t" style={{ borderColor: '#333' }}>{product.reg}</p>
                   </div>
                 </div>
-              </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* Nav columns */}
+      {/* ── BENEFIT ── */}
+      <section id="benefit">
+        {/* Forest banner */}
+        <div className="relative py-16 md:py-24">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${IMG.about})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
+            }}
+          />
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.5)' }} />
+          <FadeIn className="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto">
+            <h2 className="text-white font-black leading-tight mb-6 whitespace-nowrap" style={{ fontSize: 'clamp(1.5rem, 5vw, 5rem)' }}>
+              Mandraguna is the Key
+            </h2>
+            <p className="text-white/85 leading-[1.9]" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
+              Organic Fertilizer Plays A Vital Role In Improves Soil, Plant Health And Overall Human Welfare. Apart from providing direct benefits for Soil Health With Nutrition, Agriculture Organic Also Promotes Sustainability Environment By Reducing Pollution And Support Biodiversity.
+            </p>
+          </FadeIn>
+        </div>
+
+        {/* Specialty */}
+        <div className="py-24 bg-white">
+          <div className="max-w-[1400px] mx-auto px-6">
+            <FadeIn className="text-center mb-14">
+              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: AMBER_LIGHT, color: AMBER }}>Keunggulan Produk</span>
+              <h2 className="font-black leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+                8 MANDRAGUNA GROW <span style={{ color: AMBER }}>SPECIALTY</span>
+              </h2>
+            </FadeIn>
+            <Stagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { num: '01', title: 'Complete Nutrients', desc: 'MANDRAGUNA GROW provides complete macro and micro nutrients plants need.' },
+                { num: '02', title: 'Enzymes & Amino Acids', desc: 'Contains complex organic compounds, especially enzymes and amino acids.' },
+                { num: '03', title: 'Plant Fertilizer', desc: 'MANDRAGUNA GROW contains plant fertilizing microorganisms.' },
+                { num: '04', title: 'Fertile & Nourishing', desc: 'Repairs physical fertility and nourishes the soil so plants absorb faster and easily.' },
+                { num: '05', title: 'Reducing Chemical Fertilizers', desc: 'Reduces usage of chemical fertilizer by 50–100% gradually.' },
+                { num: '06', title: 'Plant Durability', desc: 'Increases plant resistance to attack from pests and diseases.' },
+                { num: '07', title: 'Healthier Plants', desc: 'Makes plants grow bigger, healthier and safe for human consumption.' },
+                { num: '08', title: 'Increased Production', desc: 'Increases production as a whole — quantity, quality, taste, color, aroma, and storage durability.' },
+              ].map((sp) => (
+                <StaggerItem key={sp.num}>
+                  <div className="group p-6 rounded-xl border-2 hover:border-amber-400 transition-colors h-full" style={{ borderColor: '#F5C561' }}>
+                    <div className="font-black text-4xl mb-3 leading-none" style={{ color: '#F5C561' }}>{sp.num}</div>
+                    <h3 className="font-bold text-base mb-3 group-hover:text-amber-700 transition-colors" style={{ color: '#1a1a1a' }}>{sp.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed">{sp.desc}</p>
+                  </div>
+                </StaggerItem>
+              ))}
+            </Stagger>
+            <FadeIn className="mt-16 grid md:grid-cols-2 gap-10 items-center p-8 rounded-2xl" style={{ background: AMBER_LIGHT }}>
               <div>
-                <ul className="space-y-2.5 text-white text-sm">
-                  {['Company', 'Products', 'Applications', 'Services', 'Technology', 'References'].map((l) => (
-                    <li key={l}>
-                      <a href="#" className="hover:underline opacity-90 hover:opacity-100">{l}</a>
-                    </li>
+                <h3 className="font-black text-xl mb-4" style={{ color: AMBER_DARK }}>Mengapa Asam Amino?</h3>
+                <p className="text-gray-700 text-sm leading-relaxed mb-4">Amino acids are organic compounds containing an amino group (-NH₂) and carboxyl group (-COOH). Amino acids are the basic components of protein and play an important role in various biological processes.</p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  {['Meningkatkan kandungan klorofil dan laju fotosintesis', 'Meningkatkan aktivitas mikroba tanah yang menguntungkan, sehingga meningkatkan kesuburan tanah', 'Meningkatkan kualitas dan produktivitas tanaman serta metabolisme tanaman'].map((item) => (
+                    <li key={item} className="flex gap-2"><span style={{ color: AMBER }}>✦</span>{item}</li>
                   ))}
                 </ul>
               </div>
+              <div className="grid grid-cols-3 gap-3">
+                {[{ label: 'Tanaman Padi & Jagung', desc: 'Food Crops' }, { label: 'Sayuran & Buah', desc: 'Vegetables & Fruits' }, { label: 'Tanaman Keras', desc: 'Perennials' }, { label: 'Umbi-umbian', desc: 'Tuber Plants' }, { label: 'Tanaman Hias', desc: 'Ornamental' }, { label: 'Perkebunan', desc: 'Plantation' }].map((c) => (
+                  <div key={c.label} className="p-3 rounded-lg text-center" style={{ background: 'white' }}>
+                    <p className="font-bold text-xs text-gray-900 mb-0.5">{c.label}</p>
+                    <p className="text-[10px] text-gray-400">{c.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
 
+      {/* ── HOW TO USE ── */}
+      <section id="howto" className="py-24" style={{ background: '#1a1a1a' }}>
+        <div className="max-w-[1400px] mx-auto px-6">
+          <FadeIn className="mb-12">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: 'rgba(212,137,10,0.2)', color: AMBER }}>Cara Pemakaian</span>
+            <h2 className="font-black text-white leading-tight mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>MANDRAGUNA GROW</h2>
+            <h3 className="font-bold mb-6" style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)', color: AMBER }}>DOSAGE, TIME &amp; HOW TO USE</h3>
+            <div className="flex gap-8 mb-10 p-5 rounded-xl inline-flex" style={{ background: 'rgba(212,137,10,0.1)', border: `1px solid ${AMBER}` }}>
               <div>
-                <ul className="space-y-2.5 text-white text-sm">
-                  {['Career', 'Magazine', 'Media & Press', 'Events', 'Park Viewer', 'Contact'].map((l) => (
-                    <li key={l}>
-                      <a href="#" className="hover:underline opacity-90 hover:opacity-100">{l}</a>
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-xs text-gray-400 mb-1 uppercase tracking-wider">Spraying Time</p>
+                <p className="text-white font-bold">Morning: 06.00 – 09.00</p>
+                <p className="text-white font-bold">Afternoon: 15.00 – 18.00</p>
               </div>
             </div>
+          </FadeIn>
+          <Stagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { title: 'Food Crops', sub: 'Rice & Corn', color: AMBER, items: ['Seeds ready for sowing — soak 8 hours in POC solution 10ml/liter', 'Field plants: 10ml/liter — spray at 7th, 15th, 30th HST (vegetative)', '20ml/liter — spray at 45th & 60th HST (generative)'] },
+              { title: 'Tuber Plants', sub: 'Cassava, Potato, etc.', color: '#C07A08', items: ['10ml/liter = vegetative period', '20ml/liter = generative period', 'Double dose when applied around stem and roots', 'Repeat every 10–14 days'] },
+              { title: 'Vegetable & Fruit', sub: 'All types', color: AMBER, items: ['5ml/liter = vegetative period', '10ml/liter = generative period', 'Double dose when applied around stem and roots'] },
+              { title: 'Perennials', sub: 'Palm, Durian, etc.', color: '#C07A08', items: ['10ml/liter = vegetative period', '20ml/liter = generative period', 'Double dose when applied around stem and roots'] },
+            ].map((cat) => (
+              <StaggerItem key={cat.title}>
+                <div className="rounded-xl overflow-hidden h-full" style={{ background: '#111' }}>
+                  <div className="px-6 py-4" style={{ background: cat.color }}>
+                    <h3 className="font-black text-white text-base">{cat.title}</h3>
+                    <p className="text-white/80 text-xs">{cat.sub}</p>
+                  </div>
+                  <ul className="p-6 space-y-3">
+                    {cat.items.map((item) => (
+                      <li key={item} className="text-gray-400 text-xs leading-relaxed flex gap-2"><span style={{ color: AMBER }}>•</span>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+          <FadeIn className="mt-10 p-6 rounded-xl" style={{ background: '#111' }}>
+            <h4 className="font-bold text-white mb-4">Petunjuk Umum</h4>
+            <div className="grid sm:grid-cols-3 gap-4 text-sm text-gray-400">
+              <p>1. Kocok dahulu sebelum digunakan</p>
+              <p>2. Lakukan penyemprotan dengan merata</p>
+              <p>3. Waktu penyemprotan ideal: pagi 06.00–09.00, sore 15.00–18.00</p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
 
-            {/* Bottom row */}
-            <div className="border-t border-white border-opacity-20 pt-6 mt-12 flex flex-col sm:flex-row justify-between items-center gap-4">
-              <p className="text-white text-xs opacity-75">
-                Leitner S.p.A. — VAT IT00560870215 — Cap. soc. € 70.000.000 i.v. — © leitwind 2025
+      {/* ── GALLERY ── */}
+      <section id="gallery" className="py-24 bg-white">
+        <div className="max-w-[1400px] mx-auto px-6">
+          <FadeIn className="mb-12">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: AMBER_LIGHT, color: AMBER }}>Dokumentasi</span>
+            <h2 className="font-black leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+              BEST PARTNERS <span style={{ color: AMBER }}>FRIENDS</span> OF FARMERS INDONESIA
+            </h2>
+          </FadeIn>
+          <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { img: IMG.gallery1, caption: 'Pelatihan & Sosialisasi Petani Mandraguna' },
+              { img: IMG.gallery2, caption: 'Uji Coba di Lahan Padi — Kabupaten Bone' },
+              { img: IMG.gallery3, caption: 'Panen Bawang dengan Mandraguna Grow' },
+              { img: IMG.field1, caption: 'Mitra Petani Mandraguna — Hasil Panen Padi' },
+              { img: IMG.field2, caption: 'Aplikasi Mandraguna Grow pada Tanaman Jagung' },
+              { img: IMG.hero, caption: 'Mandraguna Hadir di Seluruh Indonesia' },
+            ].map((item, i) => (
+              <StaggerItem key={i}>
+                <div className="group relative rounded-xl overflow-hidden" style={{ height: '260px' }}>
+                  <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 100%), url(${item.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <p className="text-white font-bold text-sm">{item.caption}</p>
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </section>
+
+      {/* ── LEGAL ── */}
+      <section id="legal" className="py-24" style={{ background: '#fafafa' }}>
+        <div className="max-w-[1100px] mx-auto px-6">
+          <FadeIn className="mb-12">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: AMBER_LIGHT, color: AMBER }}>Legalitas</span>
+            <h2 className="font-black leading-tight mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>LEGALITAS <span style={{ color: AMBER }}>PERUSAHAAN &amp; PRODUK</span></h2>
+            <p className="text-gray-500 max-w-2xl text-sm">PT. Mandraguna Pusaka Indonesia melakukan operasi produksi dengan melalui proses perizinan sesuai perundangan di Indonesia. Kami terus berproses melengkapi dokumen legalitas dari mulai Akta Notariat, pengesahan Kemenkumham, Perizinan Perpajakan hingga legalitas HAKI untuk pengamanan merk nama produk kami semua.</p>
+          </FadeIn>
+          <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { title: 'NIB Perusahaan', sub: 'PT Mandraguna Pusaka Indonesia', detail: 'NIB: 1289000121596', issued: '19 Januari 2021 — Rev. 22 Sep 2022', color: AMBER },
+              { title: 'NIB Induk', sub: 'CV Bir Ali Jaya', detail: 'NIB: 0220105850731', issued: '3 Agustus 2020 — Rev. 13 Juni 2023', color: AMBER_DARK },
+              { title: 'NPWP Perusahaan', sub: 'PT Mandraguna Pusaka Indonesia', detail: 'NPWP: 96.868.238.5-443.000', issued: 'KPP Pratama Garut', color: AMBER },
+              { title: 'Reg. Mandraguna Grow', sub: 'Pupuk Organik Cair', detail: 'No. Reg: 02.02.2022.897', issued: 'Izin Edar Kementrian Pertanian', color: AMBER_DARK },
+              { title: 'Reg. Bio-Fat', sub: 'Pupuk Hayati Majemuk Cair', detail: 'No. Reg: 03.02.2023.996', issued: '25 Juli 2023', color: AMBER },
+              { title: 'Sertifikat Merek', sub: 'Kementerian Hukum dan HAM', detail: 'IDM000953284', issued: '3 Feb 2021 — berlaku hingga 2031', color: AMBER_DARK },
+            ].map((doc) => (
+              <StaggerItem key={doc.title}>
+                <div className="bg-white p-6 rounded-xl border-l-4 shadow-sm h-full" style={{ borderColor: doc.color }}>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: AMBER_LIGHT }}>
+                    <svg viewBox="0 0 24 24" className="w-5 h-5" fill={AMBER}><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" /></svg>
+                  </div>
+                  <h3 className="font-bold text-gray-900 mb-1">{doc.title}</h3>
+                  <p className="text-xs text-gray-500 mb-3">{doc.sub}</p>
+                  <p className="text-sm font-bold" style={{ color: doc.color }}>{doc.detail}</p>
+                  <p className="text-xs text-gray-400 mt-1">{doc.issued}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </section>
+
+      {/* ── DECOMMENTATION ── */}
+      {(() => {
+        const articles = [
+          { media: 'Analis News', date: '11 November 2024', title: 'Mandraguna: Terobosan Pupuk Asam Amino Hewani H. Muhamad Rian untuk Pertanian Berkelanjutan', img: IMG.news1, tag: 'JABAR' },
+          { media: 'Priangan Insider', date: '26 November 2024', title: 'H. Rian, Pengusaha Muda Visioner dari Garut Mengubah Limbah Menjadi Berkah', img: IMG.news2, tag: 'PRIANGAN' },
+          { media: 'Harian Fajar', date: 'Desember 2023', title: 'Kunci Sukses Petani di Bone Bisa Panen Tembus 7,3 Ton Per Hektare', img: IMG.news3, tag: 'BONE' },
+        ];
+        const prev = () => setActiveArticle((i) => (i - 1 + articles.length) % articles.length);
+        const next = () => setActiveArticle((i) => (i + 1) % articles.length);
+        const isMobile = winW < 768;
+        const activeW = isMobile ? Math.min(winW - 48, 480) : 520;
+        const inactiveW = isMobile ? activeW : 300;
+        const activeH = isMobile ? 420 : 460;
+        const inactiveH = isMobile ? activeH : 380;
+        const xStep = isMobile ? activeW + 16 : 360;
+
+        return (
+          <section id="decommentation" className="py-24 overflow-hidden" style={{ background: '#111' }}>
+            <div className="max-w-[1400px] mx-auto px-6">
+              {/* Header row */}
+              <FadeIn className="mb-12">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4" style={{ background: 'rgba(212,137,10,0.2)', color: AMBER }}>Media Coverage</span>
+                    <h2 className="font-black text-white leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>DECOMMENTATION</h2>
+                    <p className="text-sm mt-2" style={{ color: AMBER }}>Mandraguna di Mata Media</p>
+                  </div>
+                  {/* Desktop buttons — right side of header */}
+                  <div className="hidden md:flex gap-3">
+                    {[{ fn: prev, icon: '←' }, { fn: next, icon: '→' }].map(({ fn, icon }) => (
+                      <button
+                        key={icon}
+                        onClick={fn}
+                        className="w-11 h-11 rounded-full border-2 flex items-center justify-center font-bold text-lg"
+                        style={{ borderColor: AMBER, color: AMBER }}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = AMBER; (e.currentTarget as HTMLButtonElement).style.color = '#fff'; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = AMBER; }}
+                      >
+                        {icon}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/* Mobile buttons — below subtitle, centered */}
+                <div className="md:hidden flex justify-center gap-3 mt-5">
+                  {[{ fn: prev, icon: '←' }, { fn: next, icon: '→' }].map(({ fn, icon }) => (
+                    <button
+                      key={icon}
+                      onClick={fn}
+                      className="w-11 h-11 rounded-full border-2 flex items-center justify-center font-bold text-lg"
+                      style={{ borderColor: AMBER, color: AMBER }}
+                    >
+                      {icon}
+                    </button>
+                  ))}
+                </div>
+              </FadeIn>
+
+              {/* Carousel */}
+              <div className="relative flex items-center justify-center" style={{ height: isMobile ? activeH + 20 : 480 }}>
+                {articles.map((a, i) => {
+                  const offset = i - activeArticle;
+                  const isActive = offset === 0;
+                  const isVisible = isMobile ? isActive : Math.abs(offset) <= 1;
+
+                  return (
+                    <motion.div
+                      key={a.title}
+                      onClick={() => !isActive && setActiveArticle(i)}
+                      layout
+                      animate={{
+                        x: offset * xStep,
+                        scale: isActive ? 1 : 0.8,
+                        opacity: isVisible ? (isActive ? 1 : 0.6) : 0,
+                        zIndex: isActive ? 10 : 5 - Math.abs(offset),
+                        width: isActive ? activeW : inactiveW,
+                        height: isActive ? activeH : inactiveH,
+                        background: isActive ? AMBER : '#1e1e1e',
+                      }}
+                      transition={{
+                        x: { type: 'spring', stiffness: 220, damping: 28, mass: 0.8 },
+                        scale: { type: 'spring', stiffness: 220, damping: 28, mass: 0.8 },
+                        opacity: { duration: 0.35, ease: 'easeOut' },
+                        width: { type: 'spring', stiffness: 180, damping: 26, mass: 0.9 },
+                        height: { type: 'spring', stiffness: 180, damping: 26, mass: 0.9 },
+                        background: { duration: 0.4, ease: 'easeInOut' },
+                      }}
+                      className="absolute rounded-2xl overflow-hidden cursor-pointer"
+                      style={{ flexShrink: 0 }}
+                    >
+                      <AnimatePresence mode="wait" initial={false}>
+                        {isActive ? (
+                          <motion.div
+                            key="active"
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                          >
+                            <div className="p-8 pb-4">
+                              <div className="flex items-center gap-2 mb-3">
+                                <span className="text-xs font-bold px-2 py-1 rounded" style={{ background: 'rgba(0,0,0,0.2)', color: '#fff' }}>{a.tag}</span>
+                                <span className="text-xs text-white/70">{a.date}</span>
+                              </div>
+                              <p className="font-black text-white/90 text-xl mb-1">{a.media}</p>
+                              <h3 className="font-bold text-white text-sm leading-snug">{a.title}</h3>
+                            </div>
+                            <div
+                              className="mx-4 rounded-xl"
+                              style={{
+                                height: '200px',
+                                backgroundImage: `url(${a.img})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                              }}
+                            />
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="inactive"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="p-8 h-full flex flex-col justify-between"
+                          >
+                            <div>
+                              <span className="text-xs font-bold px-2 py-1 rounded mb-4 inline-block" style={{ background: 'rgba(212,137,10,0.2)', color: AMBER }}>{a.tag}</span>
+                              <p className="font-black text-white/20 leading-none mb-4" style={{ fontSize: '4rem' }}>{a.media.split(' ')[0]}</p>
+                              <p className="font-bold text-white/60 text-sm leading-snug">{a.title}</p>
+                            </div>
+                            <p className="text-xs" style={{ color: AMBER }}>{a.date}</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* Dots */}
+              <div className="flex justify-center gap-2 mt-10">
+                {articles.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveArticle(i)}
+                    className="rounded-full transition-all"
+                    style={{
+                      width: activeArticle === i ? '24px' : '8px',
+                      height: '8px',
+                      background: activeArticle === i ? AMBER : '#444',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* ── CONTACT ── */}
+      <section className="py-16" style={{ background: AMBER }}>
+        <FadeIn className="max-w-[1400px] mx-auto px-6 text-center">
+          <h2 className="font-black text-white mb-3" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}>HUBUNGI KAMI</h2>
+          <p className="text-white/90 text-sm mb-8 max-w-xl mx-auto">Bergabunglah bersama ribuan petani Indonesia yang telah merasakan manfaat Mandraguna Grow.</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="tel:02622803406" className="inline-flex items-center gap-2 font-bold text-sm px-7 py-3.5 rounded text-amber-900 bg-white hover:bg-amber-50 transition-colors">📞 (0262) 2803406</a>
+            <a href="mailto:mandragunapusaka2022@gmail.com" className="inline-flex items-center gap-2 font-bold text-sm px-7 py-3.5 rounded border-2 border-white text-white hover:bg-white hover:text-amber-700 transition-colors">✉ mandragunapusaka2022@gmail.com</a>
+          </div>
+        </FadeIn>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer style={{ background: '#1a1a1a' }}>
+        <div className="max-w-[1400px] mx-auto px-6 py-14">
+          {/* Logo */}
+          <div className="mb-10">
+            <p className="font-black text-2xl mb-1" style={{ color: AMBER }}>MANDRAGUNA</p>
+            <p className="text-gray-400 text-sm">PUSAKA INDONESIA</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div className="lg:col-span-2">
+              <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Alamat</h4>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Kp. Ciherang RT. 01 RW. 07<br />
+                Desa/Kelurahan Suci, Kec. Karangpawitan<br />
+                Kab. Garut, Provinsi Jawa Barat<br />
+                Kode Pos: 44182
               </p>
-              <div className="flex items-center gap-4">
-                {/* Social icons */}
+              <div className="mt-4 space-y-1 text-sm text-gray-400">
+                <p>📞 (0262) 2803406</p>
+                <p>✉ mandragunapusaka2022@gmail.com</p>
+              </div>
+              <div className="mt-4 flex gap-3">
                 {[
-                  { l: 'in', bg: 'rgba(255,255,255,0.15)' },
-                  { l: 'f', bg: 'rgba(255,255,255,0.15)' },
-                  { l: '▶', bg: 'rgba(255,255,255,0.15)' },
-                  { l: '@', bg: 'rgba(255,255,255,0.15)' },
-                ].map((s, i) => (
-                  <a key={i} href="#" className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: s.bg }}>
-                    {s.l}
+                  { label: 'IG', href: '#' },
+                  { label: 'YT', href: '#' },
+                  { label: 'FB', href: '#' },
+                ].map((s) => (
+                  <a key={s.label} href={s.href} className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-gray-900" style={{ background: AMBER }}>
+                    {s.label}
                   </a>
                 ))}
               </div>
-              <div className="flex items-center gap-4 text-xs text-white opacity-75">
-                <a href="#" className="hover:opacity-100">Privacy</a>
-                <a href="#" className="hover:opacity-100">Cookies</a>
-                <a href="#" className="hover:opacity-100">Legal</a>
-              </div>
             </div>
+
+            <div>
+              <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Produk</h4>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                {['Mandraguna Grow', 'Bio-Fat', 'Produk Lainnya'].map((l) => (
+                  <li key={l}><a href="#products" className="hover:text-amber-400 transition-colors">{l}</a></li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Navigasi</h4>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                {[
+                  ['About Us', '#company'],
+                  ['Products', '#products'],
+                  ['Benefit', '#benefit'],
+                  ['How To', '#howto'],
+                  ['Galeri', '#gallery'],
+                  ['Legal', '#legal'],
+                  ['Decommentation', '#decommentation'],
+                ].map(([l, h]) => (
+                  <li key={l}><a href={h} className="hover:text-amber-400 transition-colors">{l}</a></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-white/10 pt-6 mt-12 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-gray-500 text-xs">
+              © 2024 PT. Mandraguna Pusaka Indonesia — NIB: 1289000121596
+            </p>
+            <p className="text-gray-600 text-xs">
+              <span style={{ color: AMBER }}>YouTube:</span> Petani Mandraguna &nbsp;|&nbsp;
+              <span style={{ color: AMBER }}>Instagram:</span> @ptmandragunaofficial
+            </p>
           </div>
         </div>
       </footer>

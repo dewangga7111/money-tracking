@@ -33,7 +33,7 @@ export function SidebarContent({ isOpen, pathname }: SidebarContentProps) {
     <div className="flex h-full flex-col">
       {/* Header */}
       <div className="flex h-[50px] items-center border-b border-gray-200 px-4">
-        {isOpen && <h2 className="text-xl font-bold text-purple-600">Admin</h2>}
+        {isOpen && <h2 className="text-xl font-bold text-primary">Admin</h2>}
       </div>
 
       {/* Menu Items */}
