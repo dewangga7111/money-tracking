@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { NAV_ITEMS } from './home-constants';
 import type { HeroData } from '@/types/sections/home-section';
+import type { AboutData } from '@/types/sections/about-section';
 import { HeroSection } from './sections/hero-section';
 import { StickyNav } from './sections/sticky-nav';
 import { AboutSection } from './sections/about-section';
@@ -15,7 +16,7 @@ import { DocumentationSection } from './sections/documentation-section';
 import { ContactSection } from './sections/contact-section';
 import { FooterSection } from './sections/footer-section';
 
-export function HomeContent({ heroData }: { heroData?: HeroData | null }) {
+export function HomeContent({ heroData, aboutData }: { heroData?: HeroData | null; aboutData?: AboutData | null }) {
   const [activeSection, setActiveSection] = useState<string>('company');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(0);
@@ -52,7 +53,7 @@ export function HomeContent({ heroData }: { heroData?: HeroData | null }) {
     >
       <HeroSection data={heroData ?? null} />
       <StickyNav activeSection={activeSection} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-      <AboutSection />
+      <AboutSection data={aboutData ?? null} />
       <ProductsSection />
       <BenefitSection />
       <HowToSection />

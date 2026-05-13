@@ -6,6 +6,8 @@ import type { PathsForPages, GetConfigResponse } from 'waku/router';
 // prettier-ignore
 import type { getConfig as File_AdminAbout_getConfig } from './pages/(admin)/about';
 // prettier-ignore
+import type { getConfig as File_AdminHomeAbout_getConfig } from './pages/(admin)/home/about';
+// prettier-ignore
 import type { getConfig as File_AdminHomeHero_getConfig } from './pages/(admin)/home/hero';
 // prettier-ignore
 import type { getConfig as File_AdminRoleAdd_getConfig } from './pages/(admin)/role/add';
@@ -27,6 +29,7 @@ import type { getConfig as File_BlankLogin_getConfig } from './pages/(blank)/log
 // prettier-ignore
 type Page =
 | ({ path: '/about' } & GetConfigResponse<typeof File_AdminAbout_getConfig>)
+| ({ path: '/home/about' } & GetConfigResponse<typeof File_AdminHomeAbout_getConfig>)
 | ({ path: '/home/hero' } & GetConfigResponse<typeof File_AdminHomeHero_getConfig>)
 | ({ path: '/role/add' } & GetConfigResponse<typeof File_AdminRoleAdd_getConfig>)
 | ({ path: '/role/edit/[id]' } & GetConfigResponse<typeof File_AdminRoleEditId_getConfig>)

@@ -8,9 +8,10 @@ type AppImageUploadProps = {
   name: string;
   label?: string;
   defaultValue?: string;
+  onValueChange?: (value: File | string | null) => void;
 };
 
-export default function AppImageUpload({ name, label, defaultValue }: AppImageUploadProps) {
+export default function AppImageUpload({ name, label, defaultValue, onValueChange }: AppImageUploadProps) {
   const [previewUrl, setPreviewUrl] = useState<string>(defaultValue ?? '');
   const [hasNewFile, setHasNewFile] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,6 +23,7 @@ export default function AppImageUpload({ name, label, defaultValue }: AppImageUp
     objectUrlRef.current = url;
     setPreviewUrl(url);
     setHasNewFile(true);
+    onValueChange?.(file);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +49,7 @@ export default function AppImageUpload({ name, label, defaultValue }: AppImageUp
     setPreviewUrl('');
     setHasNewFile(false);
     if (inputRef.current) inputRef.current.value = '';
+    onValueChange?.(null);
   };
 
   return (
