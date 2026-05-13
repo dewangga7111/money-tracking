@@ -1,6 +1,7 @@
 'use server';
 
 import { PrismaClient } from '@prisma/client';
+import { requireAuth } from '@/lib/action-guard';
 import type { HeroData, GetHeroResponse, UpdateHeroResponse } from '@/types/sections/home-section';
 
 function getPrismaClient() {
@@ -21,6 +22,7 @@ export async function getHeroAction(): Promise<GetHeroResponse> {
 }
 
 export async function upsertHeroAction(data: HeroData): Promise<UpdateHeroResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbHomeSection.upsert({

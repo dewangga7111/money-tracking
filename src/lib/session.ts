@@ -33,13 +33,15 @@ export function verifySessionToken(token: string): SessionPayload | null {
   }
 }
 
+const SECURE = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+
 export function sessionCookieHeader(token: string): string {
   const maxAge = 24 * 60 * 60;
-  return `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${maxAge}`;
+  return `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${maxAge}${SECURE}`;
 }
 
 export function clearSessionCookieHeader(): string {
-  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0`;
+  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${SECURE}`;
 }
 
 export function getSessionFromRequest(req: Request): ReturnType<typeof verifySessionToken> {

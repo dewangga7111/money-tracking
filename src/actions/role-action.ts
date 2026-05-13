@@ -1,6 +1,7 @@
 'use server';
 
 import { PrismaClient } from '@prisma/client';
+import { requireAuth } from '@/lib/action-guard';
 import type { GetAllRoleResponse, GetRoleByIdResponse, RoleFormData } from '@/types/role';
 import type { ActionResponse } from '@/types/response';
 
@@ -13,6 +14,7 @@ export async function getAllRole(
   pageSize: number = 10,
   params?: any
 ): Promise<GetAllRoleResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     const skip = (page - 1) * pageSize;
@@ -55,6 +57,7 @@ export async function getAllRole(
 }
 
 export async function getRoleByIdAction(id: string): Promise<GetRoleByIdResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     const role = await prisma.tbRole.findUnique({
@@ -75,6 +78,7 @@ export async function getRoleByIdAction(id: string): Promise<GetRoleByIdResponse
 }
 
 export async function createRoleAction(formData: RoleFormData): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbRole.create({
@@ -96,6 +100,7 @@ export async function createRoleAction(formData: RoleFormData): Promise<ActionRe
 }
 
 export async function updateRoleAction(id: string, formData: RoleFormData): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbRole.update({
@@ -118,6 +123,7 @@ export async function updateRoleAction(id: string, formData: RoleFormData): Prom
 }
 
 export async function deleteRoleAction(id: string): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbRole.update({
