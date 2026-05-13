@@ -1,20 +1,27 @@
 'use client';
 
+import { useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useScroll, useTransform } from 'framer-motion';
 import { IMG } from '../home-constants';
 import { FadeIn, Stagger, StaggerItem } from '../home-animations';
 
 export function BenefitSection() {
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: bannerRef, offset: ['start end', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['-20%', '20%']);
+
   return (
     <section id="benefit">
       {/* Forest banner */}
-      <div className="relative py-16 md:py-24">
-        <div
-          className="absolute inset-0"
-          style={{ backgroundImage: `url(${IMG.about})`, backgroundSize: 'cover', backgroundPosition: 'center top' }}
+      <div ref={bannerRef} className="relative py-16 md:py-24 overflow-hidden">
+        <motion.div
+          className="absolute inset-0 scale-125"
+          style={{ backgroundImage: `url(${IMG.about})`, backgroundSize: 'cover', backgroundPosition: 'center', y: bgY }}
         />
         <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.5)' }} />
         <FadeIn className="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto">
-          <h2 className="text-white font-black leading-tight mb-6 whitespace-nowrap" style={{ fontSize: 'clamp(1.5rem, 5vw, 5rem)' }}>
+          <h2 className="text-white font-black leading-tight mb-6 whitespace-nowrap" style={{ fontSize: 'clamp(2rem, 6vw, 6rem)' }}>
             Mandraguna is the Key
           </h2>
           <p className="text-white/85 leading-[1.9]" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)' }}>
