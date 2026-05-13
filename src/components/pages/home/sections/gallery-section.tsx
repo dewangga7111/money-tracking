@@ -17,7 +17,7 @@ export function GallerySection() {
     <section id="gallery" className="py-24 bg-white">
       <div className="max-w-[1400px] mx-auto px-6">
         <FadeIn className="mb-12">
-          <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">Dokumentasi</span>
+          <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">Galeri</span>
           <h2 className="font-black leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             BEST PARTNERS <span className="text-primary">FRIENDS</span> OF FARMERS INDONESIA
           </h2>

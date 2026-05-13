@@ -10,13 +10,13 @@ const ARTICLES = [
   { media: 'Harian Fajar', date: 'Desember 2023', title: 'Kunci Sukses Petani di Bone Bisa Panen Tembus 7,3 Ton Per Hektare', img: IMG.news3, tag: 'BONE' },
 ];
 
-type DecommentationSectionProps = {
+type DocumentationSectionProps = {
   activeArticle: number;
   setActiveArticle: (i: number) => void;
   winW: number;
 };
 
-export function DecommentationSection({ activeArticle, setActiveArticle, winW }: DecommentationSectionProps) {
+export function DocumentationSection({ activeArticle, setActiveArticle, winW }: DocumentationSectionProps) {
   const prev = () => setActiveArticle((activeArticle - 1 + ARTICLES.length) % ARTICLES.length);
   const next = () => setActiveArticle((activeArticle + 1) % ARTICLES.length);
 
@@ -28,14 +28,14 @@ export function DecommentationSection({ activeArticle, setActiveArticle, winW }:
   const xStep = isMobile ? activeW + 16 : 360;
 
   return (
-    <section id="decommentation" className="py-24 overflow-hidden" style={{ background: '#111' }}>
+    <section id="documentation" className="py-24 overflow-hidden" style={{ background: '#111' }}>
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Header */}
         <FadeIn className="mb-12">
           <div className="flex items-end justify-between">
             <div>
-              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary/20 text-primary">Media Coverage</span>
-              <h2 className="font-black text-white leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>DECOMMENTATION</h2>
+              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary/20 text-primary">DOCUMENTATION</span>
+              <h2 className="font-black text-white leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>Media Coverage</h2>
               <p className="text-sm mt-2 text-primary">Mandraguna di Mata Media</p>
             </div>
             <div className="hidden md:flex gap-3">

@@ -6,8 +6,8 @@ export const NAV_ITEMS = [
   { label: 'BENEFIT', href: '#benefit', id: 'benefit' },
   { label: 'HOW TO', href: '#howto', id: 'howto' },
   { label: 'GALERI', href: '#gallery', id: 'gallery' },
+  { label: 'DOCUMENTATION', href: '#documentation', id: 'documentation' },
   { label: 'LEGAL', href: '#legal', id: 'legal' },
-  { label: 'DECOMMENTATION', href: '#decommentation', id: 'decommentation' },
 ] as const;
 
 export const IMG = {

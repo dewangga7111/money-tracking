@@ -11,7 +11,7 @@ import { BenefitSection } from './sections/benefit-section';
 import { HowToSection } from './sections/howto-section';
 import { GallerySection } from './sections/gallery-section';
 import { LegalSection } from './sections/legal-section';
-import { DecommentationSection } from './sections/decommentation-section';
+import { DocumentationSection } from './sections/documentation-section';
 import { ContactSection } from './sections/contact-section';
 import { FooterSection } from './sections/footer-section';
 
@@ -61,8 +61,8 @@ export function HomeContent() {
       <BenefitSection />
       <HowToSection />
       <GallerySection />
+      <DocumentationSection activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />
       <LegalSection />
-      <DecommentationSection activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />
       <ContactSection />
       <FooterSection />
     </div>
