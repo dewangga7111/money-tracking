@@ -92,6 +92,8 @@ cp .env.example .env
 Edit `.env` and set the required values:
 
 ```env
+POSTGRES_DB=your_db
+POSTGRES_USER=your_user
 POSTGRES_PASSWORD=your_secure_password
 SESSION_SECRET=your_long_random_secret   # openssl rand -hex 32
 ```
