@@ -77,6 +77,58 @@ npm run build     # Production build
 npm run start     # Start production server
 ```
 
+## Running in Production (Docker)
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) + [Docker Compose](https://docs.docker.com/compose/)
+
+### 1. Configure environment
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set the required values:
+
+```env
+POSTGRES_PASSWORD=your_secure_password
+SESSION_SECRET=your_long_random_secret   # openssl rand -hex 32
+```
+
+### 2. Build and start
+
+```bash
+docker compose up -d --build
+```
+
+The app will be available at `http://localhost:8080`.
+
+> On first start, database migrations run automatically before the app starts.
+
+### 3. Seed initial data (first time only)
+
+```bash
+docker compose exec app npm run db:seed
+```
+
+This creates the default admin user: `admin@mail.com` / `admin1234`.
+
+### 4. Common commands
+
+```bash
+docker compose up -d --build    # Build and start (or rebuild after code changes)
+docker compose down             # Stop and remove containers
+docker compose logs -f app      # Stream app logs
+docker compose exec app npx prisma studio   # Open Prisma Studio
+```
+
+### Notes
+
+- Uploaded images are stored in a named Docker volume (`uploads`) and persist across restarts/rebuilds.
+- The PostgreSQL data is stored in the `postgres_data` volume.
+- To change the exposed port, set `APP_PORT` in `.env` (default: `8080`).
+
 ## Project Structure
 
 ```

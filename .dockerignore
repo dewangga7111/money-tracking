@@ -1,0 +1,10 @@
+node_modules
+dist
+.env*
+*.tsbuildinfo
+.cache
+.DS_Store
+.git
+.claude
+public/uploads/*
+README.md
