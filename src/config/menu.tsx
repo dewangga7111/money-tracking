@@ -22,7 +22,7 @@ export const menuItems: MenuItem[] = [
       { key: 'HOME_GALLERY', label: 'Gallery', path: '/home/gallery' },
       { key: 'HOME_LEGAL', label: 'Legal', path: '/home/legal' },
       { key: 'HOME_DOCUMENTATION', label: 'Documentation', path: '/home/documentation' },
-      { key: 'HOME_CONTACT', label: 'Contact', path: '/home/contact' },
+      { key: 'HOME_FOOTER', label: 'Footer', path: '/home/footer' },
     ],
   },
   {

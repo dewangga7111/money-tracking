@@ -166,6 +166,40 @@ export async function seedHomeSection(prisma: PrismaClient) {
       },
     },
     {
+      section: 'documentation',
+      data: {
+        badge: 'Documentation',
+        headline: 'Media Coverage',
+        subheadline: 'Mandraguna di Mata Media',
+        articles: [
+          {
+            media: 'Analis News',
+            date: '11 November 2024',
+            title: 'Mandraguna: Terobosan Pupuk Asam Amino Hewani H. Muhamad Rian untuk Pertanian Berkelanjutan',
+            img: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80&auto=format&fit=crop',
+            tag: 'JABAR',
+            link: '',
+          },
+          {
+            media: 'Priangan Insider',
+            date: '26 November 2024',
+            title: 'H. Rian, Pengusaha Muda Visioner dari Garut Mengubah Limbah Menjadi Berkah',
+            img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80&auto=format&fit=crop',
+            tag: 'PRIANGAN',
+            link: '',
+          },
+          {
+            media: 'Harian Fajar',
+            date: 'Desember 2023',
+            title: 'Kunci Sukses Petani di Bone Bisa Panen Tembus 7,3 Ton Per Hektare',
+            img: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=80&auto=format&fit=crop',
+            tag: 'BONE',
+            link: '',
+          },
+        ],
+      },
+    },
+    {
       section: 'about',
       data: {
         introduction: {

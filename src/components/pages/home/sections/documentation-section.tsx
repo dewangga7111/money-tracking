@@ -1,24 +1,24 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { IMG } from '../home-constants';
 import { FadeIn } from '../home-animations';
-
-const ARTICLES = [
-  { media: 'Analis News', date: '11 November 2024', title: 'Mandraguna: Terobosan Pupuk Asam Amino Hewani H. Muhamad Rian untuk Pertanian Berkelanjutan', img: IMG.news1, tag: 'JABAR' },
-  { media: 'Priangan Insider', date: '26 November 2024', title: 'H. Rian, Pengusaha Muda Visioner dari Garut Mengubah Limbah Menjadi Berkah', img: IMG.news2, tag: 'PRIANGAN' },
-  { media: 'Harian Fajar', date: 'Desember 2023', title: 'Kunci Sukses Petani di Bone Bisa Panen Tembus 7,3 Ton Per Hektare', img: IMG.news3, tag: 'BONE' },
-];
+import type { DocumentationData } from '@/types/sections/documentation-section';
 
 type DocumentationSectionProps = {
+  data: DocumentationData | null;
   activeArticle: number;
   setActiveArticle: (i: number) => void;
   winW: number;
 };
 
-export function DocumentationSection({ activeArticle, setActiveArticle, winW }: DocumentationSectionProps) {
-  const prev = () => setActiveArticle((activeArticle - 1 + ARTICLES.length) % ARTICLES.length);
-  const next = () => setActiveArticle((activeArticle + 1) % ARTICLES.length);
+export function DocumentationSection({ data, activeArticle, setActiveArticle, winW }: DocumentationSectionProps) {
+  const articles = data?.articles ?? [];
+  const badge = data?.badge ?? 'Documentation';
+  const headline = data?.headline ?? 'Media Coverage';
+  const subheadline = data?.subheadline ?? 'Mandraguna di Mata Media';
+
+  const prev = () => setActiveArticle((activeArticle - 1 + articles.length) % articles.length);
+  const next = () => setActiveArticle((activeArticle + 1) % articles.length);
 
   const isMobile = winW < 768;
   const activeW = isMobile ? Math.min(winW - 48, 480) : 520;
@@ -34,9 +34,9 @@ export function DocumentationSection({ activeArticle, setActiveArticle, winW }: 
         <FadeIn className="mb-12">
           <div className="flex items-end justify-between">
             <div>
-              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary/20 text-primary">DOCUMENTATION</span>
-              <h2 className="font-black text-white leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>Media Coverage</h2>
-              <p className="text-sm mt-2 text-primary">Mandraguna di Mata Media</p>
+              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary/20 text-primary">{badge}</span>
+              <h2 className="font-black text-white leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>{headline}</h2>
+              <p className="text-sm mt-2 text-primary">{subheadline}</p>
             </div>
             <div className="hidden md:flex gap-3">
               {[{ fn: prev, icon: '←' }, { fn: next, icon: '→' }].map(({ fn, icon }) => (
@@ -65,7 +65,7 @@ export function DocumentationSection({ activeArticle, setActiveArticle, winW }: 
 
         {/* Carousel */}
         <div className="relative flex items-center justify-center" style={{ height: isMobile ? activeH + 20 : 480 }}>
-          {ARTICLES.map((a, i) => {
+          {articles.map((a, i) => {
             const offset = i - activeArticle;
             const isActive = offset === 0;
             const isVisible = isMobile ? isActive : Math.abs(offset) <= 1;
@@ -73,7 +73,13 @@ export function DocumentationSection({ activeArticle, setActiveArticle, winW }: 
             return (
               <motion.div
                 key={a.title}
-                onClick={() => !isActive && setActiveArticle(i)}
+                onClick={() => {
+                  if (isActive) {
+                    if (a.link) window.open(a.link, '_blank', 'noopener,noreferrer');
+                  } else {
+                    setActiveArticle(i);
+                  }
+                }}
                 layout
                 animate={{
                   x: offset * xStep,
@@ -142,7 +148,7 @@ export function DocumentationSection({ activeArticle, setActiveArticle, winW }: 
 
         {/* Dots */}
         <div className="flex justify-center gap-2 mt-10">
-          {ARTICLES.map((_, i) => (
+          {articles.map((_, i) => (
             <button
               key={i}
               onClick={() => setActiveArticle(i)}

@@ -8,6 +8,7 @@ import type { ProductsData } from '@/types/sections/products-section';
 import type { BenefitData } from '@/types/sections/benefit-section';
 import type { HowToData } from '@/types/sections/howto-section';
 import type { GalleryData } from '@/types/sections/gallery-section';
+import type { DocumentationData } from '@/types/sections/documentation-section';
 import { HeroSection } from './sections/hero-section';
 import { StickyNav } from './sections/sticky-nav';
 import { AboutSection } from './sections/about-section';
@@ -20,7 +21,7 @@ import { DocumentationSection } from './sections/documentation-section';
 import { ContactSection } from './sections/contact-section';
 import { FooterSection } from './sections/footer-section';
 
-export function HomeContent({ heroData, aboutData, productsData, benefitData, howToData, galleryData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null; howToData?: HowToData | null; galleryData?: GalleryData | null }) {
+export function HomeContent({ heroData, aboutData, productsData, benefitData, howToData, galleryData, documentationData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null; howToData?: HowToData | null; galleryData?: GalleryData | null; documentationData?: DocumentationData | null }) {
   const [activeSection, setActiveSection] = useState<string>('company');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(0);
@@ -62,7 +63,7 @@ export function HomeContent({ heroData, aboutData, productsData, benefitData, ho
       <BenefitSection data={benefitData ?? null} />
       <HowToSection data={howToData ?? null} />
       <GallerySection data={galleryData ?? null} />
-      <DocumentationSection activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />
+      <DocumentationSection data={documentationData ?? null} activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />
       <LegalSection />
       <ContactSection />
       <FooterSection />
