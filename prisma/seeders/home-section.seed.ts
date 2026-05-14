@@ -13,6 +13,63 @@ export async function seedHomeSection(prisma: PrismaClient) {
       },
     },
     {
+      section: 'howto',
+      data: {
+        badge: 'Cara Pemakaian',
+        headline: 'MANDRAGUNA GROW',
+        subheadline: 'DOSAGE, TIME & HOW TO USE',
+        sprayingTimes: ['Morning: 06.00 – 09.00', 'Afternoon: 15.00 – 18.00'],
+        categories: [
+          {
+            title: 'Food Crops',
+            sub: 'Rice & Corn',
+            cls: 'bg-primary',
+            items: [
+              'Seeds ready for sowing — soak 8 hours in POC solution 10ml/liter',
+              'Field plants: 10ml/liter — spray at 7th, 15th, 30th HST (vegetative)',
+              '20ml/liter — spray at 45th & 60th HST (generative)',
+            ],
+          },
+          {
+            title: 'Tuber Plants',
+            sub: 'Cassava, Potato, etc.',
+            cls: 'bg-primary-700',
+            items: [
+              '10ml/liter = vegetative period',
+              '20ml/liter = generative period',
+              'Double dose when applied around stem and roots',
+              'Repeat every 10–14 days',
+            ],
+          },
+          {
+            title: 'Vegetable & Fruit',
+            sub: 'All types',
+            cls: 'bg-primary',
+            items: [
+              '5ml/liter = vegetative period',
+              '10ml/liter = generative period',
+              'Double dose when applied around stem and roots',
+            ],
+          },
+          {
+            title: 'Perennials',
+            sub: 'Palm, Durian, etc.',
+            cls: 'bg-primary-700',
+            items: [
+              '10ml/liter = vegetative period',
+              '20ml/liter = generative period',
+              'Double dose when applied around stem and roots',
+            ],
+          },
+        ],
+        generalNotes: [
+          'Kocok dahulu sebelum digunakan',
+          'Lakukan penyemprotan dengan merata',
+          'Waktu penyemprotan ideal: pagi 06.00–09.00, sore 15.00–18.00',
+        ],
+      },
+    },
+    {
       section: 'benefit',
       data: {
         quote: 'Mandraguna is the Key',
