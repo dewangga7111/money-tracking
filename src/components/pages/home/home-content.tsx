@@ -5,6 +5,7 @@ import { NAV_ITEMS } from './home-constants';
 import type { HeroData } from '@/types/sections/home-section';
 import type { AboutData } from '@/types/sections/about-section';
 import type { ProductsData } from '@/types/sections/products-section';
+import type { BenefitData } from '@/types/sections/benefit-section';
 import { HeroSection } from './sections/hero-section';
 import { StickyNav } from './sections/sticky-nav';
 import { AboutSection } from './sections/about-section';
@@ -17,7 +18,7 @@ import { DocumentationSection } from './sections/documentation-section';
 import { ContactSection } from './sections/contact-section';
 import { FooterSection } from './sections/footer-section';
 
-export function HomeContent({ heroData, aboutData, productsData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null }) {
+export function HomeContent({ heroData, aboutData, productsData, benefitData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null }) {
   const [activeSection, setActiveSection] = useState<string>('company');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(0);
@@ -56,7 +57,7 @@ export function HomeContent({ heroData, aboutData, productsData }: { heroData?: 
       <StickyNav activeSection={activeSection} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <AboutSection data={aboutData ?? null} />
       <ProductsSection data={productsData ?? null} />
-      <BenefitSection />
+      <BenefitSection data={benefitData ?? null} />
       <HowToSection />
       <GallerySection />
       <DocumentationSection activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />

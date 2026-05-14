@@ -13,6 +13,43 @@ export async function seedHomeSection(prisma: PrismaClient) {
       },
     },
     {
+      section: 'benefit',
+      data: {
+        quote: 'Mandraguna is the Key',
+        quoteDesc: 'Organic Fertilizer Plays A Vital Role In Improves Soil, Plant Health And Overall Human Welfare. Apart from providing direct benefits for Soil Health With Nutrition, Agriculture Organic Also Promotes Sustainability Environment By Reducing Pollution And Support Biodiversity.',
+        badge: 'Keunggulan Produk',
+        headline: '8 MANDRAGUNA GROW',
+        headlineHighlight: 'SPECIALTY',
+        specialtyCards: [
+          { label: 'Complete Nutrients', desc: 'MANDRAGUNA GROW provides complete macro and micro nutrients plants need.' },
+          { label: 'Enzymes & Amino Acids', desc: 'Contains complex organic compounds, especially enzymes and amino acids.' },
+          { label: 'Plant Fertilizer', desc: 'MANDRAGUNA GROW contains plant fertilizing microorganisms.' },
+          { label: 'Fertile & Nourishing', desc: 'Repairs physical fertility and nourishes the soil so plants absorb faster and easily.' },
+          { label: 'Reducing Chemical Fertilizers', desc: 'Reduces usage of chemical fertilizer by 50–100% gradually.' },
+          { label: 'Plant Durability', desc: 'Increases plant resistance to attack from pests and diseases.' },
+          { label: 'Healthier Plants', desc: 'Makes plants grow bigger, healthier and safe for human consumption.' },
+          { label: 'Increased Production', desc: 'Increases production as a whole — quantity, quality, taste, color, aroma, and storage durability.' },
+        ],
+        info: {
+          title: 'Mengapa Asam Amino?',
+          desc: 'Amino acids are organic compounds containing an amino group (-NH₂) and carboxyl group (-COOH). Amino acids are the basic components of protein and play an important role in various biological processes.',
+          benefits: [
+            'Meningkatkan kandungan klorofil dan laju fotosintesis',
+            'Meningkatkan aktivitas mikroba tanah yang menguntungkan, sehingga meningkatkan kesuburan tanah',
+            'Meningkatkan kualitas dan produktivitas tanaman serta metabolisme tanaman',
+          ],
+          type: [
+            { label: 'Tanaman Padi & Jagung', desc: 'Food Crops' },
+            { label: 'Sayuran & Buah', desc: 'Vegetables & Fruits' },
+            { label: 'Tanaman Keras', desc: 'Perennials' },
+            { label: 'Umbi-umbian', desc: 'Tuber Plants' },
+            { label: 'Tanaman Hias', desc: 'Ornamental' },
+            { label: 'Perkebunan', desc: 'Plantation' },
+          ],
+        },
+      },
+    },
+    {
       section: 'products',
       data: {
         badge: 'Produk Kami',
