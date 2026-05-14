@@ -166,6 +166,24 @@ export async function seedHomeSection(prisma: PrismaClient) {
       },
     },
     {
+      section: 'legal',
+      data: {
+        badge: 'Legalitas',
+        headline: 'LEGALITAS',
+        headlineHighlight: 'PERUSAHAAN & PRODUK',
+        description:
+          'PT. Mandraguna Pusaka Indonesia melakukan operasi produksi dengan melalui proses perizinan sesuai perundangan di Indonesia. Kami terus berproses melengkapi dokumen legalitas dari mulai Akta Notariat, pengesahan Kemenkumham, Perizinan Perpajakan hingga legalitas HAKI untuk pengamanan merk nama produk kami semua.',
+        docs: [
+          { title: 'NIB Perusahaan', sub: 'PT Mandraguna Pusaka Indonesia', detail: 'NIB: 1289000121596', issued: '19 Januari 2021 — Rev. 22 Sep 2022', variant: 'primary', image: '' },
+          { title: 'NIB Induk', sub: 'CV Bir Ali Jaya', detail: 'NIB: 0220105850731', issued: '3 Agustus 2020 — Rev. 13 Juni 2023', variant: 'secondary', image: '' },
+          { title: 'NPWP Perusahaan', sub: 'PT Mandraguna Pusaka Indonesia', detail: 'NPWP: 96.868.238.5-443.000', issued: 'KPP Pratama Garut', variant: 'primary', image: '' },
+          { title: 'Reg. Mandraguna Grow', sub: 'Pupuk Organik Cair', detail: 'No. Reg: 02.02.2022.897', issued: 'Izin Edar Kementrian Pertanian', variant: 'secondary', image: '' },
+          { title: 'Reg. Bio-Fat', sub: 'Pupuk Hayati Majemuk Cair', detail: 'No. Reg: 03.02.2023.996', issued: '25 Juli 2023', variant: 'primary', image: '' },
+          { title: 'Sertifikat Merek', sub: 'Kementerian Hukum dan HAM', detail: 'IDM000953284', issued: '3 Feb 2021 — berlaku hingga 2031', variant: 'secondary', image: '' },
+        ],
+      },
+    },
+    {
       section: 'documentation',
       data: {
         badge: 'Documentation',

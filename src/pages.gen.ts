@@ -18,6 +18,8 @@ import type { getConfig as File_AdminHomeHero_getConfig } from './pages/(admin)/
 // prettier-ignore
 import type { getConfig as File_AdminHomeHowto_getConfig } from './pages/(admin)/home/howto';
 // prettier-ignore
+import type { getConfig as File_AdminHomeLegal_getConfig } from './pages/(admin)/home/legal';
+// prettier-ignore
 import type { getConfig as File_AdminHomeProducts_getConfig } from './pages/(admin)/home/products';
 // prettier-ignore
 import type { getConfig as File_AdminRoleAdd_getConfig } from './pages/(admin)/role/add';
@@ -45,6 +47,7 @@ type Page =
 | ({ path: '/home/gallery' } & GetConfigResponse<typeof File_AdminHomeGallery_getConfig>)
 | ({ path: '/home/hero' } & GetConfigResponse<typeof File_AdminHomeHero_getConfig>)
 | ({ path: '/home/howto' } & GetConfigResponse<typeof File_AdminHomeHowto_getConfig>)
+| ({ path: '/home/legal' } & GetConfigResponse<typeof File_AdminHomeLegal_getConfig>)
 | ({ path: '/home/products' } & GetConfigResponse<typeof File_AdminHomeProducts_getConfig>)
 | ({ path: '/role/add' } & GetConfigResponse<typeof File_AdminRoleAdd_getConfig>)
 | ({ path: '/role/edit/[id]' } & GetConfigResponse<typeof File_AdminRoleEditId_getConfig>)
