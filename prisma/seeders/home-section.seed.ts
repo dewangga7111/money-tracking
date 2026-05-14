@@ -166,6 +166,35 @@ export async function seedHomeSection(prisma: PrismaClient) {
       },
     },
     {
+      section: 'footer',
+      data: {
+        contact: {
+          headline: 'HUBUNGI KAMI',
+          subheadline: 'Bergabunglah bersama ribuan petani Indonesia yang telah merasakan manfaat Mandraguna Grow.',
+        },
+        brand: {
+          name: 'MANDRAGUNA',
+          sub: 'PUSAKA INDONESIA',
+        },
+        address: 'Kp. Ciherang RT. 01 RW. 07\nDesa/Kelurahan Suci, Kec. Karangpawitan\nKab. Garut, Provinsi Jawa Barat\nKode Pos: 44182',
+        phone: '(0262) 2803406',
+        email: 'mandragunapusaka2022@gmail.com',
+        socials: [
+          { label: 'IG', href: 'https://instagram.com/ptmandragunaofficial' },
+          { label: 'YT', href: 'https://youtube.com/@PetaniMandraguna' },
+          { label: 'FB', href: '#' },
+        ],
+        products: [
+          { label: 'Mandraguna Grow', href: '#products' },
+          { label: 'Bio-Fat', href: '#products' },
+          { label: 'Produk Lainnya', href: '#products' },
+        ],
+        copyright: '© 2024 PT. Mandraguna Pusaka Indonesia — NIB: 1289000121596',
+        youtubeHandle: 'Petani Mandraguna',
+        instagramHandle: '@ptmandragunaofficial',
+      },
+    },
+    {
       section: 'legal',
       data: {
         badge: 'Legalitas',

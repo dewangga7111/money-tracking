@@ -10,6 +10,7 @@ import type { HowToData } from '@/types/sections/howto-section';
 import type { GalleryData } from '@/types/sections/gallery-section';
 import type { DocumentationData } from '@/types/sections/documentation-section';
 import type { LegalData } from '@/types/sections/legal-section';
+import type { FooterData } from '@/types/sections/footer-section';
 import { HeroSection } from './sections/hero-section';
 import { StickyNav } from './sections/sticky-nav';
 import { AboutSection } from './sections/about-section';
@@ -19,10 +20,9 @@ import { HowToSection } from './sections/howto-section';
 import { GallerySection } from './sections/gallery-section';
 import { LegalSection } from './sections/legal-section';
 import { DocumentationSection } from './sections/documentation-section';
-import { ContactSection } from './sections/contact-section';
 import { FooterSection } from './sections/footer-section';
 
-export function HomeContent({ heroData, aboutData, productsData, benefitData, howToData, galleryData, documentationData, legalData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null; howToData?: HowToData | null; galleryData?: GalleryData | null; documentationData?: DocumentationData | null; legalData?: LegalData | null }) {
+export function HomeContent({ heroData, aboutData, productsData, benefitData, howToData, galleryData, documentationData, legalData, footerData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null; howToData?: HowToData | null; galleryData?: GalleryData | null; documentationData?: DocumentationData | null; legalData?: LegalData | null; footerData?: FooterData | null }) {
   const [activeSection, setActiveSection] = useState<string>('company');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(0);
@@ -66,8 +66,7 @@ export function HomeContent({ heroData, aboutData, productsData, benefitData, ho
       <GallerySection data={galleryData ?? null} />
       <DocumentationSection data={documentationData ?? null} activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />
       <LegalSection data={legalData ?? null} />
-      <ContactSection />
-      <FooterSection />
+      <FooterSection data={footerData ?? null} />
     </div>
   );
 }

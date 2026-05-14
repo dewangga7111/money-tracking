@@ -9,9 +9,10 @@ import { getHowToAction } from '@/actions/howto-section-action';
 import { getGalleryAction } from '@/actions/gallery-section-action';
 import { getDocumentationAction } from '@/actions/documentation-section-action';
 import { getLegalAction } from '@/actions/legal-section-action';
+import { getFooterAction } from '@/actions/footer-section-action';
 
 async function HomeData() {
-  const [heroResult, aboutResult, productsResult, benefitResult, howToResult, galleryResult, documentationResult, legalResult] = await Promise.all([
+  const [heroResult, aboutResult, productsResult, benefitResult, howToResult, galleryResult, documentationResult, legalResult, footerResult] = await Promise.all([
     getHeroAction(),
     getAboutAction(),
     getProductsAction(),
@@ -20,6 +21,7 @@ async function HomeData() {
     getGalleryAction(),
     getDocumentationAction(),
     getLegalAction(),
+    getFooterAction(),
   ]);
   const heroData = heroResult.success ? heroResult.data : null;
   const aboutData = aboutResult.success ? aboutResult.data : null;
@@ -29,7 +31,8 @@ async function HomeData() {
   const galleryData = galleryResult.success ? galleryResult.data : null;
   const documentationData = documentationResult.success ? documentationResult.data : null;
   const legalData = legalResult.success ? legalResult.data : null;
-  return <HomeContent heroData={heroData} aboutData={aboutData} productsData={productsData} benefitData={benefitData} howToData={howToData} galleryData={galleryData} documentationData={documentationData} legalData={legalData} />;
+  const footerData = footerResult.success ? footerResult.data : null;
+  return <HomeContent heroData={heroData} aboutData={aboutData} productsData={productsData} benefitData={benefitData} howToData={howToData} galleryData={galleryData} documentationData={documentationData} legalData={legalData} footerData={footerData} />;
 }
 
 export default async function HomePage() {
