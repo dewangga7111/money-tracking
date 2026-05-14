@@ -1,29 +1,22 @@
 'use client';
 
-import { IMG } from '../home-constants';
 import { FadeIn, Stagger, StaggerItem } from '../home-animations';
+import type { GalleryData } from '@/types/sections/gallery-section';
 
-const GALLERY = [
-  { img: IMG.gallery1, caption: 'Pelatihan & Sosialisasi Petani Mandraguna' },
-  { img: IMG.gallery2, caption: 'Uji Coba di Lahan Padi — Kabupaten Bone' },
-  { img: IMG.gallery3, caption: 'Panen Bawang dengan Mandraguna Grow' },
-  { img: IMG.field1, caption: 'Mitra Petani Mandraguna — Hasil Panen Padi' },
-  { img: IMG.field2, caption: 'Aplikasi Mandraguna Grow pada Tanaman Jagung' },
-  { img: IMG.hero, caption: 'Mandraguna Hadir di Seluruh Indonesia' },
-];
+export function GallerySection({ data }: { data: GalleryData | null }) {
+  if (!data) return null;
 
-export function GallerySection() {
   return (
     <section id="gallery" className="py-24 bg-white">
       <div className="max-w-[1400px] mx-auto px-6">
         <FadeIn className="mb-12">
-          <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">Galeri</span>
+          <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 bg-primary-100 text-primary">{data.badge}</span>
           <h2 className="font-black leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            BEST PARTNERS <span className="text-primary">FRIENDS</span> OF FARMERS INDONESIA
+            {data.headline} <span className="text-primary">{data.headlineHighlight}</span>
           </h2>
         </FadeIn>
         <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {GALLERY.map((item, i) => (
+          {data.items.map((item, i) => (
             <StaggerItem key={i}>
               <div className="group relative rounded-xl overflow-hidden" style={{ height: '260px' }}>
                 <div

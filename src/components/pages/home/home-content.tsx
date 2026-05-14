@@ -7,6 +7,7 @@ import type { AboutData } from '@/types/sections/about-section';
 import type { ProductsData } from '@/types/sections/products-section';
 import type { BenefitData } from '@/types/sections/benefit-section';
 import type { HowToData } from '@/types/sections/howto-section';
+import type { GalleryData } from '@/types/sections/gallery-section';
 import { HeroSection } from './sections/hero-section';
 import { StickyNav } from './sections/sticky-nav';
 import { AboutSection } from './sections/about-section';
@@ -19,7 +20,7 @@ import { DocumentationSection } from './sections/documentation-section';
 import { ContactSection } from './sections/contact-section';
 import { FooterSection } from './sections/footer-section';
 
-export function HomeContent({ heroData, aboutData, productsData, benefitData, howToData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null; howToData?: HowToData | null }) {
+export function HomeContent({ heroData, aboutData, productsData, benefitData, howToData, galleryData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null; howToData?: HowToData | null; galleryData?: GalleryData | null }) {
   const [activeSection, setActiveSection] = useState<string>('company');
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeArticle, setActiveArticle] = useState(0);
@@ -60,7 +61,7 @@ export function HomeContent({ heroData, aboutData, productsData, benefitData, ho
       <ProductsSection data={productsData ?? null} />
       <BenefitSection data={benefitData ?? null} />
       <HowToSection data={howToData ?? null} />
-      <GallerySection />
+      <GallerySection data={galleryData ?? null} />
       <DocumentationSection activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />
       <LegalSection />
       <ContactSection />

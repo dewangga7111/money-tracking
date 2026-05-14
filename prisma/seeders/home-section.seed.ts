@@ -13,6 +13,22 @@ export async function seedHomeSection(prisma: PrismaClient) {
       },
     },
     {
+      section: 'gallery',
+      data: {
+        badge: 'Galeri',
+        headline: 'BEST PARTNERS',
+        headlineHighlight: 'FRIENDS OF FARMERS INDONESIA',
+        items: [
+          { img: 'https://images.unsplash.com/photo-1593504049359-74330189a345?w=600&q=80&auto=format&fit=crop', caption: 'Pelatihan & Sosialisasi Petani Mandraguna' },
+          { img: 'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=600&q=80&auto=format&fit=crop', caption: 'Uji Coba di Lahan Padi — Kabupaten Bone' },
+          { img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80&auto=format&fit=crop', caption: 'Panen Bawang dengan Mandraguna Grow' },
+          { img: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=80&auto=format&fit=crop', caption: 'Mitra Petani Mandraguna — Hasil Panen Padi' },
+          { img: 'https://images.unsplash.com/photo-1562519819-016930ada31b?w=900&q=80&auto=format&fit=crop', caption: 'Aplikasi Mandraguna Grow pada Tanaman Jagung' },
+          { img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80&auto=format&fit=crop', caption: 'Mandraguna Hadir di Seluruh Indonesia' },
+        ],
+      },
+    },
+    {
       section: 'howto',
       data: {
         badge: 'Cara Pemakaian',
