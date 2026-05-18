@@ -9,7 +9,7 @@ function buildDatabaseUrl(): string {
     POSTGRES_DB,
   } = process.env;
 
-  if (!POSTGRES_USER || !POSTGRES_PASSWORD || !POSTGRES_DB) {
+  if (POSTGRES_USER === undefined || POSTGRES_PASSWORD === undefined || POSTGRES_DB === undefined) {
     throw new Error(
       'Missing database env vars. Set POSTGRES_USER, POSTGRES_PASSWORD, and POSTGRES_DB (POSTGRES_HOST and POSTGRES_PORT are optional).'
     );

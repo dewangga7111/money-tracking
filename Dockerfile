@@ -16,8 +16,8 @@ FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy deps (includes prisma CLI needed for migrate deploy at startup)
-COPY --from=deps /app/node_modules ./node_modules
+# Copy node_modules from builder (includes prisma generate output in .prisma/client)
+COPY --from=builder /app/node_modules ./node_modules
 
 # Copy built output
 COPY --from=builder /app/dist ./dist
