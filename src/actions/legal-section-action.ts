@@ -1,12 +1,8 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { LegalData, GetLegalResponse, UpdateLegalResponse } from '@/types/sections/legal-section';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getLegalAction(): Promise<GetLegalResponse> {
   const prisma = getPrismaClient();

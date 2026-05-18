@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { compare } from 'bcryptjs';
+import { getPrismaClient } from '@/lib/prisma';
 import { createSessionToken, sessionCookieHeader } from '@/lib/session';
 
 // In-memory rate limiter: max 5 attempts per 15 minutes per IP
@@ -47,7 +47,7 @@ export const POST = async (request: Request): Promise<Response> => {
     );
   }
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   try {
     const { email, password } = await request.json();
 

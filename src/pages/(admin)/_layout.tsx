@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { unstable_getContext } from 'waku/server';
-import { PrismaClient } from '@prisma/client';
 import { LayoutWrapper } from '@/components/layout/layout-cms';
+import { getPrismaClient } from '@/lib/prisma';
 import { getSessionFromRequest } from '@/lib/session';
 
 async function getCurrentUser() {
@@ -9,7 +9,7 @@ async function getCurrentUser() {
   const session = getSessionFromRequest(ctx.req);
   if (!session) return null;
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   try {
     const user = await prisma.tbUser.findUnique({
       where: { userId: session.userId, status: true },

@@ -20,7 +20,11 @@ services:
     ports:
       - "${APP_PORT:-8080}:8080"
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-waku_db}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-waku_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
       SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
       WAKU_PUBLIC_WEB_TITLE: ${WAKU_PUBLIC_WEB_TITLE:-Waku Template}
       NODE_ENV: production

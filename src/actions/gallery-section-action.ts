@@ -1,12 +1,8 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { GalleryData, GetGalleryResponse, UpdateGalleryResponse } from '@/types/sections/gallery-section';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getGalleryAction(): Promise<GetGalleryResponse> {
   const prisma = getPrismaClient();

@@ -1,12 +1,8 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { FooterData, GetFooterResponse, UpdateFooterResponse } from '@/types/sections/footer-section';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getFooterAction(): Promise<GetFooterResponse> {
   const prisma = getPrismaClient();

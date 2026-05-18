@@ -1,14 +1,10 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { GetAllUserResponse, GetUserByIdResponse, UserFormData } from '@/types/user';
 import type { ActionResponse } from '@/types/response';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getAllUser(
   page: number = 1,

@@ -1,12 +1,8 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { BenefitData, GetBenefitResponse, UpdateBenefitResponse } from '@/types/sections/benefit-section';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getBenefitAction(): Promise<GetBenefitResponse> {
   const prisma = getPrismaClient();

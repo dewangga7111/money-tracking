@@ -1,13 +1,9 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { GetAllRoleResponse, GetRoleByIdResponse, RoleFormData } from '@/types/role';
 import type { ActionResponse } from '@/types/response';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getAllRole(
   page: number = 1,

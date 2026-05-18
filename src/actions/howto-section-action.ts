@@ -1,12 +1,8 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { HowToData, GetHowToResponse, UpdateHowToResponse } from '@/types/sections/howto-section';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getHowToAction(): Promise<GetHowToResponse> {
   const prisma = getPrismaClient();
