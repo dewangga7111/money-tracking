@@ -1,18 +1,17 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcryptjs';
+import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { GetAllUserResponse, GetUserByIdResponse, UserFormData } from '@/types/user';
 import type { ActionResponse } from '@/types/response';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getAllUser(
   page: number = 1,
   pageSize: number = 10,
   params?: any
 ): Promise<GetAllUserResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     const skip = (page - 1) * pageSize;
@@ -57,6 +56,7 @@ export async function getAllUser(
 }
 
 export async function getUserByIdAction(id: string): Promise<GetUserByIdResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     const user = await prisma.tbUser.findUnique({
@@ -78,13 +78,15 @@ export async function getUserByIdAction(id: string): Promise<GetUserByIdResponse
 }
 
 export async function createUserAction(formData: UserFormData): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
+    const hashedPassword = await hash(formData.password || '', 12);
     await prisma.tbUser.create({
       data: {
         name: formData.name,
         email: formData.email,
-        password: formData.password || '',
+        password: hashedPassword,
         roleId: formData.roleId,
         createdBy: 'SYSTEM',
         updatedBy: 'SYSTEM',
@@ -104,6 +106,7 @@ export async function createUserAction(formData: UserFormData): Promise<ActionRe
 }
 
 export async function updateUserAction(id: string, formData: UserFormData): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     const updateData: any = {
@@ -115,7 +118,7 @@ export async function updateUserAction(id: string, formData: UserFormData): Prom
     };
 
     if (formData.password) {
-      updateData.password = formData.password;
+      updateData.password = await hash(formData.password, 12);
     }
 
     await prisma.tbUser.update({
@@ -136,6 +139,7 @@ export async function updateUserAction(id: string, formData: UserFormData): Prom
 }
 
 export async function deleteUserAction(id: string): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbUser.update({

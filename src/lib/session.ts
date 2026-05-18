@@ -19,7 +19,10 @@ export function createSessionToken(userId: string, email: string): string {
 
 export function verifySessionToken(token: string): SessionPayload | null {
   try {
-    const [encoded, sig] = token.split('.');
+    const parts = token.split('.');
+    const encoded = parts[0];
+    const sig = parts[1];
+    if (!encoded || !sig) return null;
     const expected = createHmac('sha256', SECRET).update(encoded).digest('base64url');
     if (sig !== expected) return null;
     const payload: SessionPayload = JSON.parse(Buffer.from(encoded, 'base64url').toString());
@@ -30,13 +33,15 @@ export function verifySessionToken(token: string): SessionPayload | null {
   }
 }
 
+const SECURE = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+
 export function sessionCookieHeader(token: string): string {
   const maxAge = 24 * 60 * 60;
-  return `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${maxAge}`;
+  return `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${maxAge}${SECURE}`;
 }
 
 export function clearSessionCookieHeader(): string {
-  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0`;
+  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${SECURE}`;
 }
 
 export function getSessionFromRequest(req: Request): ReturnType<typeof verifySessionToken> {

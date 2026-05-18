@@ -1,18 +1,16 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import { requireAuth } from '@/lib/action-guard';
+import { getPrismaClient } from '@/lib/prisma';
 import type { GetAllRoleResponse, GetRoleByIdResponse, RoleFormData } from '@/types/role';
 import type { ActionResponse } from '@/types/response';
-
-function getPrismaClient() {
-  return new PrismaClient();
-}
 
 export async function getAllRole(
   page: number = 1,
   pageSize: number = 10,
   params?: any
 ): Promise<GetAllRoleResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     const skip = (page - 1) * pageSize;
@@ -55,6 +53,7 @@ export async function getAllRole(
 }
 
 export async function getRoleByIdAction(id: string): Promise<GetRoleByIdResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     const role = await prisma.tbRole.findUnique({
@@ -75,12 +74,13 @@ export async function getRoleByIdAction(id: string): Promise<GetRoleByIdResponse
 }
 
 export async function createRoleAction(formData: RoleFormData): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbRole.create({
       data: {
         name: formData.name,
-        description: formData.description,
+        description: formData.description ?? null,
         createdBy: 'SYSTEM',
         updatedBy: 'SYSTEM',
       },
@@ -96,13 +96,14 @@ export async function createRoleAction(formData: RoleFormData): Promise<ActionRe
 }
 
 export async function updateRoleAction(id: string, formData: RoleFormData): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbRole.update({
       where: { roleId: id },
       data: {
         name: formData.name,
-        description: formData.description,
+        description: formData.description ?? null,
         updatedBy: 'SYSTEM',
         updatedAt: new Date(),
       },
@@ -118,6 +119,7 @@ export async function updateRoleAction(id: string, formData: RoleFormData): Prom
 }
 
 export async function deleteRoleAction(id: string): Promise<ActionResponse> {
+  requireAuth();
   const prisma = getPrismaClient();
   try {
     await prisma.tbRole.update({

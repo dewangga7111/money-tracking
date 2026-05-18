@@ -1,16 +1,14 @@
 'use client';
 
-import { HeroUIProvider } from '@heroui/react';
-import { ConfirmationProvider } from '@/contexts/confirmation-context';
-import { ToastProvider } from '@heroui/react';
+import { Toast } from '@heroui/react';
+import { ConfirmationModal } from '@/contexts/confirmation-context';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <HeroUIProvider>
-      <ConfirmationProvider>
-        <ToastProvider placement="top-right" toastOffset={10} />
-        {children}
-      </ConfirmationProvider>
-    </HeroUIProvider>
+    <>
+      <Toast.Provider placement="top end" />
+      <ConfirmationModal />
+      {children}
+    </>
   );
 }

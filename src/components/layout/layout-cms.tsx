@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
 import { useRouter } from 'waku';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from '../sidebar/sidebar';
 import { Navbar } from '../navbar/navbar';
 import { Footer } from './footer';
+import { currentUserAtom } from '@/store/ui';
 import type { UserData } from '@/types/user';
 
 type LayoutWrapperProps = {
@@ -15,13 +17,17 @@ type LayoutWrapperProps = {
 
 export function LayoutWrapper({ children, user }: LayoutWrapperProps) {
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const setCurrentUser = useSetAtom(currentUserAtom);
+
+  useEffect(() => {
+    setCurrentUser(user);
+  }, [user, setCurrentUser]);
 
   return (
     <div className="flex min-h-screen bg-white">
-      <Sidebar pathname={router.path} isOpen={sidebarOpen} />
+      <Sidebar pathname={router.path} />
       <div className="flex flex-1 flex-col">
-        <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} user={user} />
+        <Navbar />
         <main className="flex-1 bg-gray-50 p-6">
           <AnimatePresence mode="wait">
             <motion.div

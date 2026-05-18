@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, Card, CardBody, Form } from '@heroui/react';
+import { Button, Card, Form } from '@heroui/react';
 import { LogIn } from 'lucide-react';
 import { isMobile } from 'react-device-detect';
 import { useRouter } from 'waku';
@@ -33,8 +33,8 @@ export function LoginContent() {
       });
       router.push('/users');
     } catch (err: any) {
-      const { addToast } = await import('@heroui/react');
-      addToast({ title: 'Login Failed', description: err.message, color: 'danger', timeout: 3000 });
+      const { toast } = await import('@heroui/react');
+      toast.danger('Login Failed', { description: err.message, timeout: 3000 });
     } finally {
       setLoading(false);
     }
@@ -59,13 +59,13 @@ export function LoginContent() {
       />
       <Button
         type="submit"
-        color="primary"
+        variant="primary"
         className="w-full mt-2"
-        startContent={<LogIn size={15} />}
-        isLoading={loading}
         isDisabled={loading}
       >
-        Login
+        <span className="flex items-center gap-2">
+          <LogIn size={15} />Login
+        </span>
       </Button>
     </Form>
   );
@@ -100,8 +100,8 @@ export function LoginContent() {
 
   return (
     <div className="flex justify-center items-center h-screen w-screen bg-default-50">
-      <Card className="max-w-6xl w-[90%] h-[70%] shadow-2xl">
-        <CardBody className="grid grid-cols-2 p-0 h-full overflow-hidden">
+      <Card className="max-w-6xl w-[90%] h-[70%] shadow-2xl p-0">
+        <Card.Content className="grid grid-cols-2 gap-0 p-0 h-full overflow-hidden">
           {/* Left panel */}
           <div className="w-full h-full bg-gradient-to-br from-primary-600 via-primary-500 to-primary-300 rounded-l-xl relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
@@ -135,7 +135,7 @@ export function LoginContent() {
 
             <Footer />
           </div>
-        </CardBody>
+        </Card.Content>
       </Card>
     </div>
   );

@@ -1,49 +1,72 @@
 'use client';
 
-import { Link } from 'waku';
+import { useEffect, useState } from 'react';
+import { NAV_ITEMS } from './home-constants';
+import type { HeroData } from '@/types/sections/home-section';
+import type { AboutData } from '@/types/sections/about-section';
+import type { ProductsData } from '@/types/sections/products-section';
+import type { BenefitData } from '@/types/sections/benefit-section';
+import type { HowToData } from '@/types/sections/howto-section';
+import type { GalleryData } from '@/types/sections/gallery-section';
+import type { DocumentationData } from '@/types/sections/documentation-section';
+import type { LegalData } from '@/types/sections/legal-section';
+import type { FooterData } from '@/types/sections/footer-section';
+import { HeroSection } from './sections/hero-section';
+import { StickyNav } from './sections/sticky-nav';
+import { AboutSection } from './sections/about-section';
+import { ProductsSection } from './sections/products-section';
+import { BenefitSection } from './sections/benefit-section';
+import { HowToSection } from './sections/howto-section';
+import { GallerySection } from './sections/gallery-section';
+import { LegalSection } from './sections/legal-section';
+import { DocumentationSection } from './sections/documentation-section';
+import { FooterSection } from './sections/footer-section';
 
-export function HomeContent() {
+export function HomeContent({ heroData, aboutData, productsData, benefitData, howToData, galleryData, documentationData, legalData, footerData }: { heroData?: HeroData | null; aboutData?: AboutData | null; productsData?: ProductsData | null; benefitData?: BenefitData | null; howToData?: HowToData | null; galleryData?: GalleryData | null; documentationData?: DocumentationData | null; legalData?: LegalData | null; footerData?: FooterData | null }) {
+  const [activeSection, setActiveSection] = useState<string>('company');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeArticle, setActiveArticle] = useState(0);
+  const [winW, setWinW] = useState(1200);
+
+  useEffect(() => {
+    setWinW(window.innerWidth);
+    const onResize = () => setWinW(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const trigger = window.scrollY + window.innerHeight * 0.4;
+      let current: string = NAV_ITEMS[0]!.id;
+      for (const { id } of NAV_ITEMS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top + window.scrollY <= trigger) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Dashboard</h1>
-        <p className="mt-2 text-lg text-gray-500 dark:text-gray-400">
-          Built with Waku, Tailwind CSS, Prisma & NextAuth
-        </p>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Welcome</h3>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Admin dashboard built with Waku and Tailwind CSS.
-          </p>
-        </div>
-
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Getting Started</h3>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Use the sidebar to navigate between sections.
-          </p>
-        </div>
-
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Theme</h3>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Dark mode support with Tailwind CSS.
-          </p>
-        </div>
-      </div>
-
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <p className="text-gray-900 dark:text-white">
-          Visit the{' '}
-          <Link to="/about" className="text-purple-600 underline hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300">
-            about page
-          </Link>{' '}
-          to learn more.
-        </p>
-      </div>
+    <div
+      className="min-h-screen bg-white text-gray-900"
+      style={{ fontFamily: '"Helvetica Neue", Arial, sans-serif', isolation: 'isolate' }}
+    >
+      <HeroSection data={heroData ?? null} />
+      <StickyNav activeSection={activeSection} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <AboutSection data={aboutData ?? null} />
+      <ProductsSection data={productsData ?? null} />
+      <BenefitSection data={benefitData ?? null} />
+      <HowToSection data={howToData ?? null} />
+      <GallerySection data={galleryData ?? null} />
+      <DocumentationSection data={documentationData ?? null} activeArticle={activeArticle} setActiveArticle={setActiveArticle} winW={winW} />
+      <LegalSection data={legalData ?? null} />
+      <FooterSection data={footerData ?? null} />
     </div>
   );
 }

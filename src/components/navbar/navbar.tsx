@@ -1,21 +1,17 @@
 'use client';
 
+import { useAtom, useAtomValue } from 'jotai';
 import { LogOut, Menu } from 'lucide-react';
-import { Button, Listbox, ListboxItem } from '@heroui/react';
-import { ManagedPopover } from '@/components/managed-popover';
+import { Button, Dropdown } from '@heroui/react';
 import { apiClient } from '@/lib/api-client';
 import { useConfirmation } from '@/contexts/confirmation-context';
+import { sidebarOpenAtom, currentUserAtom } from '@/store/ui';
 import avatar from '@/assets/images/User-avatar.png';
-import type { UserData } from '@/types/user';
 
-type NavbarProps = {
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
-  user: UserData | null;
-};
-
-export function Navbar({ sidebarOpen, setSidebarOpen, user }: NavbarProps) {
+export function Navbar() {
   const { confirm } = useConfirmation();
+  const [sidebarOpen, setSidebarOpen] = useAtom(sidebarOpenAtom);
+  const user = useAtomValue(currentUserAtom);
 
   const handleLogout = () => {
     confirm({
@@ -45,30 +41,26 @@ export function Navbar({ sidebarOpen, setSidebarOpen, user }: NavbarProps) {
             <span className="text-xs text-gray-500">{user?.role?.name}</span>
           </div>
 
-          <ManagedPopover
-            placement="bottom-end"
-            trigger={
-              <Button variant="light" isIconOnly className="rounded-full p-0">
+          <Dropdown>
+            <Dropdown.Trigger>
+              <Button variant="ghost" isIconOnly className="rounded-full p-0">
                 <img
                   src={avatar}
                   alt="User avatar"
-                  className="h-8 w-8 rounded-full bg-blue"
+                  className="h-8 w-8 rounded-full"
                 />
               </Button>
-            }
-          >
-            <Listbox aria-label="User menu" variant="flat">
-              <ListboxItem
-                key="logout"
-                className="text-danger"
-                color="danger"
-                startContent={<LogOut className="h-4 w-4" />}
-                onPress={handleLogout}
-              >
-                Logout
-              </ListboxItem>
-            </Listbox>
-          </ManagedPopover>
+            </Dropdown.Trigger>
+            <Dropdown.Popover placement="bottom end" className="min-w-32">
+              <Dropdown.Menu aria-label="User menu">
+                <Dropdown.Item key="logout" className="text-danger" onAction={handleLogout}>
+                  <span className="flex items-center gap-2">
+                    <LogOut className="h-4 w-4" />Logout
+                  </span>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown.Popover>
+          </Dropdown>
         </div>
       </div>
     </header>

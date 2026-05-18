@@ -1,6 +1,6 @@
 'use client';
 
-import { Tooltip, addToast } from '@heroui/react';
+import { Tooltip, toast } from '@heroui/react';
 
 export const formatEllipsis = (
   text: string,
@@ -13,27 +13,19 @@ export const formatEllipsis = (
   const truncated = text.slice(0, maxChars) + '...';
 
   return (
-    <Tooltip content={text} delay={500} showArrow color="foreground">
-      <span className="cursor-help">{truncated}</span>
+    <Tooltip>
+      <Tooltip.Trigger>
+        <span className="cursor-help">{truncated}</span>
+      </Tooltip.Trigger>
+      <Tooltip.Content>{text}</Tooltip.Content>
     </Tooltip>
   );
 };
 
 export const showSuccessToast = (msg: string) => {
-  addToast({
-    title: "Success",
-    description: msg,
-    color: 'success',
-    timeout: 3000,
-  })
-}
+  toast.success(msg, { timeout: 3000 });
+};
 
 export const showErrorToast = (msg: string) => {
-  addToast({
-    title: "Error",
-    description: msg,
-    color: 'danger',
-    timeout: 3000,
-  })
-}
-
+  toast.danger(msg, { timeout: 3000 });
+};

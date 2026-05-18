@@ -1,16 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAtomValue } from 'jotai';
 import { SidebarContent } from './sidebar-content';
 import { BrowserView } from 'react-device-detect';
+import { sidebarOpenAtom } from '@/store/ui';
 
 type SidebarProps = {
   pathname: string;
-  isOpen: boolean;
 };
 
-export function Sidebar({ pathname, isOpen }: SidebarProps) {
+export function Sidebar({ pathname }: SidebarProps) {
   const [mounted, setMounted] = useState(false);
+  const isOpen = useAtomValue(sidebarOpenAtom);
 
   useEffect(() => {
     setMounted(true);

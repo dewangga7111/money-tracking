@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcryptjs';
 
 export async function seedUser(prisma: PrismaClient) {
   console.log('Seeding tb_user...');
@@ -24,8 +25,9 @@ export async function seedUser(prisma: PrismaClient) {
       });
       console.log(`  Updated user: ${user.email}`);
     } else {
+      const hashedPassword = await hash(user.password, 12);
       await prisma.tbUser.create({
-        data: { name: user.name, email: user.email, password: user.password, roleId: user.roleId, createdBy: 'SYSTEM', updatedBy: 'SYSTEM' },
+        data: { name: user.name, email: user.email, password: hashedPassword, roleId: user.roleId, createdBy: 'SYSTEM', updatedBy: 'SYSTEM' },
       });
       console.log(`  Created user: ${user.email}`);
     }
