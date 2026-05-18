@@ -40,10 +40,14 @@ CREATE DATABASE your_db;
 cp .env.example .env
 ```
 
-Update `.env`:
+Update `.env` with your database credentials:
 
 ```env
-DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/your_db"
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=yourpassword
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=your_db
 ```
 
 ### 4. Install Dependencies
@@ -270,7 +274,7 @@ email String @unique @db.VarChar(255)
 
 **Database connection error**
 1. Check PostgreSQL is running: `brew services list` / `systemctl status postgresql`
-2. Verify `DATABASE_URL` in `.env`
+2. Verify `POSTGRES_*` vars in `.env`
 3. Test: `psql -U postgres -d your_db`
 
 **Port 3000 already in use**
