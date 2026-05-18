@@ -22,8 +22,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy built output
 COPY --from=builder /app/dist ./dist
 
-# Copy prisma schema + migrations for migrate deploy
+# Copy prisma schema + migrations + config for migrate deploy
 COPY prisma ./prisma
+COPY prisma.config.ts ./
 
 # Copy package.json for npm start
 COPY package.json ./
