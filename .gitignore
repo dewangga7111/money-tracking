@@ -6,5 +6,5 @@ dist
 .cache
 .DS_Store
 *.pem
-.claude
+.claude*
 **/public/uploads/*
