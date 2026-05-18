@@ -36,5 +36,5 @@ RUN chmod +x docker-entrypoint.sh
 # Persistent upload directory
 RUN mkdir -p /app/public/uploads
 
-EXPOSE 8080
+EXPOSE 9100
 ENTRYPOINT ["./docker-entrypoint.sh"]
