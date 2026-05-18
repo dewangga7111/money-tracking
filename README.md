@@ -83,9 +83,13 @@ npm run start     # Start production server
 
 ## Running in Production (Docker)
 
+The app runs in Docker and connects to an **existing PostgreSQL server** on your machine or network — no database container is included.
+
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) + [Docker Compose](https://docs.docker.com/compose/)
+- PostgreSQL already running and accessible (e.g. installed on the host or a separate DB server)
+- A database created for the app
 
 ### 1. Configure environment
 
@@ -93,14 +97,25 @@ npm run start     # Start production server
 cp .env.example .env
 ```
 
-Edit `.env` and set the required values:
+Edit `.env` and fill in all required values:
 
 ```env
+# App
+WAKU_PUBLIC_WEB_TITLE="Your App Title"
+SESSION_SECRET="your_long_random_secret"   # openssl rand -hex 32
+
+# Database — point to your existing PostgreSQL server
+POSTGRES_HOST=127.0.0.1        # host IP/hostname reachable from the container
+POSTGRES_PORT=5432
 POSTGRES_DB=your_db
 POSTGRES_USER=your_user
 POSTGRES_PASSWORD=your_secure_password
-SESSION_SECRET=your_long_random_secret   # openssl rand -hex 32
+
+# Port exposed on the host
+APP_PORT=8080
 ```
+
+> **Connecting to PostgreSQL on the host machine:** use `host.docker.internal` (Mac/Windows) or the host's LAN IP (Linux). Using `localhost` inside the container refers to the container itself, not the host.
 
 ### 2. Build and start
 
@@ -108,7 +123,7 @@ SESSION_SECRET=your_long_random_secret   # openssl rand -hex 32
 docker compose up -d --build
 ```
 
-The app will be available at `http://localhost:8080`.
+The app will be available at `http://localhost:8080` (or whatever `APP_PORT` you set).
 
 > On first start, database migrations run automatically before the app starts.
 
@@ -124,15 +139,14 @@ This creates the default admin user: `admin@mail.com` / `admin1234`.
 
 ```bash
 docker compose up -d --build    # Build and start (or rebuild after code changes)
-docker compose down             # Stop and remove containers
+docker compose down             # Stop containers
 docker compose logs -f app      # Stream app logs
-docker compose exec app npx prisma studio   # Open Prisma Studio
+docker compose exec app npx prisma migrate deploy   # Run pending migrations manually
 ```
 
 ### Notes
 
 - Uploaded images are stored in a named Docker volume (`uploads`) and persist across restarts/rebuilds.
-- The PostgreSQL data is stored in the `postgres_data` volume.
 - To change the exposed port, set `APP_PORT` in `.env` (default: `8080`).
 
 ## Project Structure
