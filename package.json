@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "waku dev",
     "build": "waku build",
-    "start": "waku start",
+    "start": "waku start --port ${APP_PORT:-8080}",
     "db:seed": "tsx prisma/seed.ts"
   },
   "prisma": {
