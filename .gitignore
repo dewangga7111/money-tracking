@@ -8,3 +8,4 @@ dist
 *.pem
 .claude*
 **/public/uploads/*
+.agent*

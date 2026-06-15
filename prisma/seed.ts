@@ -2,7 +2,6 @@ import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import { seedRole } from './seeders/role.seed';
 import { seedUser } from './seeders/user.seed';
-import { seedHomeSection } from './seeders/home-section.seed';
 
 function buildDatabaseUrl(): string {
   const {
@@ -22,7 +21,6 @@ async function main() {
 
   await seedRole(prisma);
   await seedUser(prisma);
-  await seedHomeSection(prisma);
 
   console.log('\nAll seeding completed!');
 }

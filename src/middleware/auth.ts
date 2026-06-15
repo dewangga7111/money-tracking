@@ -16,8 +16,8 @@ const auth = (): MiddlewareHandler => {
     const token = getCookie(c, SESSION_COOKIE);
     const session = token ? verifySessionToken(token) : null;
 
-    // /admin → redirect based on session
-    if (path === '/admin') {
+    // / or /admin → redirect based on session
+    if (path === '/' || path === '/admin') {
       const location = session ? '/users' : '/login';
       c.res = new Response(null, { status: 302, headers: { Location: location } });
       return;
@@ -25,7 +25,7 @@ const auth = (): MiddlewareHandler => {
 
     // Already logged in → skip login page
     if (path === '/login' && session) {
-      c.res = new Response(null, { status: 302, headers: { Location: '/' } });
+      c.res = new Response(null, { status: 302, headers: { Location: '/users' } });
       return;
     }
 
