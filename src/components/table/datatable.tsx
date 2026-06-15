@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Table, Spinner, Pagination, Card } from "@heroui/react";
+import { Inbox } from "lucide-react";
 import { DynamicTableProps } from "@/types/table";
 import { isMobile } from "react-device-detect";
 
@@ -98,7 +99,12 @@ export default function Datatable({
     }
 
     if (!rows || rows.length === 0) {
-      return <p className="text-center text-default-500 py-6">{emptyContent}</p>;
+      return (
+        <div className="flex flex-col items-center justify-center py-12 bg-white rounded-xl border border-gray-100 shadow-sm text-gray-400">
+          <Inbox className="h-12 w-12 mb-3 text-gray-300 stroke-[1.5]" />
+          <p className="text-sm font-medium">{emptyContent}</p>
+        </div>
+      );
     }
 
     return (
@@ -144,8 +150,8 @@ export default function Datatable({
 
   // Desktop table view
   const renderDesktopTable = () => (
-    <Card>
-      <Card.Content>
+    <Card className="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden">
+      <Card.Content className="p-0 sm:p-2 md:p-4">
         {topContent && <div className="mb-4">{topContent}</div>}
         <div className="relative">
           {loading && (
@@ -172,7 +178,10 @@ export default function Datatable({
                 items={rows}
                 renderEmptyState={() =>
                   !loading ? (
-                    <p className="text-center py-6 text-default-500">{emptyContent}</p>
+                    <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+                      <Inbox className="h-12 w-12 mb-3 text-gray-200 stroke-[1]" />
+                      <p className="text-sm font-medium tracking-wide">{emptyContent}</p>
+                    </div>
                   ) : null
                 }
               >

@@ -1,32 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 @import "@heroui/styles";
 @config '../tailwind.config.ts';
 
 :root {
-  /* HeroUI v3 semantic tokens — controls component colors (buttons, inputs, etc.) */
-  --accent: oklch(63% 0.167 62);               /* amber = #D4890A */
-  --accent-foreground: oklch(100% 0 0);         /* white */
-
-  /* Tailwind primary palette — for bg-primary, text-primary, from-primary, etc. */
-  --heroui-primary-50:  255 251 240;
-  --heroui-primary-100: 254 243 220;
-  --heroui-primary-200: 253 232 176;
-  --heroui-primary-300: 251 208 122;
-  --heroui-primary-400: 247 183 60;
-  --heroui-primary-500: 212 137 10;
-  --heroui-primary:     212 137 10;
-  --heroui-primary-600: 184 116 9;
-  --heroui-primary-700: 163 99 8;
-  --heroui-primary-800: 122 74 6;
-  --heroui-primary-900: 77 46 4;
+  /* Sapphire Primary Palette */
+  --heroui-primary-50:  239 246 255; /* blue-50 */
+  --heroui-primary-100: 219 234 254; /* blue-100 */
+  --heroui-primary-200: 191 219 254; /* blue-200 */
+  --heroui-primary-300: 147 197 253; /* blue-300 */
+  --heroui-primary-400: 96 165 250; /* blue-400 */
+  --heroui-primary-500: 59 130 246; /* blue-500 */
+  --heroui-primary:     37 99 235; /* blue-600 */
+  --heroui-primary-600: 37 99 235; /* blue-600 */
+  --heroui-primary-700: 29 78 216; /* blue-700 */
+  --heroui-primary-800: 30 64 175; /* blue-800 */
+  --heroui-primary-900: 30 58 138; /* blue-900 */
   --heroui-primary-foreground: 255 255 255;
+
+  /* Font variables for Tailwind */
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  
+  /* Additional variables to force Light Mode / Refined Look */
+  --background: #F9FAFB;
+  --foreground: #111827;
 }
 
 body {
-  font-family: 'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
+/* Base resets */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;

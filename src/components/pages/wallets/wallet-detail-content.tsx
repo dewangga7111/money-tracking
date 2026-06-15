@@ -135,7 +135,7 @@ export function WalletDetailContent({
       const isTransfer = cellValue === 'TRANSFER';
       return (
         <span
-          className={`rounded-full px-2 py-1 text-xs font-semibold ${isIncome ? 'bg-green-100 text-green-800' : isTransfer ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'}`}
+          className={`rounded-full px-3 py-1 text-xs font-semibold tracking-wide ${isIncome ? 'bg-emerald-50 text-emerald-700' : isTransfer ? 'bg-blue-50 text-blue-700' : 'bg-rose-50 text-rose-700'}`}
         >
           {cellValue}
         </span>
@@ -146,7 +146,7 @@ export function WalletDetailContent({
       const isIncome = row.type === 'INCOME';
       const isExpense = row.type === 'EXPENSE';
       return (
-        <span className={`font-semibold ${isIncome ? 'text-green-600' : isExpense ? 'text-red-600' : 'text-gray-800'}`}>
+        <span className={`font-semibold ${isIncome ? 'text-emerald-700' : isExpense ? 'text-rose-700' : 'text-gray-800'}`}>
           {isIncome ? '+' : isExpense ? '-' : ''} {formatCurrency(Number(cellValue))}
         </span>
       );
@@ -183,24 +183,27 @@ export function WalletDetailContent({
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="bg-zinc-900 text-white border-none shadow-xl">
-          <Card.Content className="p-6">
-            <p className="text-xs text-zinc-400 uppercase tracking-widest font-semibold mb-2">Total Saldo</p>
-            <p className="text-3xl font-bold">{formatCurrency(totalBalance)}</p>
+        <Card className="bg-gradient-to-br from-primary-900 to-primary-800 text-white border-none shadow-sm rounded-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/3"></div>
+          <Card.Content className="p-6 relative z-10">
+            <p className="text-xs text-primary-200 uppercase tracking-widest font-semibold mb-2">Total Saldo</p>
+            <p className="text-3xl font-bold text-white">{formatCurrency(totalBalance)}</p>
           </Card.Content>
         </Card>
 
-        <Card className="bg-green-50 text-green-900 border-none shadow-sm">
-          <Card.Content className="p-6">
-            <p className="text-xs text-green-700 uppercase tracking-widest font-semibold mb-2">Total Pemasukan</p>
-            <p className="text-3xl font-bold text-green-600">{formatCurrency(totalIncome)}</p>
+        <Card className="bg-gradient-to-br from-emerald-600 to-emerald-500 text-white border-none shadow-sm rounded-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/3"></div>
+          <Card.Content className="p-6 relative z-10">
+            <p className="text-xs text-emerald-100 uppercase tracking-widest font-semibold mb-2">Total Pemasukan</p>
+            <p className="text-3xl font-bold text-white">{formatCurrency(totalIncome)}</p>
           </Card.Content>
         </Card>
 
-        <Card className="bg-red-50 text-red-900 border-none shadow-sm">
-          <Card.Content className="p-6">
-            <p className="text-xs text-red-700 uppercase tracking-widest font-semibold mb-2">Total Pengeluaran</p>
-            <p className="text-3xl font-bold text-red-600">{formatCurrency(totalExpense)}</p>
+        <Card className="bg-gradient-to-br from-rose-800 to-rose-700 text-white border-none shadow-sm rounded-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/3"></div>
+          <Card.Content className="p-6 relative z-10">
+            <p className="text-xs text-rose-200 uppercase tracking-widest font-semibold mb-2">Total Pengeluaran</p>
+            <p className="text-3xl font-bold text-white">{formatCurrency(totalExpense)}</p>
           </Card.Content>
         </Card>
       </div>

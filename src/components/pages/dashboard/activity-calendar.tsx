@@ -80,15 +80,15 @@ export default function ActivityCalendar({ currentMonthDate, data, onDateClick }
   ];
 
   return (
-    <div className="w-full flex flex-col bg-[#1c1c1c] rounded-2xl p-6 text-zinc-300">
-      <div className="text-sm font-bold tracking-wider mb-6 text-zinc-500">
+    <div className="w-full flex flex-col bg-white border border-gray-100 shadow-sm rounded-2xl p-6 text-gray-900">
+      <div className="text-sm font-bold tracking-wider mb-6 text-gray-500 uppercase">
         {monthNames[month]} {year}
       </div>
 
       {/* Days Header */}
       <div className="grid grid-cols-7 gap-2 mb-2">
         {DAYS_OF_WEEK.map(day => (
-          <div key={day} className="text-center text-xs font-semibold text-zinc-500">
+          <div key={day} className="text-center text-xs font-semibold text-gray-400">
             {day}
           </div>
         ))}
@@ -108,16 +108,16 @@ export default function ActivityCalendar({ currentMonthDate, data, onDateClick }
               key={dateStr}
               onClick={() => onDateClick(dateStr)}
               className={`relative min-h-[100px] rounded-xl p-3 cursor-pointer transition-all hover:scale-105 overflow-hidden flex flex-col justify-between
-                ${hasActivity ? 'bg-[#3f4b2c]/60 border border-[#5c6e3b]/50 hover:bg-[#4a5833]' : 'bg-[#2a2a2a] hover:bg-[#333333]'}
+                ${hasActivity ? 'bg-primary-50 border border-primary-100 hover:bg-primary-100' : 'bg-gray-50 hover:bg-gray-100'}
               `}
             >
-              <span className={`text-sm font-semibold ${hasActivity ? 'text-zinc-200' : 'text-zinc-500'}`}>
+              <span className={`text-sm font-semibold ${hasActivity ? 'text-primary-800' : 'text-gray-400'}`}>
                 {day}
               </span>
 
               <div className="flex flex-col items-end gap-1 mt-auto text-xs font-bold">
-                {income > 0 && <span className="text-green-400">+{formatCompact(income)}</span>}
-                {expense > 0 && <span className="text-red-400">-{formatCompact(expense)}</span>}
+                {income > 0 && <span className="text-emerald-600">+{formatCompact(income)}</span>}
+                {expense > 0 && <span className="text-rose-600">-{formatCompact(expense)}</span>}
               </div>
             </div>
           );

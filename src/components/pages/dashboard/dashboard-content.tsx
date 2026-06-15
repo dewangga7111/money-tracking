@@ -173,7 +173,7 @@ export function DashboardContent({
       const isTransfer = cellValue === 'TRANSFER';
       return (
         <span
-          className={`rounded-full px-2 py-1 text-xs font-semibold ${isIncome ? 'bg-green-100 text-green-800' : isTransfer ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
+          className={`rounded-full px-3 py-1 text-xs font-semibold tracking-wide ${isIncome ? 'bg-emerald-50 text-emerald-700' : isTransfer ? 'bg-blue-50 text-blue-700' : 'bg-rose-50 text-rose-700'
             }`}
         >
           {cellValue}
@@ -185,7 +185,7 @@ export function DashboardContent({
       const isIncome = row.type === 'INCOME';
       const isExpense = row.type === 'EXPENSE';
       return (
-        <span className={`font-semibold ${isIncome ? 'text-green-600' : isExpense ? 'text-red-600' : 'text-gray-800'}`}>
+        <span className={`font-semibold ${isIncome ? 'text-emerald-700' : isExpense ? 'text-rose-700' : 'text-gray-800'}`}>
           {isIncome ? '+' : isExpense ? '-' : ''} {formatCurrency(Number(cellValue))}
         </span>
       );
@@ -199,8 +199,8 @@ export function DashboardContent({
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <p className="text-default-500">Halo, Admin 🌙</p>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-500">Welcome back, Admin</p>
         </div>
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
           <div className="w-full md:w-64">
@@ -220,26 +220,26 @@ export function DashboardContent({
       </div>
 
       {/* Main Top Card: Sekilas Hari Ini */}
-      <Card className="bg-zinc-900 text-white border-none shadow-xl w-full rounded-2xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+      <Card className="bg-gradient-to-br from-primary-900 to-primary-800 text-white border-none shadow-xl w-full rounded-2xl overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
         <Card.Content className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10">
           <div>
-            <div className="flex items-center gap-2 mb-2 text-green-400">
+            <div className="flex items-center gap-2 mb-2 text-primary-200">
               <span className="text-xl">⚡</span>
               <h3 className="font-semibold text-sm tracking-wider uppercase">Sekilas Bulan Ini</h3>
             </div>
-            <p className="text-5xl font-bold mb-2">{formatCurrency(summary.totalBalance)}</p>
-            <p className="text-sm text-zinc-400">💸 Total Saldo Keseluruhan</p>
+            <p className="text-5xl font-bold mb-2 tracking-tight">{formatCurrency(summary.totalBalance)}</p>
+            <p className="text-sm text-primary-200">💸 Total Saldo Keseluruhan</p>
           </div>
 
           <div className="flex flex-col md:flex-row md:justify-end gap-6 md:gap-12 text-left md:text-right">
             <div className="text-left md:text-right">
-              <p className="text-xs text-zinc-400 uppercase tracking-widest font-semibold mb-1">Pemasukan</p>
-              <p className="text-2xl font-bold text-green-400">{formatCurrency(summary.monthlyIncome)}</p>
+              <p className="text-xs text-primary-300 uppercase tracking-widest font-semibold mb-1">Pemasukan</p>
+              <p className="text-2xl font-bold text-emerald-400">{formatCurrency(summary.monthlyIncome)}</p>
             </div>
             <div className="text-left md:text-right">
-              <p className="text-xs text-zinc-400 uppercase tracking-widest font-semibold mb-1">Pengeluaran</p>
-              <p className="text-2xl font-bold text-pink-500">{formatCurrency(summary.monthlyExpense)}</p>
+              <p className="text-xs text-primary-300 uppercase tracking-widest font-semibold mb-1">Pengeluaran</p>
+              <p className="text-2xl font-bold text-rose-400">{formatCurrency(summary.monthlyExpense)}</p>
             </div>
           </div>
         </Card.Content>
@@ -272,8 +272,8 @@ export function DashboardContent({
                     labelFormatter={(label) => `Tanggal: ${label}`}
                   />
                   <Legend />
-                  <Line type="monotone" dataKey="income" name="Pemasukan" stroke="#4ade80" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
-                  <Line type="monotone" dataKey="expense" name="Pengeluaran" stroke="#f472b6" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                  <Line type="monotone" dataKey="income" name="Pemasukan" stroke="#059669" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                  <Line type="monotone" dataKey="expense" name="Pengeluaran" stroke="#e11d48" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -294,7 +294,7 @@ export function DashboardContent({
                     formatter={(value: number) => formatCurrency(value)}
                     cursor={{fill: 'transparent'}}
                   />
-                  <Bar dataKey="amount" fill="#f472b6" radius={[0, 4, 4, 0]} barSize={25} />
+                  <Bar dataKey="amount" fill="#e11d48" radius={[0, 4, 4, 0]} barSize={25} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
