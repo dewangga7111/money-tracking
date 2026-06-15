@@ -5,6 +5,7 @@ import { Button, Card, Form } from '@heroui/react';
 import { LogIn } from 'lucide-react';
 import { isMobile } from 'react-device-detect';
 import { useRouter } from 'waku';
+import { showErrorToast } from '@/utils/common';
 
 import AppTextInput from '@/components/forms/app-text-input';
 import AppTextInputPassword from '@/components/forms/app-text-input-password';
@@ -31,10 +32,9 @@ export function LoginContent() {
         email: form.get('email'),
         password: form.get('password'),
       });
-      router.push('/users');
+      router.push('/dashboard');
     } catch (err: any) {
-      const { toast } = await import('@heroui/react');
-      toast.danger('Login Failed', { description: err.message, timeout: 3000 });
+      showErrorToast(`Login Failed: ${err.message}`);
     } finally {
       setLoading(false);
     }

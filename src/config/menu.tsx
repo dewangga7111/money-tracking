@@ -1,4 +1,4 @@
-import { Settings, type LucideIcon, LayoutDashboard, WalletCards } from 'lucide-react';
+import { Settings, type LucideIcon, LayoutDashboard, WalletCards, ArrowRightLeft } from 'lucide-react';
 
 export type MenuItem = {
   key: string;
@@ -20,6 +20,12 @@ export const menuItems: MenuItem[] = [
     label: 'Wallets',
     path: '/wallets',
     icon: WalletCards,
+  },
+  {
+    key: 'TRANSACTIONS_PAGE',
+    label: 'Transaksi',
+    path: '/transactions',
+    icon: ArrowRightLeft,
   },
   {
     key: 'master',

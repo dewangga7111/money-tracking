@@ -20,6 +20,8 @@ import type { getConfig as File_AdminRoleEditId_getConfig } from './pages/(admin
 // prettier-ignore
 import type { getConfig as File_AdminRoleIndex_getConfig } from './pages/(admin)/role/index';
 // prettier-ignore
+import type { getConfig as File_AdminTransactionsIndex_getConfig } from './pages/(admin)/transactions/index';
+// prettier-ignore
 import type { getConfig as File_AdminUsersAdd_getConfig } from './pages/(admin)/users/add';
 // prettier-ignore
 import type { getConfig as File_AdminUsersEditId_getConfig } from './pages/(admin)/users/edit/[id]';
@@ -46,6 +48,7 @@ type Page =
 | ({ path: '/role/add' } & GetConfigResponse<typeof File_AdminRoleAdd_getConfig>)
 | ({ path: '/role/edit/[id]' } & GetConfigResponse<typeof File_AdminRoleEditId_getConfig>)
 | ({ path: '/role' } & GetConfigResponse<typeof File_AdminRoleIndex_getConfig>)
+| ({ path: '/transactions' } & GetConfigResponse<typeof File_AdminTransactionsIndex_getConfig>)
 | ({ path: '/users/add' } & GetConfigResponse<typeof File_AdminUsersAdd_getConfig>)
 | ({ path: '/users/edit/[id]' } & GetConfigResponse<typeof File_AdminUsersEditId_getConfig>)
 | ({ path: '/users' } & GetConfigResponse<typeof File_AdminUsersIndex_getConfig>)

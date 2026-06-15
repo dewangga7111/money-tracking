@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Button, Card } from '@heroui/react';
-import { PlusIcon } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import { PlusIcon, Download } from 'lucide-react';
 import { getLocalTimeZone, today } from '@internationalized/date';
 import Datatable from '@/components/table/datatable';
 import { TableColumnType, TableRowType, PaginationInfo } from '@/types/table';
-import TransactionModal from './transaction-modal';
 import DailyTransactionsModal from './daily-transactions-modal';
 import { formatCurrency, formatDateLong } from '@/utils/common';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -48,10 +48,6 @@ export function DashboardContent({
   createAction,
   getAllAction,
 }: DashboardContentProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const onOpen = () => setIsOpen(true);
-  const onOpenChange = (open: boolean) => setIsOpen(open);
-
   const [page, setPage] = useState(initialPagination.page);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState<PaginationInfo>(initialPagination);
@@ -150,6 +146,45 @@ export function DashboardContent({
     refreshData(1, dateRange);
   };
 
+  const handleExport = async () => {
+    try {
+      const startYMD = parseDDMMYYYYtoYYYYMMDD(dateRange.start || '');
+      const endYMD = parseDDMMYYYYtoYYYYMMDD(dateRange.end || '');
+      // Fetch all transactions for the date range
+      const txRes = await getAllAction(1, 99999, { startDate: startYMD, endDate: endYMD });
+      if (!txRes.success || !txRes.data) return;
+
+      const transactions = mapTransactions(txRes.data);
+      
+      const excelData = transactions.map(t => ({
+        Tanggal: t.date,
+        Tipe: t.type,
+        Kategori: t.category,
+        Dompet: t.wallet,
+        Catatan: t.notes,
+        Jumlah: t.amount
+      }));
+
+      const summaryData = [
+        { Keterangan: 'Total Saldo', Nominal: summary.totalBalance },
+        { Keterangan: 'Pemasukan', Nominal: summary.monthlyIncome },
+        { Keterangan: 'Pengeluaran', Nominal: summary.monthlyExpense }
+      ];
+
+      const wb = XLSX.utils.book_new();
+      
+      const wsTransactions = XLSX.utils.json_to_sheet(excelData);
+      XLSX.utils.book_append_sheet(wb, wsTransactions, "Transaksi");
+      
+      const wsSummary = XLSX.utils.json_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(wb, wsSummary, "Ringkasan");
+      
+      XLSX.writeFile(wb, `transaksi_${startYMD}_to_${endYMD}.xlsx`);
+    } catch (e) {
+      console.error('Export failed:', e);
+    }
+  };
+
   const handleCalendarClick = async (dateStr: string) => {
     setSelectedDateStr(dateStr);
     setIsDailyModalOpen(true);
@@ -213,9 +248,15 @@ export function DashboardContent({
               }}
             />
           </div>
-          <Button color="primary" onPress={onOpen} startContent={<PlusIcon size={18} />} className="w-full md:w-auto">
-            Add Transaction
-          </Button>
+            <Button
+              variant="flat"
+              className="bg-white border border-gray-200 text-gray-700 shadow-sm rounded-xl font-medium"
+              startContent={<Download size={18} />}
+              onPress={handleExport}
+              isDisabled={loading}
+            >
+              Export Excel
+            </Button>
         </div>
       </div>
 
@@ -321,15 +362,6 @@ export function DashboardContent({
             />
           </div>
         </div>
-
-      <TransactionModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        wallets={wallets}
-        categories={categories}
-        createAction={createAction}
-        onSuccess={handleSuccess}
-      />
 
       <DailyTransactionsModal
         isOpen={isDailyModalOpen}

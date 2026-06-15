@@ -124,7 +124,7 @@ model TbCategory {
 model TbTransaction {
   transactionId String          @id @default(uuid()) @map("transaction_id") @db.Uuid
   amount        Decimal         @db.Decimal(19, 4)
-  date          DateTime        @db.Date
+  date          DateTime        @db.Timestamp(6)
   notes         String?         @db.VarChar(255)
   type          TransactionType
   walletId      String          @map("wallet_id") @db.Uuid

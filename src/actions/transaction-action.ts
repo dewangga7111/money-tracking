@@ -107,6 +107,33 @@ export async function createTransactionAction(formData: TransactionFormData): Pr
   }
 }
 
+export async function updateTransactionAction(id: string, formData: TransactionFormData): Promise<ActionResponse> {
+  const session = requireAuth();
+  const prisma = getPrismaClient();
+  try {
+    await prisma.tbTransaction.update({
+      where: { transactionId: id, userId: session.userId },
+      data: {
+        amount: formData.amount,
+        date: new Date(formData.date),
+        notes: formData.notes,
+        type: formData.type,
+        walletId: formData.walletId,
+        toWalletId: formData.toWalletId || null,
+        categoryId: formData.categoryId || null,
+        updatedBy: session.userId,
+      },
+    });
+
+    return { success: true, message: 'Transaction updated successfully' };
+  } catch (error) {
+    console.error('Error updating transaction:', error);
+    return { success: false, error: 'Failed to update transaction' };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function deleteTransactionAction(id: string): Promise<ActionResponse> {
   const session = requireAuth();
   const prisma = getPrismaClient();
@@ -311,6 +338,34 @@ export async function getExpensesByCategory(startDate?: string, endDate?: string
   } catch (error) {
     console.error('Error fetching expenses by category:', error);
     return { success: false, error: 'Failed to fetch expenses by category' };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function createBulkTransactionsAction(formDataArray: TransactionFormData[]): Promise<ActionResponse> {
+  const session = requireAuth();
+  const prisma = getPrismaClient();
+  try {
+    const data = formDataArray.map(formData => ({
+      amount: formData.amount,
+      date: new Date(formData.date),
+      notes: formData.notes,
+      type: formData.type,
+      walletId: formData.walletId,
+      toWalletId: formData.toWalletId || null,
+      categoryId: formData.categoryId || null,
+      userId: session.userId,
+      createdBy: session.userId,
+      updatedBy: session.userId,
+    }));
+
+    await prisma.tbTransaction.createMany({ data });
+
+    return { success: true, message: 'Transactions created successfully' };
+  } catch (error) {
+    console.error('Error creating bulk transactions:', error);
+    return { success: false, error: 'Failed to create bulk transactions' };
   } finally {
     await prisma.$disconnect();
   }
