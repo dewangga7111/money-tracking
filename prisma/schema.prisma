@@ -60,5 +60,86 @@ model TbUser {
 
   role TbRole @relation(fields: [roleId], references: [roleId])
 
+  wallets      TbWallet[]
+  categories   TbCategory[]
+  transactions TbTransaction[]
+
   @@map("tb_user")
+}
+
+enum WalletType {
+  BANK
+  E_WALLET
+  CASH
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+model TbWallet {
+  walletId  String     @id @default(uuid()) @map("wallet_id") @db.Uuid
+  name      String     @db.VarChar(100)
+  type      WalletType
+  balance   Decimal    @default(0) @db.Decimal(19, 4)
+  userId    String     @map("user_id") @db.Uuid
+  status    Boolean    @default(true)
+  createdBy String?    @map("created_by") @db.VarChar(50)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedBy String?    @map("updated_by") @db.VarChar(50)
+  updatedAt DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  user              TbUser          @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  transactionsFrom  TbTransaction[] @relation("WalletFrom")
+  transactionsTo    TbTransaction[] @relation("WalletTo")
+
+  @@map("tb_wallet")
+}
+
+model TbCategory {
+  categoryId String       @id @default(uuid()) @map("category_id") @db.Uuid
+  name       String       @db.VarChar(100)
+  type       CategoryType
+  icon       String?      @db.VarChar(50)
+  userId     String       @map("user_id") @db.Uuid
+  status     Boolean      @default(true)
+  createdBy  String?      @map("created_by") @db.VarChar(50)
+  createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedBy  String?      @map("updated_by") @db.VarChar(50)
+  updatedAt  DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  user         TbUser          @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  transactions TbTransaction[]
+
+  @@map("tb_category")
+}
+
+model TbTransaction {
+  transactionId String          @id @default(uuid()) @map("transaction_id") @db.Uuid
+  amount        Decimal         @db.Decimal(19, 4)
+  date          DateTime        @db.Date
+  notes         String?         @db.VarChar(255)
+  type          TransactionType
+  walletId      String          @map("wallet_id") @db.Uuid
+  toWalletId    String?         @map("to_wallet_id") @db.Uuid
+  categoryId    String?         @map("category_id") @db.Uuid
+  userId        String          @map("user_id") @db.Uuid
+  createdBy     String?         @map("created_by") @db.VarChar(50)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedBy     String?         @map("updated_by") @db.VarChar(50)
+  updatedAt     DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  user       TbUser      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  wallet     TbWallet    @relation("WalletFrom", fields: [walletId], references: [walletId])
+  toWallet   TbWallet?   @relation("WalletTo", fields: [toWalletId], references: [walletId])
+  category   TbCategory? @relation(fields: [categoryId], references: [categoryId])
+
+  @@map("tb_transaction")
 }

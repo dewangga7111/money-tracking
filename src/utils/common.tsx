@@ -29,3 +29,24 @@ export const showSuccessToast = (msg: string) => {
 export const showErrorToast = (msg: string) => {
   toast.danger(msg, { timeout: 3000 });
 };
+
+export const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+};
+
+export const formatDate = (dateStr: string | Date) => {
+  return new Date(dateStr).toLocaleDateString('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+
+export const formatDateLong = (dateStr: string | Date) => {
+  return new Date(dateStr).toLocaleDateString('id-ID', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+};

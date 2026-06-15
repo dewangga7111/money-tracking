@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { seedRole } from './seeders/role.seed';
 import { seedUser } from './seeders/user.seed';
 
+import { seedMoneyTracking } from './seeders/money.seed';
+
 function buildDatabaseUrl(): string {
   const {
     POSTGRES_USER,
@@ -21,6 +23,7 @@ async function main() {
 
   await seedRole(prisma);
   await seedUser(prisma);
+  await seedMoneyTracking(prisma);
 
   console.log('\nAll seeding completed!');
 }

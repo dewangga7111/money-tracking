@@ -1,4 +1,4 @@
-import { Settings, type LucideIcon, Database } from 'lucide-react';
+import { Settings, type LucideIcon, LayoutDashboard, WalletCards } from 'lucide-react';
 
 export type MenuItem = {
   key: string;
@@ -10,10 +10,27 @@ export type MenuItem = {
 
 export const menuItems: MenuItem[] = [
   {
+    key: 'DASHBOARD_PAGE',
+    label: 'Dashboard',
+    path: '/dashboard',
+    icon: LayoutDashboard,
+  },
+  {
+    key: 'WALLETS_PAGE',
+    label: 'Wallets',
+    path: '/wallets',
+    icon: WalletCards,
+  },
+  {
     key: 'master',
     label: 'Master',
-    icon: Database,
+    icon: Settings,
     children: [
+      {
+        key: 'CATEGORIES_PAGE',
+        label: 'Categories',
+        path: '/categories',
+      },
       {
         key: 'USERS_PAGE',
         label: 'Users',

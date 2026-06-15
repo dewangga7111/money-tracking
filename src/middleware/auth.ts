@@ -18,14 +18,14 @@ const auth = (): MiddlewareHandler => {
 
     // / or /admin → redirect based on session
     if (path === '/' || path === '/admin') {
-      const location = session ? '/users' : '/login';
+      const location = session ? '/dashboard' : '/login';
       c.res = new Response(null, { status: 302, headers: { Location: location } });
       return;
     }
 
     // Already logged in → skip login page
     if (path === '/login' && session) {
-      c.res = new Response(null, { status: 302, headers: { Location: '/users' } });
+      c.res = new Response(null, { status: 302, headers: { Location: '/dashboard' } });
       return;
     }
 
