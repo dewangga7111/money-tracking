@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "dev": "waku dev",
-    "build": "waku build",
+    "build": "prisma generate && waku build",
+    "postinstall": "prisma generate",
     "start": "waku start --port ${APP_PORT:-8080}",
     "db:seed": "tsx prisma/seed.ts"
   },
