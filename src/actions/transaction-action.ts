@@ -307,32 +307,40 @@ export async function getExpensesByCategory(startDate?: string, endDate?: string
     start.setHours(0, 0, 0, 0);
     end.setHours(23, 59, 59, 999);
 
-    const transactions = await prisma.tbTransaction.findMany({
-      where: { 
-        userId: session.userId,
-        date: { gte: start, lte: end },
-        type: 'EXPENSE'
-      },
-      include: {
-        category: true
-      }
-    });
+    // Start from every expense category so all of them show up, even with 0 value.
+    const [categories, grouped] = await Promise.all([
+      prisma.tbCategory.findMany({
+        where: { userId: session.userId, type: 'EXPENSE', status: true },
+        orderBy: { name: 'asc' },
+      }),
+      prisma.tbTransaction.groupBy({
+        by: ['categoryId'],
+        where: {
+          userId: session.userId,
+          date: { gte: start, lte: end },
+          type: 'EXPENSE',
+        },
+        _sum: { amount: true },
+      }),
+    ]);
 
-    const categoryMap = new Map();
-    
-    for (const tx of transactions) {
-      const catName = tx.category?.name || 'Uncategorized';
-      const catIcon = tx.category?.icon || '📦';
-      const label = `${catIcon} ${catName}`;
-      
-      const existing = categoryMap.get(label) || 0;
-      categoryMap.set(label, existing + Number(tx.amount));
+    // Left-join the summed amounts onto the categories.
+    const sumByCategoryId = new Map(
+      grouped.map((g) => [g.categoryId, Number(g._sum.amount || 0)])
+    );
+
+    const data = categories.map((cat) => ({
+      name: `${cat.icon || '📦'} ${cat.name}`,
+      amount: sumByCategoryId.get(cat.categoryId) || 0,
+    }));
+
+    // Include uncategorized expenses if there are any.
+    const uncategorized = sumByCategoryId.get(null);
+    if (uncategorized && uncategorized > 0) {
+      data.push({ name: '📦 Uncategorized', amount: uncategorized });
     }
 
-    const data = Array.from(categoryMap.entries())
-      .map(([name, amount]) => ({ name, amount }))
-      .sort((a, b) => b.amount - a.amount)
-      .slice(0, 5); // top 5 expenses
+    data.sort((a, b) => b.amount - a.amount);
 
     return { success: true, data };
   } catch (error) {
