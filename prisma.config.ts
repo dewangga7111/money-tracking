@@ -14,7 +14,7 @@ const {
 // prisma generate only reads the schema structure, it never connects to the DB.
 process.env.DATABASE_URL =
   POSTGRES_USER !== undefined && POSTGRES_PASSWORD !== undefined && POSTGRES_DB !== undefined
-    ? `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`
+    ? `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=require&channel_binding=require`
     : 'postgresql://localhost/placeholder';
 
 export default defineConfig({
