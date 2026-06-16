@@ -230,12 +230,12 @@ export function DashboardContent({
   };
 
   return (
-    <div className="flex flex-col gap-6 pb-24">
+    <div className="flex flex-col gap-4 md:gap-6 pb-24">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500">Welcome back, Admin</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-sm md:text-base text-gray-500">Welcome back, Admin</p>
         </div>
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
           <div className="w-full md:w-64">
@@ -263,24 +263,24 @@ export function DashboardContent({
       {/* Main Top Card: Sekilas Hari Ini */}
       <Card className="bg-gradient-to-br from-primary-900 to-primary-800 text-white border-none shadow-xl w-full rounded-2xl overflow-hidden relative">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-        <Card.Content className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10">
+        <Card.Content className="p-5 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-center relative z-10">
           <div>
-            <div className="flex items-center gap-2 mb-2 text-primary-200">
-              <span className="text-xl">⚡</span>
-              <h3 className="font-semibold text-sm tracking-wider uppercase">Sekilas Bulan Ini</h3>
+            <div className="flex items-center gap-2 mb-1.5 md:mb-2 text-primary-200">
+              <span className="text-lg md:text-xl">⚡</span>
+              <h3 className="font-semibold text-xs md:text-sm tracking-wider uppercase">Sekilas Bulan Ini</h3>
             </div>
-            <p className="text-5xl font-bold mb-2 tracking-tight">{formatCurrency(summary.totalBalance)}</p>
-            <p className="text-sm text-primary-200">💸 Total Saldo Keseluruhan</p>
+            <p className="text-3xl md:text-5xl font-bold mb-1.5 md:mb-2 tracking-tight">{formatCurrency(summary.totalBalance)}</p>
+            <p className="text-xs md:text-sm text-primary-200">💸 Total Saldo Keseluruhan</p>
           </div>
 
-          <div className="flex flex-col md:flex-row md:justify-end gap-6 md:gap-12 text-left md:text-right">
+          <div className="grid grid-cols-2 md:flex md:flex-row md:justify-end gap-4 md:gap-12 text-left md:text-right">
             <div className="text-left md:text-right">
-              <p className="text-xs text-primary-300 uppercase tracking-widest font-semibold mb-1">Pemasukan</p>
-              <p className="text-2xl font-bold text-emerald-400">{formatCurrency(summary.monthlyIncome)}</p>
+              <p className="text-[10px] md:text-xs text-primary-300 uppercase tracking-widest font-semibold mb-0.5 md:mb-1">Pemasukan</p>
+              <p className="text-lg md:text-2xl font-bold text-emerald-400">{formatCurrency(summary.monthlyIncome)}</p>
             </div>
             <div className="text-left md:text-right">
-              <p className="text-xs text-primary-300 uppercase tracking-widest font-semibold mb-1">Pengeluaran</p>
-              <p className="text-2xl font-bold text-rose-400">{formatCurrency(summary.monthlyExpense)}</p>
+              <p className="text-[10px] md:text-xs text-primary-300 uppercase tracking-widest font-semibold mb-0.5 md:mb-1">Pengeluaran</p>
+              <p className="text-lg md:text-2xl font-bold text-rose-400">{formatCurrency(summary.monthlyExpense)}</p>
             </div>
           </div>
         </Card.Content>
@@ -288,7 +288,7 @@ export function DashboardContent({
 
       {/* Calendar Section */}
       <div className="w-full">
-        <h3 className="font-bold text-lg mb-4 w-full text-left">Aktivitas Bulan Ini</h3>
+        <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 w-full text-left">Aktivitas Bulan Ini</h3>
         <ActivityCalendar
           currentMonthDate={parseDDMMYYYYtoYYYYMMDD(dateRange.start || '')}
           data={chartData}
@@ -297,11 +297,11 @@ export function DashboardContent({
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* Line Chart Section */}
         <Card className="shadow-sm border-none">
-          <Card.Content className="p-6">
-            <h3 className="font-bold text-lg mb-6">Grafik Keuangan</h3>
+          <Card.Content className="p-4 md:p-6">
+            <h3 className="font-bold text-base md:text-lg mb-4 md:mb-6">Grafik Keuangan</h3>
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
@@ -323,8 +323,8 @@ export function DashboardContent({
 
         {/* Expenses by Category Section */}
         <Card className="shadow-sm border-none">
-          <Card.Content className="p-6">
-            <h3 className="font-bold text-lg mb-6">Pengeluaran Terbesar</h3>
+          <Card.Content className="p-4 md:p-6">
+            <h3 className="font-bold text-base md:text-lg mb-4 md:mb-6">Pengeluaran Terbesar</h3>
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart layout="vertical" data={expensesByCategory} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
@@ -345,7 +345,7 @@ export function DashboardContent({
 
       {/* Datatable Section */}
       <div className="w-full flex flex-col h-full overflow-hidden">
-          <h3 className="font-bold text-lg mb-4 pl-2">Transaksi Terbaru</h3>
+          <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 pl-2">Transaksi Terbaru</h3>
           <div className="w-full">
             <Datatable
               columns={columns}

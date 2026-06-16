@@ -8,6 +8,7 @@ type ActivityCalendarProps = {
 };
 
 const DAYS_OF_WEEK = ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU', 'MINGGU'];
+const DAYS_OF_WEEK_SHORT = ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB', 'MIN'];
 
 function formatCompact(number: number) {
   if (number === 0) return '';
@@ -80,25 +81,26 @@ export default function ActivityCalendar({ currentMonthDate, data, onDateClick }
   ];
 
   return (
-    <div className="w-full flex flex-col bg-white border border-gray-100 shadow-sm rounded-2xl p-6 text-gray-900">
-      <div className="text-sm font-bold tracking-wider mb-6 text-gray-500 uppercase">
+    <div className="w-full flex flex-col bg-white border border-gray-100 shadow-sm rounded-2xl p-4 sm:p-6 text-gray-900">
+      <div className="text-xs sm:text-sm font-bold tracking-wider mb-3 sm:mb-6 text-gray-500 uppercase">
         {monthNames[month]} {year}
       </div>
 
       {/* Days Header */}
-      <div className="grid grid-cols-7 gap-2 mb-2">
-        {DAYS_OF_WEEK.map(day => (
-          <div key={day} className="text-center text-xs font-semibold text-gray-400">
-            {day}
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-1.5 sm:mb-2">
+        {DAYS_OF_WEEK.map((day, i) => (
+          <div key={day} className="text-center text-[10px] sm:text-xs font-semibold text-gray-400">
+            <span className="sm:hidden">{DAYS_OF_WEEK_SHORT[i]}</span>
+            <span className="hidden sm:inline">{day}</span>
           </div>
         ))}
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {calendarDays.map((cell, index) => {
           if (!cell) {
-            return <div key={`empty-${index}`} className="min-h-[100px] rounded-xl" />;
+            return <div key={`empty-${index}`} className="min-h-[48px] sm:min-h-[100px] rounded-lg sm:rounded-xl" />;
           }
 
           const { day, dateStr, income, expense, hasActivity } = cell;
@@ -107,15 +109,15 @@ export default function ActivityCalendar({ currentMonthDate, data, onDateClick }
             <div
               key={dateStr}
               onClick={() => onDateClick(dateStr)}
-              className={`relative min-h-[100px] rounded-xl p-3 cursor-pointer transition-all hover:scale-105 overflow-hidden flex flex-col justify-between
+              className={`relative min-h-[48px] sm:min-h-[100px] rounded-lg sm:rounded-xl p-1.5 sm:p-3 cursor-pointer transition-all hover:scale-105 overflow-hidden flex flex-col justify-between
                 ${hasActivity ? 'bg-primary-50 border border-primary-100 hover:bg-primary-100' : 'bg-gray-50 hover:bg-gray-100'}
               `}
             >
-              <span className={`text-sm font-semibold ${hasActivity ? 'text-primary-800' : 'text-gray-400'}`}>
+              <span className={`text-xs sm:text-sm font-semibold ${hasActivity ? 'text-primary-800' : 'text-gray-400'}`}>
                 {day}
               </span>
 
-              <div className="flex flex-col items-end gap-1 mt-auto text-xs font-bold">
+              <div className="flex flex-col items-end gap-0.5 sm:gap-1 mt-auto text-[9px] sm:text-xs font-bold leading-tight">
                 {income > 0 && <span className="text-emerald-600">+{formatCompact(income)}</span>}
                 {expense > 0 && <span className="text-rose-600">-{formatCompact(expense)}</span>}
               </div>

@@ -28,7 +28,7 @@ export function LayoutWrapper({ children, user }: LayoutWrapperProps) {
       <Sidebar pathname={router.path} />
       <div className="flex flex-1 flex-col">
         <Navbar />
-        <main className="flex-1 bg-gray-50 p-6">
+        <main className="flex-1 bg-gray-50 p-3 sm:p-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={router.path}
