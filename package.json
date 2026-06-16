@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "waku dev",
-    "build": "prisma generate && waku build",
+    "build": "prisma generate && waku build && node scripts/copy-prisma-vercel.mjs",
     "postinstall": "prisma generate",
     "start": "waku start --port ${APP_PORT:-8080}",
     "db:seed": "tsx prisma/seed.ts"
